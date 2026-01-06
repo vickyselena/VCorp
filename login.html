@@ -3,283 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login / Register - VCorp Inventory</title>
+  <title>Login / Register - VCorp</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #F8FAFC;
-      --primary: #1E293B;
-      --green: #10B981;
-      --gray: #64748B;
-      --card: #FFFFFF;
-      --radius: 24px;
-      --shadow: 0 20px 50px -12px rgba(0,0,0,0.12);
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-    }
-    .card {
-      background: var(--card);
-      width: 100%;
-      max-width: 440px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .header {
-      background: linear-gradient(135deg, var(--primary), #0F172A);
-      color: white;
-      padding: 3rem 2rem 2rem;
-      text-align: center;
-    }
-    .logo {
-      font-family: 'Outfit', sans-serif;
-      font-size: 3rem;
-      font-weight: 900;
-      margin-bottom: 0.5rem;
-    }
-    .logo span { color:#94A3B8; font-style:italic; font-weight:400; }
-
-    .tabs {
-      display: flex;
-      background: #F1F5F9;
-    }
-    .tab {
-      flex: 1;
-      padding: 16px;
-      text-align: center;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .tab.active {
-      background: white;
-      color: var(--primary);
-      border-bottom: 3px solid var(--green);
-    }
-
-    .form-body {
-      padding: 2.5rem 2rem;
-    }
-    .input-group {
-      margin-bottom: 1.3rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: var(--primary);
-    }
-    input {
-      width: 100%;
-      padding: 16px 20px;
-      border: 2px solid #E2E8F0;
-      border-radius: 16px;
-      font-size: 1rem;
-      transition: all 0.3s;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 16px;
-      background: var(--green);
-      color: white;
-      border: none;
-      border-radius: 16px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 1rem;
-    }
-    .btn:hover { background: #059669; transform: translateY(-2px); }
-    .btn.loading { opacity: 0.7; cursor: not-allowed; }
-
-    .error-msg, .success-msg {
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      text-align: center;
-      display: none;
-    }
-    .error-msg { background: #FEE2E2; color: #991B1B; }
-    .success-msg { background: #ECFDF5; color: #065F46; }
-
-    .form-section { display: none; }
-    .form-section.active { display: block; }
+    :root{--bg:#F8FAFC;--primary:#1E293B;--green:#10B981;--gray:#64748B;--card:#FFFFFF;--radius:24px;--shadow:0 20px 50px -12px rgba(0,0,0,0.12)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:linear-gradient(135deg,#6366f1,#8b5cf6);font-family:'Inter',sans-serif;min-height:100vh;display:grid;place-items:center;padding:20px;color:var(--primary)}
+    .card{background:var(--card);max-width:440px;width:100%;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .header{background:linear-gradient(135deg,var(--primary),#0f172a);color:white;padding:3rem 2rem 2rem;text-align:center}
+    .logo{font-family:'Outfit',sans-serif;font-size:3rem;font-weight:900}
+    .logo span{color:#94a3b8;font-style:italic;font-weight:400}
+    .tabs{display:flex;background:#f1f5f9}
+    .tab{flex:1;padding:16px;text-align:center;font-weight:600;cursor:pointer;transition:.3s}
+    .tab.active{background:white;color:var(--primary);border-bottom:4px solid var(--green)}
+    .form-body{padding:2.5rem 2rem}
+    input{width:100%;padding:16px 20px;margin:10px 0 20px;border:2px solid #e2e8f0;border-radius:16px;font-size:1rem;transition:.3s}
+    input:focus{border-color:var(--green);outline:none;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
+    .btn{width:100%;padding:16px;background:var(--green);color:white;border:none;border-radius:16px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:.3s}
+    .btn:hover{background:#059669;transform:translateY(-2px)}
+    .btn.loading{opacity:.7;cursor:not-allowed}
+    .msg{padding:12px 16px;border-radius:12px;margin-top:16px;text-align:center;display:none}
+    .error{background:#fee2e2;color:#991b1b}
+    .success{background:#ecfdf5;color:#065f46}
+    .form-section{display:none}
+    .form-section.active{display:block}
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="header">
-      <div class="logo">VC<span>orp</span></div>
-      <p>Sistem Inventory Management</p>
-    </div>
-
-    <div class="tabs">
-      <div class="tab active" onclick="switchForm('login')">Login</div>
-      <div class="tab" onclick="switchForm('register')">Register</div>
-    </div>
-
-    <div class="form-body">
-      <!-- LOGIN FORM -->
-      <div id="loginForm" class="form-section active">
-        <div class="input-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" placeholder="masukan@email.com">
-        </div>
-        <div class="input-group">
-          <label>Password</label>
-          <input type="password" id="loginPass" placeholder="••••••••">
-        </div>
-        <button class="btn" id="btnLogin">Masuk ke Dashboard</button>
-        <div class="error-msg" id="loginError"></div>
-      </div>
-
-      <!-- REGISTER FORM -->
-      <div id="registerForm" class="form-section">
-        <div class="input-group">
-          <label>Nama Lengkap</label>
-          <input type="text" id="regNama" placeholder="Nama kamu">
-        </div>
-        <div class="input-group">
-          <label>Email</label>
-          <input type="email" id="regEmail" placeholder="email@contoh.com">
-        </div>
-        <div class="input-group">
-          <label>Password <small style="font-weight:400;color:#64748B">(min. 6 karakter)</small></label>
-          <input type="password" id="regPass" placeholder="••••••••">
-        </div>
-        <button class="btn" id="btnRegister">Daftar Sekarang</button>
-        <div class="success-msg" id="regSuccess"></div>
-        <div class="error-msg" id="regError"></div>
-      </div>
-    </div>
+<div class="card">
+  <div class="header">
+    <div class="logo">VC<span>orp</span></div>
+    <p>Sistem Inventory Management</p>
   </div>
 
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('login')">Login</div>
+    <div class="tab" onclick="switchTab('register')">Register</div>
+  </div>
+
+  <div class="form-body">
+    <div id="loginForm" class="form-section active">
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPass" placeholder="Password" required>
+      <button class="btn" id="btnLogin">Masuk ke Dashboard</button>
+      <div class="msg error" id="loginError"></div>
+    </div>
+
+    <div id="registerForm" class="form-section">
+      <input type="text" id="regNama" placeholder="Nama Lengkap" required>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPass" placeholder="Password (min. 6 karakter)" required>
+      <button class="btn" id="btnRegister">Daftar Sekarang</button>
+      <div class="msg success" id="regSuccess"></div>
+      <div class="msg error" id="regError"></div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { auth, db } from "./firebase-config.js";
+  import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  const app = initializeApp({
-    apiKey: "AIzaSyDnmmQWABHvOEuEWe9-C-s8U7fLMlHnqTc",
-    authDomain: "vcorp.firebaseapp.com",
-    databaseURL: "https://vcorp-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "vcorp"
-  });
-
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-
-  // Switch tab
-  window.switchForm = (type) => {
+  window.switchTab = (tab) => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
-    
-    if (type === 'login') {
-      document.querySelector('.tab:nth-child(1)').classList.add('active');
-      document.getElementById('loginForm').classList.add('active');
-    } else {
-      document.querySelector('.tab:nth-child(2)').classList.add('active');
-      document.getElementById('registerForm').classList.add('active');
-    }
+    document.querySelector(`.tab:nth-child(${tab==='login'?1:2})`).classList.add('active');
+    document.getElementById(tab + 'Form').classList.add('active');
+  };
+
+  const showMsg = (id, text, success = false) => {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = `msg ${success ? 'success' : 'error'}`;
+    el.style.display = 'block';
   };
 
   // LOGIN
   document.getElementById('btnLogin').onclick = async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPass').value;
-    const btn = document.getElementById('btnLogin');
-    const error = document.getElementById('loginError');
-
-    if (!email || !pass) return showMsg(error, 'Email & password wajib diisi!');
-
-    btn.classList.add('loading');
-    error.style.display = 'none';
-
+    if (!email || !pass) return showMsg('loginError', 'Email & password wajib diisi!');
+    
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-      window.location.href = "index.html";
-    } catch (err) {
-      let msg = 'Login gagal!';
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') msg = 'Email atau password salah!';
-      if (err.code === 'auth/invalid-email') msg = 'Format email salah!';
-      showMsg(error, msg);
-    } finally {
-      btn.classList.remove('loading');
+      location.href = "index.html";
+    } catch (e) {
+      showMsg('loginError', 'Email atau password salah!');
     }
   };
 
-  // REGISTER MANDIRI → OTOMATIS JADI STAFF
+  // REGISTER → OTOMATIS STAFF
   document.getElementById('btnRegister').onclick = async () => {
     const nama = document.getElementById('regNama').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const pass = document.getElementById('regPass').value;
-    const btn = document.getElementById('btnRegister');
-    const success = document.getElementById('regSuccess');
-    const error = document.getElementById('regError');
-
-    if (!nama || !email || !pass) return showMsg(error, 'Semua field wajib diisi!');
-    if (pass.length < 6) return showMsg(error, 'Password minimal 6 karakter!');
-
-    btn.classList.add('loading');
-    success.style.display = 'none';
-    error.style.display = 'none';
+    if (!nama || !email || !pass) return showMsg('regError', 'Semua field wajib diisi!');
+    if (pass.length < 6) return showMsg('regError', 'Password minimal 6 karakter!');
 
     try {
-      const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-      const uid = userCred.user.uid;
-
-      // Simpan data user → role otomatis "Staff"
-      await set(ref(db, 'users/' + uid), {
-        nama: nama,
-        email: email,
-        role: "Staff",  // ← PASTI STAFF, BUKAN ADMIN!
-        registeredAt: new Date().toISOString()
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await set(ref(db, 'users/' + cred.user.uid), {
+        nama, email, role: "Staff", registeredAt: new Date().toISOString()
       });
-
-      showMsg(success, 'Register berhasil! Sedang masuk...');
-      setTimeout(() => window.location.href = "index.html", 1500);
-    } catch (err) {
-      let msg = 'Register gagal!';
-      if (err.code === 'auth/email-already-in-use') msg = 'Email sudah terdaftar!';
-      if (err.code === 'auth/weak-password') msg = 'Password terlalu lemah!';
-      showMsg(error, msg);
-    } finally {
-      btn.classList.remove('loading');
+      showMsg('regSuccess', 'Register berhasil! Sedang masuk...', true);
+      setTimeout(() => location.href = "index.html", 1500);
+    } catch (e) {
+      showMsg('regError', e.code === 'auth/email-already-in-use' ? 'Email sudah terdaftar!' : 'Gagal daftar!');
     }
   };
-
-  function showMsg(el, text) {
-    el.textContent = text;
-    el.style.display = 'block';
-  }
-
-  // Enter key support
-  document.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      if (document.getElementById('loginForm').classList.contains('active')) {
-        document.getElementById('btnLogin').click();
-      } else {
-        document.getElementById('btnRegister').click();
-      }
-    }
-  });
 </script>
-
 </body>
 </html>
