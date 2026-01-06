@@ -21,8 +21,8 @@
     input:focus{border-color:var(--green);outline:none;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
     .btn{width:100%;padding:16px;background:var(--green);color:white;border:none;border-radius:16px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:.3s}
     .btn:hover{background:#059669;transform:translateY(-2px)}
-    .btn.loading{opacity:.7;cursor:not-allowed}
-    .msg{padding:12px 16px;border-radius:12px;margin-top:16px;text-align:center;display:none}
+    .btn:disabled{opacity:0.7;cursor:not-allowed}
+    .msg{padding:12px 16px;border-radius:12px;margin-top:16px;text-align:center;display:none;font-weight:500}
     .error{background:#fee2e2;color:#991b1b}
     .success{background:#ecfdf5;color:#065f46}
     .form-section{display:none}
@@ -73,46 +73,91 @@
     document.getElementById(tab + 'Form').classList.add('active');
   };
 
-  const showMsg = (id, text, success = false) => {
+  const showMsg = (id, text, isSuccess = false) => {
     const el = document.getElementById(id);
     el.textContent = text;
-    el.className = `msg ${success ? 'success' : 'error'}`;
+    el.className = `msg ${isSuccess ? 'success' : 'error'}`;
     el.style.display = 'block';
   };
 
+  const hideMsg = (id) => {
+    document.getElementById(id).style.display = 'none';
+  };
+
   // LOGIN
-  document.getElementById('btnLogin').onclick = async () => {
+  document.getElementById('btnLogin').addEventListener('click', async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPass').value;
-    if (!email || !pass) return showMsg('loginError', 'Email & password wajib diisi!');
+    const btn = document.getElementById('btnLogin');
     
+    if (!email || !pass) return showMsg('loginError', 'Email & password wajib diisi!');
+
+    btn.disabled = true;
+    hideMsg('loginError');
+
     try {
       await signInWithEmailAndPassword(auth, email, pass);
       location.href = "index.html";
     } catch (e) {
       showMsg('loginError', 'Email atau password salah!');
+    } finally {
+      btn.disabled = false;
     }
-  };
+  });
 
-  // REGISTER → OTOMATIS STAFF
-  document.getElementById('btnRegister').onclick = async () => {
+  // REGISTER — INI YANG SUDAH DI-FIX 100%!
+  document.getElementById('btnRegister').addEventListener('click', async () => {
     const nama = document.getElementById('regNama').value.trim();
     const email = document.getElementById('regEmail').value.trim();
     const pass = document.getElementById('regPass').value;
-    if (!nama || !email || !pass) return showMsg('regError', 'Semua field wajib diisi!');
-    if (pass.length < 6) return showMsg('regError', 'Password minimal 6 karakter!');
+    const btn = document.getElementById('btnRegister');
+
+    if (!nama || !email || !pass) {
+      return showMsg('regError', 'Semua field wajib diisi!');
+    }
+    if (pass.length < 6) {
+      return showMsg('regError', 'Password minimal 6 karakter!');
+    }
+
+    btn.disabled = true;
+    hideMsg('regSuccess');
+    hideMsg('regError');
 
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      await set(ref(db, 'users/' + cred.user.uid), {
-        nama, email, role: "Staff", registeredAt: new Date().toISOString()
+      // 1. Buat user di Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+      const uid = userCredential.user.uid;
+
+      // 2. Simpan data ke Realtime Database
+      await set(ref(db, 'users/' + uid), {
+        nama: nama,
+        email: email,
+        role: "Staff",
+        registeredAt: new Date().toISOString()
       });
+
       showMsg('regSuccess', 'Register berhasil! Sedang masuk...', true);
       setTimeout(() => location.href = "index.html", 1500);
-    } catch (e) {
-      showMsg('regError', e.code === 'auth/email-already-in-use' ? 'Email sudah terdaftar!' : 'Gagal daftar!');
+
+    } catch (error) {
+      console.error("Register error:", error);
+      let msg = 'Gagal daftar!';
+      if (error.code === 'auth/email-already-in-use') msg = 'Email sudah terdaftar!';
+      if (error.code === 'auth/weak-password') msg = 'Password terlalu lemah!';
+      if (error.code === 'auth/invalid-email') msg = 'Format email salah!';
+      showMsg('regError', msg);
+    } finally {
+      btn.disabled = false;
     }
-  };
+  });
+
+  // Enter key support
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const activeBtn = document.querySelector('.form-section.active button.btn');
+      if (activeBtn) activeBtn.click();
+    }
+  });
 </script>
 </body>
 </html>
