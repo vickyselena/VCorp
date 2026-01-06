@@ -23,232 +23,116 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:var(--bg); color:var(--primary); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
 
+    /* LOADING SCREEN AESTHETIC */
+    #globalLoader {
+      position:fixed; inset:0; background:var(--bg); z-index:99999;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition:opacity 0.8s ease; opacity:1;
+    }
+    #globalLoader .logo {
+      font-size:4.5rem; font-weight:800; letter-spacing:-3px; color:var(--accent);
+      margin-bottom:1.5rem;
+    }
+    #globalLoader .logo span { color:#64748b; font-weight:400; }
+    #globalLoader p {
+      color:var(--text-light); font-size:1.3rem; margin-top:1rem; letter-spacing:1px;
+    }
+    .progress-container {
+      width:340px; height:12px; background:#e0f2fe; border-radius:50px;
+      overflow:hidden; margin:3rem 0; box-shadow:0 8px 25px rgba(14,165,233,0.2);
+    }
+    #progressBar {
+      width:0%; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-hover));
+      border-radius:50px; transition:width 0.6s ease;
+    }
+
+    /* SIDEBAR */
     .sidebar {
-      width: 300px;
-      background: var(--sidebar);
-      padding: 3.5rem 2.5rem;
-      position: fixed;
-      height: 100%;
-      border-right: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
+      width:300px; background:var(--sidebar); padding:3.5rem 2.5rem;
+      position:fixed; height:100%; border-right:1px solid var(--border);
+      box-shadow:var(--shadow); z-index:10; display:flex; flex-direction:column;
     }
-    .logo {
-      font-size: 2.8rem;
-      font-weight: 800;
-      letter-spacing: -2px;
-      margin-bottom: 5rem;
-      color: var(--accent);
-    }
-    .logo span { color: var(--text-light); font-weight: 400; }
+    .logo { font-size:2.8rem; font-weight:800; letter-spacing:-2px; margin-bottom:5rem; color:var(--accent); }
+    .logo span { color:var(--text-light); font-weight:400; }
 
     .nav-item {
-      display: flex;
-      align-items: center;
-      padding: 20px 28px;
-      border-radius: 24px;
-      color: var(--text-light);
-      font-weight: 500;
-      margin-bottom: 16px;
-      transition: 0.4s;
-      cursor: pointer;
-      text-decoration: none;
+      display:flex; align-items:center; padding:20px 28px; border-radius:24px;
+      color:var(--text-light); font-weight:500; margin-bottom:16px; transition:0.4s;
+      cursor:pointer; text-decoration:none;
     }
-    .nav-item:hover {
-      background: rgba(14,165,233,0.08);
-      color: var(--accent);
-      transform: translateX(10px);
-    }
-    .nav-item.active {
-      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-      color: white;
-      font-weight: 600;
-      box-shadow: 0 12px 30px rgba(14,165,233,0.3);
-    }
-    .nav-item .icon {
-      margin-right: 18px;
-      font-size: 1.4rem;
-    }
+    .nav-item:hover { background:rgba(14,165,233,0.08); color:var(--accent); transform:translateX(10px); }
+    .nav-item.active { background:linear-gradient(135deg,var(--accent),var(--accent-hover)); color:white; font-weight:600; box-shadow:0 12px 30px rgba(14,165,233,0.3); }
+    .nav-item .icon { margin-right:18px; font-size:1.4rem; }
 
-    /* USER INFO + LOGOUT — PALING BAWAH */
     .bottom-section {
-      margin-top: auto;
-      padding-top: 2.5rem;
-      border-top: 1px solid var(--border);
+      margin-top:auto; padding-top:2.5rem; border-top:1px solid var(--border);
     }
     .user-info-sidebar {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      display:flex; align-items:center; gap:1.5rem; margin-bottom:2rem;
     }
     .user-avatar {
-      width: 64px;
-      height: 64px;
-      background: var(--accent);
-      color: white;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 1.8rem;
-      box-shadow: 0 12px 30px rgba(14,165,233,0.35);
-      flex-shrink: 0;
+      width:64px; height:64px; background:var(--accent); color:white;
+      border-radius:50%; display:grid; place-items:center; font-weight:700;
+      font-size:1.8rem; box-shadow:0 12px 30px rgba(14,165,233,0.35); flex-shrink:0;
     }
-    .user-details h4 {
-      font-weight: 600;
-      font-size: 1.15rem;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-    .user-details p {
-      color: var(--text-light);
-      font-size: 0.95rem;
-    }
+    .user-details h4 { font-weight:600; font-size:1.15rem; color:var(--primary); margin-bottom:4px; }
+    .user-details p { color:var(--text-light); font-size:0.95rem; }
     .status-online {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      background: var(--online);
-      border-radius: 50%;
-      margin-right: 8px;
-      box-shadow: 0 0 12px rgba(16,185,129,0.6);
-      animation: pulse 2s infinite;
+      display:inline-block; width:12px; height:12px; background:var(--online);
+      border-radius:50%; margin-right:8px; box-shadow:0 0 12px rgba(16,185,129,0.6);
+      animation:pulse 2s infinite;
     }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
-      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
-    }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)} 70%{box-shadow:0 0 0 10px rgba(16,185,129,0)} 100%{box-shadow:0 0 0 0 rgba(16,185,129,0)} }
 
     .logout-btn {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 28px;
-      border-radius: 24px;
-      color: var(--danger);
-      font-weight: 600;
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.15);
-      transition: all 0.4s ease;
-      cursor: pointer;
+      display:flex; align-items:center; gap:20px; padding:20px 28px; border-radius:24px;
+      color:var(--danger); font-weight:600; background:rgba(239,68,68,0.08);
+      border:1px solid rgba(239,68,68,0.15); transition:all 0.4s ease; cursor:pointer;
     }
-    .logout-btn:hover {
-      background: rgba(239,68,68,0.15);
-      transform: translateX(8px);
-      border-color: rgba(239,68,68,0.3);
-    }
-    .logout-btn .icon {
-      font-size: 1.5rem;
-    }
+    .logout-btn:hover { background:rgba(239,68,68,0.15); transform:translateX(8px); }
 
-    .main {
-      margin-left: 300px;
-      padding: 5rem;
-      flex: 1;
-    }
-    .header h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      letter-spacing: -2px;
-      margin-bottom: 1rem;
-    }
-    .header p {
-      color: var(--text-light);
-      font-size: 1.4rem;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2.5rem;
-      margin: 4rem 0;
-    }
-    .stat-card {
-      background: var(--card);
-      padding: 3rem;
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      transition: 0.5s;
-    }
-    .stat-card:hover {
-      transform: translateY(-15px);
-      box-shadow: 0 25px 50px rgba(14,165,233,0.2);
-    }
-    .stat-label {
-      color: var(--text-light);
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 1.5rem;
-    }
-    .stat-value {
-      font-size: 4.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: -2px;
-    }
-    .charts {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin-top: 3rem;
-    }
-    .chart-card {
-      background: var(--card);
-      padding: 3rem;
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-    .chart-title {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 2.5rem;
-      color: var(--primary);
-    }
-    .chart-container {
-      position: relative;
-      height: 380px;
-    }
+    .main { margin-left:300px; padding:5rem; flex:1; }
+    .header h1 { font-size:3.5rem; font-weight:700; letter-spacing:-2px; margin-bottom:1rem; }
+    .header p { color:var(--text-light); font-size:1.4rem; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2.5rem; margin:4rem 0; }
+    .stat-card { background:var(--card); padding:3rem; border-radius:28px; box-shadow:var(--shadow); border:1px solid var(--border); transition:0.5s; }
+    .stat-card:hover { transform:translateY(-15px); box-shadow:0 25px 50px rgba(14,165,233,0.2); }
+    .stat-label { color:var(--text-light); font-size:1rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem; }
+    .stat-value { font-size:4.5rem; font-weight:700; color:var(--accent); letter-spacing:-2px; }
+    .charts { display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-top:3rem; }
+    .chart-card { background:var(--card); padding:3rem; border-radius:28px; box-shadow:var(--shadow); border:1px solid var(--border); }
+    .chart-title { font-size:1.6rem; font-weight:600; margin-bottom:2.5rem; color:var(--primary); }
 
-    @media (max-width: 1200px) {
-      .sidebar { width: 90px; padding: 3rem 1.5rem; }
-      .logo, .nav-text, .user-details, .logout-btn span { display: none; }
-      .user-avatar { width: 48px; height: 48px; font-size: 1.4rem; }
-      .main { margin-left: 90px; }
+    @media (max-width:1200px) {
+      .sidebar { width:90px; padding:3rem 1.5rem; }
+      .logo,.nav-text,.user-details,.logout-btn span { display:none; }
+      .user-avatar { width:48px; height:48px; font-size:1.4rem; }
+      .main { margin-left:90px; }
     }
   </style>
 </head>
 <body>
 
+<!-- LOADING SCREEN AESTHETIC -->
+<div id="globalLoader">
+  <div style="text-align:center;">
+    <div class="logo">VC<span>orp</span></div>
+    <p>Inventory Management System</p>
+  </div>
+  <div class="progress-container">
+    <div id="progressBar"></div>
+  </div>
+  <p id="loadingText">Memuat dashboard...</p>
+</div>
+
 <div class="sidebar">
   <div class="logo">VC<span>orp</span></div>
   <nav>
-    <a href="index.html" class="nav-item active">
-      <span class="icon">⊞</span>
-      <span class="nav-text">Dashboard</span>
-    </a>
-    <a href="inventory.html" class="nav-item">
-      <span class="icon">📦</span>
-      <span class="nav-text">Inventaris</span>
-    </a>
-    <a href="stock-in.html" class="nav-item">
-      <span class="icon">↓</span>
-      <span class="nav-text">Stock In</span>
-    </a>
-    <a href="stock-out.html" class="nav-item">
-      <span class="icon">↑</span>
-      <span class="nav-text">Stock Out</span>
-    </a>
-
-    <a href="users.html" class="nav-item" id="menuKelolaUser" style="display:none">
-      <span class="icon">👥</span>
-      <span class="nav-text">Kelola User</span>
-    </a>
+    <a href="index.html" class="nav-item active"><span class="icon">⊞</span><span class="nav-text">Dashboard</span></a>
+    <a href="inventory.html" class="nav-item"><span class="icon">📦</span><span class="nav-text">Inventaris</span></a>
+    <a href="stock-in.html" class="nav-item"><span class="icon">↓</span><span class="nav-text">Stock In</span></a>
+    <a href="stock-out.html" class="nav-item"><span class="icon">↑</span><span class="nav-text">Stock Out</span></a>
+    <a href="users.html" class="nav-item" id="menuKelolaUser" style="display:none"><span class="icon">👥</span><span class="nav-text">Kelola User</span></a>
   </nav>
 
   <div class="bottom-section">
@@ -259,7 +143,6 @@
         <p><span class="status-online"></span><span id="sidebarRole">Staff</span> • Online</p>
       </div>
     </div>
-
     <div class="logout-btn" id="logout">
       <span class="icon">⏻</span>
       <span class="logout-text">Logout</span>
@@ -274,33 +157,15 @@
   </div>
 
   <div class="stats">
-    <div class="stat-card">
-      <div class="stat-label">Total Item</div>
-      <div class="stat-value" id="totalItems">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Stok</div>
-      <div class="stat-value" id="totalStok">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Rusak / Hilang</div>
-      <div class="stat-value" id="rusak">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Top Kategori</div>
-      <div class="stat-value" id="topKat">-</div>
-    </div>
+    <div class="stat-card"><div class="stat-label">Total Item</div><div class="stat-value" id="totalItems">0</div></div>
+    <div class="stat-card"><div class="stat-label">Total Stok</div><div class="stat-value" id="totalStok">0</div></div>
+    <div class="stat-card"><div class="stat-label">Rusak / Hilang</div><div class="stat-value" id="rusak">0</div></div>
+    <div class="stat-card"><div class="stat-label">Top Kategori</div><div class="stat-value" id="topKat">-</div></div>
   </div>
 
   <div class="charts">
-    <div class="chart-card">
-      <div class="chart-title">Proporsi Kategori</div>
-      <div class="chart-container"><canvas id="chartKat"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Kondisi Aset Saat Ini</div>
-      <div class="chart-container"><canvas id="chartKond"></canvas></div>
-    </div>
+    <div class="chart-card"><div class="chart-title">Proporsi Kategori</div><canvas id="chartKat"></canvas></div>
+    <div class="chart-card"><div class="chart-title">Kondisi Aset Saat Ini</div><canvas id="chartKond"></canvas></div>
   </div>
 </div>
 
@@ -309,8 +174,25 @@
   import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+  const loader = document.getElementById('globalLoader');
+  const progressBar = document.getElementById('progressBar');
+  const loadingText = document.getElementById('loadingText');
+
+  let progress = 0;
+  const loadingInterval = setInterval(() => {
+    progress += Math.random() * 12 + 8;
+    if (progress > 90) progress = 90;
+    progressBar.style.width = progress + '%';
+  }, 300);
+
   onAuthStateChanged(auth, user => {
-    if (!user) return location.href = "login.html";
+    if (!user) {
+      clearInterval(loadingInterval);
+      progressBar.style.width = '100%';
+      setTimeout(() => loader.style.opacity = '0', 400);
+      setTimeout(() => location.href = "login.html", 1000);
+      return;
+    }
 
     const nama = user.displayName || user.email.split('@')[0];
     const initial = nama.charAt(0).toUpperCase();
@@ -319,68 +201,54 @@
     document.getElementById('sidebarNama').textContent = nama;
     document.getElementById('sidebarAvatar').textContent = initial;
 
+    loadingText.textContent = "Memuat data user...";
+
     onValue(ref(db, 'users/' + user.uid + '/role'), snap => {
       const role = snap.val() || 'Staff';
       document.getElementById('sidebarRole').textContent = role;
-      if (role === 'Admin') {
-        document.getElementById('menuKelolaUser').style.display = 'flex';
-      }
-    });
+      if (role === 'Admin') document.getElementById('menuKelolaUser').style.display = 'flex';
+
+      // SELESAI LOADING
+      progress = 100;
+      progressBar.style.width = '100%';
+      loadingText.textContent = "Selamat datang kembali!";
+      
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        clearInterval(loadingInterval);
+      }, 600);
+      setTimeout(() => loader.remove(), 1200);
+    }, { onlyOnce: true });
   });
 
-  document.getElementById('logout').onclick = () => {
-    if (confirm('Yakin ingin logout?')) signOut(auth);
-  };
+  document.getElementById('logout').onclick = () => confirm('Yakin logout?') && signOut(auth);
 
   let chartKat, chartKond;
   onValue(ref(db, 'inventaris'), snap => {
     const data = snap.val() || {};
     const items = Object.values(data);
     let stok = 0, rusak = 0;
-    const kategori = {}, kondisi = {Baik:0, 'Perlu Servis':0, Rusak:0};
+    const kategori = {}, kondisi = {Baik:0,'Perlu Servis':0,Rusak:0};
 
     items.forEach(item => {
-      const qty = Number(item.jumlah) || 0;
+      const qty = Number(item.jumlah)||0;
       stok += qty;
       if (item.kondisi === 'Rusak') rusak += qty;
-
-      const kat = item.kategori || 'Lainnya';
-      kategori[kat] = (kategori[kat] || 0) + qty;
-
-      const kon = item.kondisi || 'Baik';
-      kondisi[kon] = (kondisi[kon] || 0) + qty;
+      kategori[item.kategori || 'Lainnya'] = (kategori[item.kategori || 'Lainnya']||0) + qty;
+      kondisi[item.kondisi || 'Baik'] = (kondisi[item.kondisi || 'Baik']||0) + qty;
     });
 
     document.getElementById('totalItems').textContent = items.length;
     document.getElementById('totalStok').textContent = stok.toLocaleString('id-ID');
     document.getElementById('rusak').textContent = rusak.toLocaleString('id-ID');
-    document.getElementById('topKat').textContent = Object.keys(kategori).sort((a,b) => kategori[b]-kategori[a])[0] || '-';
+    document.getElementById('topKat').textContent = Object.keys(kategori).sort((a,b)=>kategori[b]-kategori[a])[0] || '-';
 
-    if (!chartKat) {
-      chartKat = new Chart('chartKat', {
-        type: 'doughnut',
-        data: { labels: Object.keys(kategori), datasets: [{ data: Object.values(kategori), backgroundColor: ['#0ea5e9','#06b6d4','#0891b2','#0c4a6e','#0369a1'], borderWidth: 0 }] },
-        options: { plugins: { legend: { position: 'right' } }, cutout: '70%' }
-      });
-    } else {
-      chartKat.data.labels = Object.keys(kategori);
-      chartKat.data.datasets[0].data = Object.values(kategori);
-      chartKat.update('quiet');
-    }
+    if (!chartKat) chartKat = new Chart('chartKat', {type:'doughnut', data:{labels:Object.keys(kategori), datasets:[{data:Object.values(kategori), backgroundColor:['#0ea5e9','#06b6d4','#0891b2','#0c4a6e','#0369a1'], borderWidth:0}]}, options:{plugins:{legend:{position:'right'}}, cutout:'70%'}});
+    else { chartKat.data.labels = Object.keys(kategori); chartKat.data.datasets[0].data = Object.values(kategori); chartKat.update('quiet'); }
 
-    if (!chartKond) {
-      chartKond = new Chart('chartKond', {
-        type: 'bar',
-        data: { labels: Object.keys(kondisi), datasets: [{ data: Object.values(kondisi), backgroundColor: ['#10b981','#f59e0b','#ef4444'], borderRadius: 16 }] },
-        options: { plugins: { legend: { display: false } } }
-      });
-    } else {
-      chartKond.data.labels = Object.keys(kondisi);
-      chartKond.data.datasets[0].data = Object.values(kondisi);
-      chartKond.update('quiet');
-    }
+    if (!chartKond) chartKond = new Chart('chartKond', {type:'bar', data:{labels:Object.keys(kondisi), datasets:[{data:Object.values(kondisi), backgroundColor:['#10b981','#f59e0b','#ef4444'], borderRadius:16}]}, options:{plugins:{legend:{display:false}}}});
+    else { chartKond.data.labels = Object.keys(kondisi); chartKond.data.datasets[0].data = Object.values(kondisi); chartKond.update('quiet'); }
   });
 </script>
-
 </body>
 </html>
