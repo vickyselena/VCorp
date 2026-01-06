@@ -4,64 +4,226 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelola User - VCorp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#F8FAFC;--card:#fff;--primary:#1E293B;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--gray:#64748B;--radius:20px;--shadow:0 10px 30px -8px rgba(0,0,0,.08)}
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--primary);display:flex;min-height:100vh}
-    .sidebar{width:280px;background:var(--card);padding:2rem;box-shadow:var(--shadow);position:fixed;height:100%;border-right:1px solid #e2e8f0}
-    .logo{font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:900;margin-bottom:3rem}
-    .logo span{color:#94a3b8;font-style:italic;font-weight:400}
-    .nav-item{display:flex;align-items:center;padding:14px 20px;border-radius:16px;color:var(--gray);font-weight:500;margin-bottom:8px;transition:.3s;cursor:pointer;text-decoration:none}
-    .nav-item:hover{background:#f1f5f9;color:var(--primary);transform:translateX(8px)}
-    .nav-item.active{background:var(--primary);color:white}
-    .main{margin-left:280px;padding:3rem;flex:1}
-    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}
-    .btn{padding:12px 24px;background:var(--green);color:white;border:none;border-radius:12px;font-weight:600;cursor:pointer;transition:.3s}
-    .btn:hover{background:#059669}
-    .table{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    table{width:100%;border-collapse:collapse}
-    th{background:#f8fafc;padding:1.5rem;text-align:left;font-weight:600;color:var(--primary);border-bottom:2px solid #e2e8f0}
-    td{padding:1.5rem;border-bottom:1px solid #e2e8f0}
-    tr:hover{background:#f8fafc}
-    .badge{padding:6px 14px;border-radius:50px;font-size:0.85rem;font-weight:600}
-    .admin{background:#fee2e2;color:#991b1b}
-    .staff{background:#ecfdf5;color:#065f46}
-    .action-btn{padding:8px 14px;margin:0 4px;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem}
-    .edit{background:#dbeafe;color:#1d4ed8}
-    .delete{background:#fee2e2;color:#991b1b}
-    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
-    .modal-content{background:var(--card);padding:2rem;border-radius:var(--radius);width:90%;max-width:500px;box-shadow:var(--shadow)}
-    input,select{width:100%;padding:14px 18px;margin:10px 0;border:2px solid #e2e8f0;border-radius:12px;font-size:1rem}
-    @media(max-width:1100px){.sidebar{width:90px;padding:2rem 1rem}.logo,.nav-text{display:none}.main{margin-left:90px}}
+    :root {
+      --bg: #f0f9ff;
+      --sidebar: #ffffff;
+      --card: #ffffff;
+      --primary: #0c4a6e;
+      --accent: #0ea5e9;
+      --accent-hover: #0284c7;
+      --text-light: #64748b;
+      --border: #bae6fd;
+      --shadow: 0 15px 40px rgba(14,165,233,0.12);
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--primary); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
+
+    .sidebar {
+      width: 300px;
+      background: var(--sidebar);
+      padding: 3.5rem 2.5rem;
+      position: fixed;
+      height: 100%;
+      border-right: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .logo {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+      margin-bottom: 5rem;
+      color: var(--accent);
+    }
+    .logo span { color: var(--text-light); font-weight: 400; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 20px 28px;
+      border-radius: 24px;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 16px;
+      transition: 0.4s;
+      cursor: pointer;
+    }
+    .nav-item:hover {
+      background: rgba(14,165,233,0.08);
+      color: var(--accent);
+      transform: translateX(10px);
+    }
+    .nav-item.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(14,165,233,0.3);
+    }
+
+    .main {
+      margin-left: 300px;
+      padding: 5rem;
+      flex: 1;
+    }
+    .header {
+      margin-bottom: 3rem;
+    }
+    .header h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+    }
+    .header p {
+      color: var(--text-light);
+      font-size: 1.3rem;
+      margin-top: 0.8rem;
+    }
+
+    .btn-add {
+      background: var(--accent);
+      color: white;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(14,165,233,0.3);
+      transition: 0.4s;
+    }
+    .btn-add:hover {
+      background: var(--accent-hover);
+      transform: translateY(-5px);
+    }
+
+    .table-container {
+      background: var(--card);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      background: rgba(14,165,233,0.05);
+      padding: 2rem 2rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+    td {
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:hover {
+      background: rgba(14,165,233,0.03);
+    }
+    .role-badge {
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .role-admin {
+      background: rgba(239,68,68,0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239,68,68,0.2);
+    }
+    .role-staff {
+      background: rgba(16,185,129,0.1);
+      color: var(--success);
+      border: 1px solid rgba(16,185,129,0.2);
+    }
+    .action-btn {
+      padding: 12px 20px;
+      margin: 0 8px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .edit-btn {
+      background: rgba(14,165,233,0.1);
+      color: var(--accent);
+    }
+    .delete-btn {
+      background: rgba(239,68,68,0.1);
+      color: var(--danger);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(12,74,110,0.4);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: var(--card);
+      padding: 3rem;
+      border-radius: 32px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: 0 30px 80px rgba(14,165,233,0.25);
+      border: 1px solid var(--border);
+    }
+    input, select {
+      width: 100%;
+      padding: 18px 24px;
+      margin: 16px 0;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      font-size: 1.1rem;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: flex-end;
+    }
+    .btn-cancel {
+      background: #e2e8f0;
+      color: var(--text-light);
+    }
   </style>
 </head>
 <body>
 
-<aside class="sidebar">
+<div class="sidebar">
   <div class="logo">VC<span>orp</span></div>
-  <nav style="margin-top:2rem">
-    <a href="index.html" class="nav-item">⊞ Dashboard</a>
-    <a href="inventory.html" class="nav-item">📦 Inventaris</a>
-    <a href="stock-in.html" class="nav-item">↓ Stock In</a>
-    <a href="stock-out.html" class="nav-item">↑ Stock Out</a>
-    <div style="margin-top:auto;padding-top:2rem;border-top:1px solid #e2e8f0">
-      <a href="users.html" class="nav-item active">👥 Kelola User</a>
-      <a href="#" id="logout" class="nav-item" style="color:var(--red)">⏻ Logout</a>
+  <nav>
+    <a href="index.html" class="nav-item">Dashboard</a>
+    <a href="inventory.html" class="nav-item">Inventory</a>
+    <a href="stock-in.html" class="nav-item">Stock In</a>
+    <a href="stock-out.html" class="nav-item">Stock Out</a>
+    <div style="margin-top: auto;">
+      <div class="nav-item active">Kelola User</div>
+      <div class="nav-item" id="logout" style="color:#ef4444">Logout</div>
     </div>
   </nav>
-</aside>
+</div>
 
 <div class="main">
   <div class="header">
     <div>
-      <h1 style="font-family:Outfit;font-size:2.4rem;font-weight:900">Kelola User</h1>
-      <p style="color:var(--gray)">Tambah, edit, atau hapus akun staff</p>
+      <h1>Kelola User</h1>
+      <p>Tambah, edit, atau hapus akun staff dengan mudah</p>
     </div>
-    <button class="btn" onclick="openModal()">+ Tambah User</button>
+    <button class="btn-add" onclick="openModal()">+ Tambah User</button>
   </div>
 
-  <div class="table">
+  <div class="table-container">
     <table>
       <thead>
         <tr>
@@ -72,26 +234,26 @@
         </tr>
       </thead>
       <tbody id="userList">
-        <!-- Data user akan muncul otomatis -->
+        <!-- User akan muncul otomatis dari Firebase -->
       </tbody>
     </table>
   </div>
 </div>
 
 <!-- MODAL -->
-<div class="modal" id="modal">
+<div class="modal" id="userModal">
   <div class="modal-content">
-    <h2 id="modalTitle">Tambah User</h2>
-    <input type="text" id="nama" placeholder="Nama Lengkap">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password (kosongkan jika edit)">
-    <select id="role">
+    <h2 id="modalTitle" style="font-size:2rem;font-weight:700;margin-bottom:1.5rem">Tambah User Baru</h2>
+    <input type="text" id="userNama" placeholder="Nama Lengkap">
+    <input type="email" id="userEmail" placeholder="Email">
+    <input type="password" id="userPass" placeholder="Password (kosongkan jika edit)">
+    <select id="userRole">
       <option value="Staff">Staff</option>
       <option value="Admin">Admin</option>
     </select>
-    <div style="margin-top:20px;display:flex;gap:10px;justify-content:flex-end">
-      <button class="btn" style="background:#e2e8f0;color:#475569" onclick="closeModal()">Batal</button>
-      <button class="btn" onclick="saveUser()">Simpan</button>
+    <div class="modal-buttons">
+      <button class="btn-add btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-add" onclick="saveUser()">Simpan User</button>
     </div>
   </div>
 </div>
@@ -101,12 +263,11 @@
   import { onAuthStateChanged, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  let currentUid = null;
+  let currentEditUid = null;
 
-  // Cek hak akses Admin
+  // Cek Admin
   onAuthStateChanged(auth, user => {
     if (!user) return location.href = "login.html";
-    
     onValue(ref(db, 'users/' + user.uid + '/role'), snap => {
       if (snap.val() !== 'Admin') {
         alert('Hanya Admin yang bisa akses halaman ini!');
@@ -115,7 +276,7 @@
     });
   });
 
-  document.getElementById('logout').onclick = () => confirm('Logout?') && signOut(auth);
+  document.getElementById('logout').onclick = () => confirm('Yakin logout?') && signOut(auth);
 
   // Tampilkan semua user
   onValue(ref(db, 'users'), snap => {
@@ -126,12 +287,12 @@
     Object.entries(users).forEach(([uid, data]) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td style="font-weight:600">${data.nama || '-'}</td>
-        <td>${data.email || '-'}</td>
-        <td><span class="badge ${data.role === 'Admin' ? 'admin' : 'staff'}">${data.role || 'Staff'}</span></td>
+        <td style="font-weight:600;font-size:1.1rem">${data.nama || '-'}</td>
+        <td style="color:var(--text-light)">${data.email || '-'}</td>
+        <td><span class="role-badge role-${data.role === 'Admin' ? 'admin' : 'staff'}">${data.role || 'Staff'}</span></td>
         <td>
-          <button class="action-btn edit" onclick="editUser('${uid}', ${JSON.stringify(data)})">Edit</button>
-          <button class="action-btn delete" onclick="hapusUser('${uid}')">Hapus</button>
+          <button class="action-btn edit-btn" onclick="editUser('${uid}', ${JSON.stringify(data).replace(/"/g, '&quot;')})">Edit</button>
+          <button class="action-btn delete-btn" onclick="deleteUser('${uid}')">Hapus</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -140,42 +301,45 @@
 
   // Modal
   window.openModal = () => {
-    currentUid = null;
+    currentEditUid = null;
     document.getElementById('modalTitle').textContent = 'Tambah User Baru';
-    document.getElementById('nama').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('password').placeholder = 'Password wajib diisi';
-    document.getElementById('role').value = 'Staff';
-    document.getElementById('modal').style.display = 'flex';
+    document.getElementById('userNama').value = '';
+    document.getElementById('userEmail').value = '';
+    document.getElementById('userPass').value = '';
+    document.getElementById('userPass').placeholder = 'Password wajib diisi';
+    document.getElementById('userRole').value = 'Staff';
+    document.getElementById('userModal').style.display = 'flex';
   };
 
-  window.closeModal = () => document.getElementById('modal').style.display = 'none';
+  window.closeModal = () => {
+    document.getElementById('userModal').style.display = 'none';
+  };
 
   window.editUser = (uid, data) => {
-    currentUid = uid;
+    currentEditUid = uid;
     document.getElementById('modalTitle').textContent = 'Edit User';
-    document.getElementById('nama').value = data.nama || '';
-    document.getElementById('email').value = data.email || '';
-    document.getElementById('password').value = '';
-    document.getElementById('password').placeholder = 'Kosongkan jika tidak ganti password';
-    document.getElementById('role').value = data.role || 'Staff';
-    document.getElementById('modal').style.display = 'flex';
+    document.getElementById('userNama').value = data.nama || '';
+    document.getElementById('userEmail').value = data.email || '';
+    document.getElementById('userPass').value = '';
+    document.getElementById('userPass').placeholder = 'Kosongkan jika tidak ganti password';
+    document.getElementById('userRole').value = data.role || 'Staff';
+    document.getElementById('userModal').style.display = 'flex';
   };
 
   window.saveUser = async () => {
-    const nama = document.getElementById('nama').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const pass = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
+    const nama = document.getElementById('userNama').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
+    const pass = document.getElementById('userPass').value;
+    const role = document.getElementById('userRole').value;
 
     if (!nama || !email) return alert('Nama dan email wajib diisi!');
 
     try {
-      let uid = currentUid;
+      let uid = currentEditUid;
+
+      if (!uid && !pass) return alert('Password wajib diisi untuk user baru!');
 
       if (!uid) {
-        if (!pass) return alert('Password wajib diisi untuk user baru!');
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         uid = cred.user.uid;
       }
@@ -192,11 +356,12 @@
     }
   };
 
-  window.hapusUser = async (uid) => {
-    if (!confirm('Yakin hapus user ini?')) return;
+  window.deleteUser = async (uid) => {
+    if (!confirm('Yakin hapus user ini? Data akan hilang permanen.')) return;
     await remove(ref(db, 'users/' + uid));
     alert('User berhasil dihapus');
   };
 </script>
+
 </body>
 </html>
