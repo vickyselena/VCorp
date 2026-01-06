@@ -18,6 +18,7 @@
       --border: #bae6fd;
       --shadow: 0 15px 40px rgba(14,165,233,0.12);
       --online: #10b981;
+      --danger: #ef4444;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:var(--bg); color:var(--primary); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
@@ -80,30 +81,31 @@
     .user-info-sidebar {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.5rem;
       margin-bottom: 2rem;
     }
     .user-avatar {
-      width: 56px;
-      height: 56px;
+      width: 64px;
+      height: 64px;
       background: var(--accent);
       color: white;
       border-radius: 50%;
       display: grid;
       place-items: center;
       font-weight: 700;
-      font-size: 1.5rem;
-      box-shadow: 0 8px 20px rgba(14,165,233,0.3);
+      font-size: 1.8rem;
+      box-shadow: 0 12px 30px rgba(14,165,233,0.35);
+      flex-shrink: 0;
     }
     .user-details h4 {
       font-weight: 600;
       font-size: 1.15rem;
       color: var(--primary);
+      margin-bottom: 4px;
     }
     .user-details p {
       color: var(--text-light);
       font-size: 0.95rem;
-      margin-top: 4px;
     }
     .status-online {
       display: inline-block;
@@ -124,17 +126,23 @@
     .logout-btn {
       display: flex;
       align-items: center;
-      padding: 18px 28px;
+      gap: 20px;
+      padding: 20px 28px;
       border-radius: 24px;
-      color: #ef4444;
+      color: var(--danger);
       font-weight: 600;
       background: rgba(239,68,68,0.08);
-      transition: 0.4s;
+      border: 1px solid rgba(239,68,68,0.15);
+      transition: all 0.4s ease;
       cursor: pointer;
     }
     .logout-btn:hover {
       background: rgba(239,68,68,0.15);
-      transform: translateX(10px);
+      transform: translateX(8px);
+      border-color: rgba(239,68,68,0.3);
+    }
+    .logout-btn .icon {
+      font-size: 1.5rem;
     }
 
     .main {
@@ -142,22 +150,75 @@
       padding: 5rem;
       flex: 1;
     }
-    /* ... sisa style dashboard tetap sama ... */
-    .header h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -2px; margin-bottom: 1rem; }
-    .header p { color: var(--text-light); font-size: 1.4rem; }
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin: 4rem 0; }
-    .stat-card { background: var(--card); padding: 3rem; border-radius: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: 0.5s; }
-    .stat-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(14,165,233,0.2); }
-    .stat-label { color: var(--text-light); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem; }
-    .stat-value { font-size: 4.5rem; font-weight: 700; color: var(--accent); letter-spacing: -2px; }
-    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
-    .chart-card { background: var(--card); padding: 3rem; border-radius: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-    .chart-title { font-size: 1.6rem; font-weight: 600; margin-bottom: 2.5rem; color: var(--primary); }
+    .header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 1rem;
+    }
+    .header p {
+      color: var(--text-light);
+      font-size: 1.4rem;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      margin: 4rem 0;
+    }
+    .stat-card {
+      background: var(--card);
+      padding: 3rem;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: 0.5s;
+    }
+    .stat-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 25px 50px rgba(14,165,233,0.2);
+    }
+    .stat-label {
+      color: var(--text-light);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+    }
+    .stat-value {
+      font-size: 4.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -2px;
+    }
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    .chart-card {
+      background: var(--card);
+      padding: 3rem;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .chart-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+      color: var(--primary);
+    }
+    .chart-container {
+      position: relative;
+      height: 380px;
+    }
 
     @media (max-width: 1200px) {
       .sidebar { width: 90px; padding: 3rem 1.5rem; }
       .logo, .nav-text, .user-details, .logout-btn span { display: none; }
-      .user-avatar { width: 48px; height: 48px; }
+      .user-avatar { width: 48px; height: 48px; font-size: 1.4rem; }
       .main { margin-left: 90px; }
     }
   </style>
@@ -184,14 +245,12 @@
       <span class="nav-text">Stock Out</span>
     </a>
 
-    <!-- ADMIN MENU -->
     <a href="users.html" class="nav-item" id="menuKelolaUser" style="display:none">
       <span class="icon">👥</span>
       <span class="nav-text">Kelola User</span>
     </a>
   </nav>
 
-  <!-- USER INFO + LOGOUT — PALING BAWAH -->
   <div class="bottom-section">
     <div class="user-info-sidebar">
       <div class="user-avatar" id="sidebarAvatar">V</div>
@@ -203,7 +262,7 @@
 
     <div class="logout-btn" id="logout">
       <span class="icon">⏻</span>
-      <span>Logout</span>
+      <span class="logout-text">Logout</span>
     </div>
   </div>
 </div>
@@ -236,11 +295,11 @@
   <div class="charts">
     <div class="chart-card">
       <div class="chart-title">Proporsi Kategori</div>
-      <canvas id="chartKat"></canvas>
+      <div class="chart-container"><canvas id="chartKat"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="chart-title">Kondisi Aset Saat Ini</div>
-      <canvas id="chartKond"></canvas>
+      <div class="chart-container"><canvas id="chartKond"></canvas></div>
     </div>
   </div>
 </div>
@@ -256,12 +315,10 @@
     const nama = user.displayName || user.email.split('@')[0];
     const initial = nama.charAt(0).toUpperCase();
 
-    // Update semua info user
     document.getElementById('headerNama').textContent = nama;
     document.getElementById('sidebarNama').textContent = nama;
     document.getElementById('sidebarAvatar').textContent = initial;
 
-    // Cek role
     onValue(ref(db, 'users/' + user.uid + '/role'), snap => {
       const role = snap.val() || 'Staff';
       document.getElementById('sidebarRole').textContent = role;
@@ -271,12 +328,10 @@
     });
   });
 
-  // Logout
   document.getElementById('logout').onclick = () => {
     if (confirm('Yakin ingin logout?')) signOut(auth);
   };
 
-  // Realtime Data Inventaris (sama seperti sebelumnya)
   let chartKat, chartKond;
   onValue(ref(db, 'inventaris'), snap => {
     const data = snap.val() || {};
