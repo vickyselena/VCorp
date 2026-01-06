@@ -8,139 +8,124 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg: #0f172a;
-      --sidebar: #1e293b;
-      --card: #1e293b;
-      --text: #f8fafc;
-      --text-light: #94a3b8;
-      --accent: #8b5cf6;
-      --accent-hover: #7c3aed;
-      --green: #10b981;
-      --yellow: #f59e0b;
-      --red: #ef4444;
-      --border: #334155;
+      --bg: #f0f9ff;
+      --sidebar: #ffffff;
+      --card: #ffffff;
+      --primary: #0c4a6e;
+      --accent: #0ea5e9;
+      --accent-hover: #0284c7;
+      --text-light: #64748b;
+      --border: #bae6fd;
+      --shadow: 0 15px 40px rgba(14,165,233,0.12);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
+    body { background:var(--bg); color:var(--primary); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
     
     .sidebar {
-      width: 280px;
+      width: 300px;
       background: var(--sidebar);
-      padding: 2.5rem 2rem;
+      padding: 3.5rem 2.5rem;
       position: fixed;
       height: 100%;
       border-right: 1px solid var(--border);
+      box-shadow: var(--shadow);
     }
     .logo {
-      font-size: 2.4rem;
+      font-size: 2.8rem;
       font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 4rem;
+      letter-spacing: -2px;
+      margin-bottom: 5rem;
+      color: var(--accent);
     }
-    .logo span { color: rgba(255,255,255,0.6); font-weight: 400; }
+    .logo span { color: var(--text-light); font-weight: 400; }
     .nav-item {
       display: flex;
       align-items: center;
-      padding: 16px 20px;
-      border-radius: 16px;
+      padding: 20px 28px;
+      border-radius: 24px;
       color: var(--text-light);
       font-weight: 500;
-      margin-bottom: 8px;
-      transition: 0.3s;
+      margin-bottom: 16px;
+      transition: 0.4s;
       cursor: pointer;
     }
     .nav-item:hover {
-      background: rgba(139,92,246,0.2);
-      color: white;
+      background: rgba(14,165,233,0.08);
+      color: var(--accent);
+      transform: translateX(10px);
     }
     .nav-item.active {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
       color: white;
       font-weight: 600;
-    }
-    .nav-item .icon {
-      margin-right: 16px;
-      font-size: 1.3rem;
+      box-shadow: 0 12px 30px rgba(14,165,233,0.3);
     }
 
     .main {
-      margin-left: 280px;
-      padding: 3rem;
+      margin-left: 300px;
+      padding: 5rem;
       flex: 1;
     }
-    .header {
-      margin-bottom: 3rem;
-    }
     .header h1 {
-      font-size: 2.8rem;
+      font-size: 3.5rem;
       font-weight: 700;
-      letter-spacing: -1px;
+      letter-spacing: -1.5px;
+      margin-bottom: 1rem;
     }
     .header p {
       color: var(--text-light);
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      margin: 4rem 0;
     }
     .stat-card {
       background: var(--card);
-      padding: 2rem;
-      border-radius: 20px;
+      padding: 3rem;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
       border: 1px solid var(--border);
-      transition: 0.3s;
+      transition: 0.5s;
     }
     .stat-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transform: translateY(-15px);
+      box-shadow: 0 25px 50px rgba(14,165,233,0.2);
     }
     .stat-label {
       color: var(--text-light);
-      font-size: 0.9rem;
+      font-size: 1rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 1rem;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
     }
     .stat-value {
-      font-size: 3rem;
+      font-size: 4rem;
       font-weight: 700;
-      color: white;
+      color: var(--accent);
     }
 
     .charts {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 3rem;
+      margin-top: 3rem;
     }
     .chart-card {
       background: var(--card);
-      padding: 2rem;
-      border-radius: 20px;
+      padding: 3rem;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
       border: 1px solid var(--border);
     }
     .chart-title {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: white;
-    }
-    .chart-container {
-      position: relative;
-      height: 300px;
-    }
-
-    @media (max-width: 1100px) {
-      .sidebar { width: 90px; padding: 2rem 1rem; }
-      .logo, .nav-text { display: none; }
-      .main { margin-left: 90px; }
-    }
-    @media (max-width: 768px) {
-      .charts { grid-template-columns: 1fr; }
+      margin-bottom: 2.5rem;
+      color: var(--primary);
     }
   </style>
 </head>
@@ -149,23 +134,21 @@
 <div class="sidebar">
   <div class="logo">VC<span>orp</span></div>
   <nav>
-    <div class="nav-item active"><span class="icon">⊞</span><span class="nav-text">Dashboard</span></div>
-    <div class="nav-item"><span class="icon">📦</span><span class="nav-text">Inventory</span></div>
-    <div class="nav-item"><span class="icon">↓</span><span class="nav-text">Stock In</span></div>
-    <div class="nav-item"><span class="icon">↑</span><span class="nav-text">Stock Out</span></div>
-    <div style="margin-top: auto; padding-top: 2rem;">
-      <div class="nav-item" id="adminMenu" style="display:none"><span class="icon">⚙️</span><span class="nav-text">Admin</span></div>
-      <div class="nav-item" id="logout" style="color:#ef4444"><span class="icon">⏻</span><span class="nav-text">Logout</span></div>
+    <div class="nav-item active">Dashboard</div>
+    <div class="nav-item">Inventory</div>
+    <div class="nav-item">Stock In</div>
+    <div class="nav-item">Stock Out</div>
+    <div style="margin-top: auto;">
+      <div class="nav-item" id="adminMenu" style="display:none">Admin Panel</div>
+      <div class="nav-item" id="logout" style="color:#ef4444">Logout</div>
     </div>
   </nav>
 </div>
 
 <div class="main">
   <div class="header">
-    <div>
-      <h1>Inventory Dashboard</h1>
-      <p>Welcome back, <span id="userName">User</span></p>
-    </div>
+    <h1>Inventory Dashboard</h1>
+    <p>Selamat datang kembali, <span id="userName">User</span></p>
   </div>
 
   <div class="stats">
@@ -177,11 +160,11 @@
       <div class="stat-label">Total Stock</div>
       <div class="stat-value" id="totalStok">0</div>
     </div>
-    <div class="stat-card" style="border-left: 5px solid var(--red)">
-      <div class="stat-label">Damaged/Lost</div>
+    <div class="stat-card">
+      <div class="stat-label">Damaged Items</div>
       <div class="stat-value" id="rusak">0</div>
     </div>
-    <div class="stat-card" style="border-left: 5px solid var(--yellow)">
+    <div class="stat-card">
       <div class="stat-label">Top Category</div>
       <div class="stat-value" id="topKat">-</div>
     </div>
@@ -190,11 +173,11 @@
   <div class="charts">
     <div class="chart-card">
       <div class="chart-title">Category Distribution</div>
-      <div class="chart-container"><canvas id="chart1"></canvas></div>
+      <canvas id="chart1"></canvas>
     </div>
     <div class="chart-card">
       <div class="chart-title">Asset Condition</div>
-      <div class="chart-container"><canvas id="chart2"></canvas></div>
+      <canvas id="chart2"></canvas>
     </div>
   </div>
 </div>
@@ -208,7 +191,7 @@
     if (!user) return location.href = "login.html";
     document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
     onValue(ref(db, 'users/' + user.uid + '/role'), s => {
-      if (s.val() === 'Admin') document.getElementById('adminMenu').style.display = 'flex';
+      if (s.val() === 'Admin') document.getElementById('adminMenu').style.display = 'block';
     });
   });
 
@@ -233,10 +216,10 @@
     document.getElementById('rusak').textContent = rusak.toLocaleString('id-ID');
     document.getElementById('topKat').textContent = Object.keys(kat).sort((a,b)=>kat[b]-kat[a])[0] || '-';
 
-    if (!c1) c1 = new Chart('chart1', {type:'doughnut', data:{labels:Object.keys(kat), datasets:[{data:Object.values(kat), backgroundColor:['#8b5cf6','#3b82f6','#10b981','#f59e0b','#ef4444']}]}, options:{plugins:{legend:{labels:{color:'white'}}}}});
+    if (!c1) c1 = new Chart('chart1', {type:'doughnut', data:{labels:Object.keys(kat), datasets:[{data:Object.values(kat), backgroundColor:['#0ea5e9','#06b6d4','#0891b2','#0c4a6e','#0369a1']}]}, options:{plugins:{legend:{position:'right'}}, cutout:'70%'}});
     else { c1.data.labels = Object.keys(kat); c1.data.datasets[0].data = Object.values(kat); c1.update(); }
 
-    if (!c2) c2 = new Chart('chart2', {type:'bar', data:{labels:Object.keys(kond), datasets:[{data:Object.values(kond), backgroundColor:['#10b981','#f59e0b','#ef4444']}]}, options:{plugins:{legend:{display:false}}, scales:{y:{ticks:{color:'white'}}, x:{ticks:{color:'white'}}}}});
+    if (!c2) c2 = new Chart('chart2', {type:'bar', data:{labels:Object.keys(kond), datasets:[{data:Object.values(kond), backgroundColor:['#10b981','#f59e0b','#ef4444'], borderRadius:16}]}, options:{plugins:{legend:{display:false}}}});
     else { c2.data.labels = Object.keys(kond); c2.data.datasets[0].data = Object.values(kond); c2.update(); }
   });
 </script>
