@@ -71,14 +71,17 @@
       font-size: 1.4rem;
     }
 
-    /* USER INFO PALING BAWAH */
-    .user-info-sidebar {
+    /* USER INFO + LOGOUT — PALING BAWAH */
+    .bottom-section {
       margin-top: auto;
-      padding-top: 2rem;
+      padding-top: 2.5rem;
       border-top: 1px solid var(--border);
+    }
+    .user-info-sidebar {
       display: flex;
       align-items: center;
       gap: 1rem;
+      margin-bottom: 2rem;
     }
     .user-avatar {
       width: 56px;
@@ -94,7 +97,7 @@
     }
     .user-details h4 {
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--primary);
     }
     .user-details p {
@@ -109,7 +112,29 @@
       background: var(--online);
       border-radius: 50%;
       margin-right: 8px;
-      box-shadow: 0 0 10px rgba(16,185,129,0.6);
+      box-shadow: 0 0 12px rgba(16,185,129,0.6);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      padding: 18px 28px;
+      border-radius: 24px;
+      color: #ef4444;
+      font-weight: 600;
+      background: rgba(239,68,68,0.08);
+      transition: 0.4s;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: rgba(239,68,68,0.15);
+      transform: translateX(10px);
     }
 
     .main {
@@ -117,7 +142,7 @@
       padding: 5rem;
       flex: 1;
     }
-    /* ... sisa style sama seperti sebelumnya ... */
+    /* ... sisa style dashboard tetap sama ... */
     .header h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -2px; margin-bottom: 1rem; }
     .header p { color: var(--text-light); font-size: 1.4rem; }
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin: 4rem 0; }
@@ -131,7 +156,7 @@
 
     @media (max-width: 1200px) {
       .sidebar { width: 90px; padding: 3rem 1.5rem; }
-      .logo, .nav-text, .user-details { display: none; }
+      .logo, .nav-text, .user-details, .logout-btn span { display: none; }
       .user-avatar { width: 48px; height: 48px; }
       .main { margin-left: 90px; }
     }
@@ -159,7 +184,15 @@
       <span class="nav-text">Stock Out</span>
     </a>
 
-    <!-- USER INFO PALING BAWAH -->
+    <!-- ADMIN MENU -->
+    <a href="users.html" class="nav-item" id="menuKelolaUser" style="display:none">
+      <span class="icon">👥</span>
+      <span class="nav-text">Kelola User</span>
+    </a>
+  </nav>
+
+  <!-- USER INFO + LOGOUT — PALING BAWAH -->
+  <div class="bottom-section">
     <div class="user-info-sidebar">
       <div class="user-avatar" id="sidebarAvatar">V</div>
       <div class="user-details">
@@ -168,21 +201,14 @@
       </div>
     </div>
 
-    <div style="margin-top: 2rem;">
-      <a href="users.html" class="nav-item" id="menuKelolaUser" style="display:none">
-        <span class="icon">👥</span>
-        <span class="nav-text">Kelola User</span>
-      </a>
-      <a href="#" id="logout" class="nav-item" style="color:#ef4444">
-        <span class="icon">⏻</span>
-        <span class="nav-text">Logout</span>
-      </a>
+    <div class="logout-btn" id="logout">
+      <span class="icon">⏻</span>
+      <span>Logout</span>
     </div>
-  </nav>
+  </div>
 </div>
 
 <div class="main">
-  <!-- Header dan konten dashboard tetap sama -->
   <div class="header">
     <h1>Inventory Dashboard</h1>
     <p>Selamat datang kembali, <strong id="headerNama">User</strong>!</p>
@@ -210,11 +236,11 @@
   <div class="charts">
     <div class="chart-card">
       <div class="chart-title">Proporsi Kategori</div>
-      <div class="chart-container"><canvas id="chartKat"></canvas></div>
+      <canvas id="chartKat"></canvas>
     </div>
     <div class="chart-card">
       <div class="chart-title">Kondisi Aset Saat Ini</div>
-      <div class="chart-container"><canvas id="chartKond"></canvas></div>
+      <canvas id="chartKond"></canvas>
     </div>
   </div>
 </div>
@@ -230,12 +256,12 @@
     const nama = user.displayName || user.email.split('@')[0];
     const initial = nama.charAt(0).toUpperCase();
 
-    // Update semua tempat nama muncul
+    // Update semua info user
     document.getElementById('headerNama').textContent = nama;
     document.getElementById('sidebarNama').textContent = nama;
     document.getElementById('sidebarAvatar').textContent = initial;
 
-    // Cek role → munculkan menu Kelola User kalau Admin
+    // Cek role
     onValue(ref(db, 'users/' + user.uid + '/role'), snap => {
       const role = snap.val() || 'Staff';
       document.getElementById('sidebarRole').textContent = role;
@@ -245,8 +271,8 @@
     });
   });
 
-  document.getElementById('logout').onclick = (e) => {
-    e.preventDefault();
+  // Logout
+  document.getElementById('logout').onclick = () => {
     if (confirm('Yakin ingin logout?')) signOut(auth);
   };
 
