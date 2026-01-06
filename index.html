@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VCorp Inventory</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f0f0f0;padding:20px;text-align:center}
+    .card{background:white;padding:40px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:500px;margin:50px auto}
+    h1{color:#2F5928}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>VC<span style="color:#888;font-style:italic">orp.</span></h1>
+    <p style="margin:30px 0;font-size:18px">Selamat datang di sistem inventory baru!</p>
+    <p id="status">Loading data...</p>
+    <p id="demo"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const app = initializeApp({
+      apiKey: "AIzaSyDnmmQWABHvOEuEWe9-C-s8U7fLMlHnqTc",
+      authDomain: "vcorp.firebaseapp.com",
+      databaseURL: "https://vcorp-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "vcorp"
+    });
+
+    const db = getDatabase(app);
+    const testRef = ref(db, 'test');
+
+    onValue(testRef, (snapshot) => {
+      const data = snapshot.val();
+      document.getElementById('status').innerHTML = 'Koneksi berhasil! ✅';
+      document.getElementById('demo').innerHTML = 'Data dari Firebase: <b>' + (data || 'kosong') + '</b>';
+    });
+  </script>
+</body>
+</html>
