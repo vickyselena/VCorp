@@ -3,40 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VCorp Inventory</title>
+  <title>VCorp - Inventory Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body{font-family:Arial,sans-serif;background:#f0f0f0;padding:20px;text-align:center}
-    .card{background:white;padding:40px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);max-width:500px;margin:50px auto}
-    h1{color:#2F5928}
+    :root {
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --primary: #1E293B;
+      --green: #10B981;
+      --yellow: #F59E0B;
+      --red: #EF4444;
+      --gray: #64748B;
+      --light: #F1F5F9;
+      --radius: 20px;
+      --shadow: 0 10px 30px -8px rgba(0,0,0,0.08);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); font-family:'Inter',sans-serif; color:var(--primary); line-height:1.6; }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--primary);
+    }
+    .logo span { color:#94A3B8; font-weight:400; font-style:italic; }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .avatar {
+      width: 50px;
+      height: 50px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform .3s ease;
+    }
+    .stat-card:hover { transform: translateY(-8px); }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--green);
+    }
+    .stat-card.yellow::before { background: var(--yellow); }
+    .stat-card.red::before { background: var(--red); }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .chart-card {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .chart-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 320px;
+    }
+
+    @media (max-width: 992px) {
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      header { flex-direction: column; gap: 1rem; text-align: center; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>VC<span style="color:#888;font-style:italic">orp.</span></h1>
-    <p style="margin:30px 0;font-size:18px">Selamat datang di sistem inventory baru!</p>
-    <p id="status">Loading data...</p>
-    <p id="demo"></p>
+
+<div class="container">
+  <header>
+    <div class="logo">VC<span>orp</span></div>
+    <div class="user-info">
+      <div style="text-align:right">
+        <div id="userName" style="font-weight:600;font-size:1.1rem">Vicky</div>
+        <div style="color:var(--gray);font-size:0.9rem">Administrator</div>
+      </div>
+      <div class="avatar" id="userAvatar">V</div>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Item</div>
+      <div class="stat-value" id="totalItems">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Stok</div>
+      <div class="stat-value" id="totalStok">0</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Rusak / Hilang</div>
+      <div class="stat-value" id="rusak">0</div>
+    </div>
+    <div class="stat-card yellow">
+      <div class="stat-label">Top Kategori</div>
+      <div class="stat-value" id="topKategori" style="font-size:2rem">-</div>
+    </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Proporsi Kategori</div>
+      <div class="chart-container">
+        <canvas id="chartKategori"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Kondisi Aset Saat Ini</div>
+      <div class="chart-container">
+        <canvas id="chartKondisi"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
 
-    const app = initializeApp({
-      apiKey: "AIzaSyDnmmQWABHvOEuEWe9-C-s8U7fLMlHnqTc",
-      authDomain: "vcorp.firebaseapp.com",
-      databaseURL: "https://vcorp-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "vcorp"
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const app = initializeApp({
+    apiKey: "AIzaSyDnmmQWABHvOEuEWe9-C-s8U7fLMlHnqTc",
+    authDomain: "vcorp.firebaseapp.com",
+    databaseURL: "https://vcorp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "vcorp"
+  });
+
+  const db = getDatabase(app);
+  const inventarisRef = ref(db, 'inventaris');
+
+  let chart1, chart2;
+
+  onValue(inventarisRef, (snapshot) => {
+    const data = snapshot.val() || {};
+    const items = Object.values(data);
+    
+    let totalItems = items.length;
+    let totalStok = 0;
+    let rusak = 0;
+    const kategori = {};
+    const kondisi = { 'Baik': 0, 'Perlu Servis': 0, 'Rusak': 0 };
+
+    items.forEach(item => {
+      const qty = Number(item.jumlah) || 0;
+      totalStok += qty;
+      if (item.kondisi === 'Rusak') rusak += qty;
+
+      // Kategori
+      const kat = item.kategori || 'Lainnya';
+      kategori[kat] = (kategori[kat] || 0) + qty;
+
+      // Kondisi
+      const kon = item.kondisi || 'Baik';
+      kondisi[kon] = (kondisi[kon] || 0) + qty;
     });
 
-    const db = getDatabase(app);
-    const testRef = ref(db, 'test');
+    // Update stats
+    document.getElementById('totalItems').textContent = totalItems.toLocaleString('id-ID');
+    document.getElementById('totalStok').textContent = totalStok.toLocaleString('id-ID');
+    document.getElementById('rusak').textContent = rusak.toLocaleString('id-ID');
 
-    onValue(testRef, (snapshot) => {
-      const data = snapshot.val();
-      document.getElementById('status').innerHTML = 'Koneksi berhasil! ✅';
-      document.getElementById('demo').innerHTML = 'Data dari Firebase: <b>' + (data || 'kosong') + '</b>';
-    });
-  </script>
+    // Top kategori
+    let topKat = '-';
+    let max = 0;
+    for (const [k, v] of Object.entries(kategori)) {
+      if (v > max) { max = v; topKat = k; }
+    }
+    document.getElementById('topKategori').textContent = topKat;
+
+    // Chart Kategori
+    const ctx1 = document.getElementById('chartKategori');
+    if (!chart1) {
+      chart1 = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(kategori),
+          datasets: [{
+            data: Object.values(kategori),
+            backgroundColor: ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444', '#6B7280'],
+            borderWidth: 0,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          plugins: { legend: { position: 'right' } },
+          cutout: '65%'
+        }
+      });
+    } else {
+      chart1.data.labels = Object.keys(kategori);
+      chart1.data.datasets[0].data = Object.values(kategori);
+      chart1.update('quiet');
+    }
+
+    // Chart Kondisi
+    const ctx2 = document.getElementById('chartKondisi');
+    if (!chart2) {
+      chart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(kondisi),
+          datasets: [{
+            data: Object.values(kondisi),
+            backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+            borderRadius: 10,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    } else {
+      chart2.data.labels = Object.keys(kondisi);
+      chart2.data.datasets[0].data = Object.values(kondisi);
+      chart2.update('quiet');
+    }
+  });
+</script>
+
 </body>
 </html>
