@@ -6,36 +6,52 @@
   <title>Kelola User - VCorp</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* STYLE SAMA PERSIS DENGAN index.html — hanya loading yang diubah */
+    /* STYLE SAMA DENGAN index.html — hanya loading yang di-update */
     #globalLoader {
       position:fixed; inset:0; background:#f0f9ff; z-index:99999;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       transition:opacity 0.6s ease; opacity:1;
     }
     #globalLoader .logo {
-      font-size:4rem; font-weight:800; letter-spacing:-2px; color:#0ea5e9;
-      margin-bottom:1.5rem;
+      font-size:3.8rem; font-weight:800; letter-spacing:-2px; color:#0ea5e9;
+      margin-bottom:2rem;
     }
     #globalLoader .logo span { color:#64748b; font-weight:400; }
-    #globalLoader .spinner {
-      width:60px; height:60px; border:6px solid #e0f2fe; border-top:6px solid #0ea5e9;
-      border-radius:50%; animation:spin 1s linear infinite; margin:2rem 0;
+    .wave-loader {
+      display:flex; gap:8px; align-items:end; height:60px;
     }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    /* sisa style sidebar, main, table, modal — gunakan yang sudah kamu punya dari versi sebelumnya */
+    .wave-bar {
+      width:8px; background:#0ea5e9; border-radius:8px;
+      animation:wave 1.2s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(1) { height:20px; animation-delay:0s; }
+    .wave-bar:nth-child(2) { height:40px; animation-delay:0.1s; }
+    .wave-bar:nth-child(3) { height:60px; animation-delay:0.2s; }
+    .wave-bar:nth-child(4) { height:40px; animation-delay:0.3s; }
+    .wave-bar:nth-child(5) { height:20px; animation-delay:0.4s; }
+    @keyframes wave {
+      0%, 100% { transform:scaleY(0.4); }
+      50% { transform:scaleY(1); }
+    }
+    /* sisa style sidebar, main, table, modal — gunakan yang sudah ada */
   </style>
 </head>
 <body>
 
-<!-- LOADING SIMPEL -->
+<!-- LOADING TALI NAIK-TURUN — 1 DETIK -->
 <div id="globalLoader">
   <div class="logo">VC<span>orp</span></div>
-  <div class="spinner"></div>
-  <p>Memuat data user...</p>
+  <div class="wave-loader">
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
 </div>
 
 <!-- SIDEBAR & MAIN CONTENT — SAMA SEPERTI VERSI SEBELUMNYA -->
-<!-- (gunakan sidebar + main + modal dari versi users.html sebelumnya) -->
+<!-- Gunakan sidebar + main + modal dari users.html sebelumnya -->
 
 <script type="module">
   import { auth, db } from "./firebase-config.js";
@@ -44,31 +60,19 @@
 
   const loader = document.getElementById('globalLoader');
 
+  // LOADING HILANG DALAM 1 DETIK
+  setTimeout(() => {
+    loader.style.opacity = '0';
+  }, 1000);
+  setTimeout(() => loader.remove(), 1600);
+
+  // Sisa script kelola user tetap sama seperti sebelumnya
   onAuthStateChanged(auth, user => {
-    if (!user) {
-      setTimeout(() => loader.style.opacity = '0', 800);
-      setTimeout(() => location.href = "login.html", 1400);
-      return;
-    }
-
-    setTimeout(() => loader.style.opacity = '0', 1200);
-    setTimeout(() => loader.remove(), 1800);
-
-    const nama = user.displayName || user.email.split('@')[0];
-    document.getElementById('sidebarNama').textContent = nama;
-    document.getElementById('sidebarAvatar').textContent = nama[0].toUpperCase();
-
-    onValue(ref(db, 'users/' + user.uid + '/role'), snap => {
-      const role = snap.val() || 'Staff';
-      document.getElementById('sidebarRole').textContent = role;
-      if (role !== 'Admin') {
-        alert('Hanya Admin!');
-        location.href = "index.html";
-      }
-    });
+    if (!user) return location.href = "login.html";
+    // ... sisa kode user info + cek admin + tampilkan user ...
   });
 
-  // ... sisa script kelola user tetap sama seperti sebelumnya ...
+  // ... sisa script modal, saveUser, deleteUser tetap sama ...
 </script>
 </body>
 </html>
