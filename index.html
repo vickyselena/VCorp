@@ -23,24 +23,37 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:var(--bg); color:var(--primary); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
 
-    /* LOADING SIMPEL & RINGAN */
+    /* LOADING TALI NAIK-TURUN — 1 DETIK SAJA */
     #globalLoader {
       position:fixed; inset:0; background:var(--bg); z-index:99999;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       transition:opacity 0.6s ease; opacity:1;
     }
     #globalLoader .logo {
-      font-size:4rem; font-weight:800; letter-spacing:-2px; color:var(--accent);
-      margin-bottom:1.5rem;
+      font-size:3.8rem; font-weight:800; letter-spacing:-2px; color:var(--accent);
+      margin-bottom:2rem;
     }
     #globalLoader .logo span { color:#64748b; font-weight:400; }
-    #globalLoader .spinner {
-      width:60px; height:60px; border:6px solid #e0f2fe; border-top:6px solid var(--accent);
-      border-radius:50%; animation:spin 1s linear infinite; margin:2rem 0;
-    }
-    @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* SIDEBAR & MAIN — SAMA SEPERTI VERSI TERAKHIR */
+    .wave-loader {
+      display:flex; gap:8px; align-items:end; height:60px;
+    }
+    .wave-bar {
+      width:8px; background:var(--accent); border-radius:8px;
+      animation:wave 1.2s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(1) { height:20px; animation-delay:0s; }
+    .wave-bar:nth-child(2) { height:40px; animation-delay:0.1s; }
+    .wave-bar:nth-child(3) { height:60px; animation-delay:0.2s; }
+    .wave-bar:nth-child(4) { height:40px; animation-delay:0.3s; }
+    .wave-bar:nth-child(5) { height:20px; animation-delay:0.4s; }
+
+    @keyframes wave {
+      0%, 100% { transform:scaleY(0.4); }
+      50% { transform:scaleY(1); }
+    }
+
+    /* SIDEBAR & MAIN — TETAP SAMA */
     .sidebar { width:300px; background:var(--sidebar); padding:3.5rem 2.5rem; position:fixed; height:100%; border-right:1px solid var(--border); box-shadow:var(--shadow); z-index:10; display:flex; flex-direction:column; }
     .logo { font-size:2.8rem; font-weight:800; letter-spacing:-2px; margin-bottom:5rem; color:var(--accent); }
     .logo span { color:var(--text-light); font-weight:400; }
@@ -80,13 +93,19 @@
 </head>
 <body>
 
-<!-- LOADING SIMPEL -->
+<!-- LOADING TALI NAIK-TURUN — 1 DETIK -->
 <div id="globalLoader">
   <div class="logo">VC<span>orp</span></div>
-  <div class="spinner"></div>
-  <p>Memuat dashboard...</p>
+  <div class="wave-loader">
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
 </div>
 
+<!-- SIDEBAR & MAIN CONTENT SAMA SEPERTI SEBELUMNYA -->
 <div class="sidebar">
   <div class="logo">VC<span>orp</span></div>
   <nav>
@@ -138,15 +157,14 @@
 
   const loader = document.getElementById('globalLoader');
 
-  onAuthStateChanged(auth, user => {
-    if (!user) {
-      setTimeout(() => loader.style.opacity = '0', 800);
-      setTimeout(() => location.href = "login.html", 1400);
-      return;
-    }
+  // LOADING HILANG DALAM 1 DETIK
+  setTimeout(() => {
+    loader.style.opacity = '0';
+  }, 1000);
+  setTimeout(() => loader.remove(), 1600);
 
-    setTimeout(() => loader.style.opacity = '0', 1200);
-    setTimeout(() => loader.remove(), 1800);
+  onAuthStateChanged(auth, user => {
+    if (!user) return location.href = "login.html";
 
     const nama = user.displayName || user.email.split('@')[0];
     document.getElementById('headerNama').textContent = nama;
@@ -162,6 +180,7 @@
 
   document.getElementById('logout').onclick = () => confirm('Yakin logout?') && signOut(auth);
 
+  // Realtime Data Inventaris
   let chartKat, chartKond;
   onValue(ref(db, 'inventaris'), snap => {
     const data = snap.val() || {};
