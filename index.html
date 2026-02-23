@@ -1,209 +1,1030 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VCorp - Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg: #f0f9ff;
-      --sidebar: #ffffff;
-      --card: #ffffff;
-      --primary: #0c4a6e;
-      --accent: #0ea5e9;
-      --accent-hover: #0284c7;
-      --text-light: #64748b;
-      --border: #bae6fd;
-      --shadow: 0 15px 40px rgba(14,165,233,0.12);
-      --online: #10b981;
-      --danger: #ef4444;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:var(--bg); color:var(--primary); font-family:'Inter',sans-serif; display:flex; min-height:100vh; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VICKY STUDIO | Kreativitas Tanpa Batas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Cormorant Garamond & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --text-light: #ffffff;
+            --text-dim: #888888;
+            --accent: #ffffff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            letter-spacing: -0.02em;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+        }
+        input, select, textarea, button {
+            font-family: 'Inter', sans-serif !important;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .nav-link.active {
+            color: white !important;
+        }
+        .project-card img {
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .project-card:hover img {
+            transform: scale(1.08);
+        }
+        .line-reveal {
+            overflow: hidden;
+        }
+        .line-reveal span {
+            display: block;
+            transform: translateY(110%);
+            animation: reveal 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+        @keyframes reveal {
+            to { transform: translateY(0); }
+        }
+        .border-dim {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .noise::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            z-index: 9999;
+        }
 
-    /* LOADING TALI NAIK-TURUN — 1 DETIK */
-    #globalLoader {
-      position:fixed; inset:0; background:var(--bg); z-index:99999;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      transition:opacity 0.6s ease; opacity:1;
-    }
-    #globalLoader .logo {
-      font-size:3.8rem; font-weight:800; letter-spacing:-2px; color:var(--accent);
-      margin-bottom:2rem;
-    }
-    #globalLoader .logo span { color:#64748b; font-weight:400; }
-    .wave-loader {
-      display:flex; gap:8px; align-items:end; height:60px;
-    }
-    .wave-bar {
-      width:8px; background:var(--accent); border-radius:8px;
-      animation:wave 1.2s ease-in-out infinite;
-    }
-    .wave-bar:nth-child(1) { height:20px; animation-delay:0s; }
-    .wave-bar:nth-child(2) { height:40px; animation-delay:0.1s; }
-    .wave-bar:nth-child(3) { height:60px; animation-delay:0.2s; }
-    .wave-bar:nth-child(4) { height:40px; animation-delay:0.3s; }
-    .wave-bar:nth-child(5) { height:20px; animation-delay:0.4s; }
-    @keyframes wave {
-      0%, 100% { transform:scaleY(0.4); }
-      50% { transform:scaleY(1); }
-    }
-
-    /* SIDEBAR & MAIN — FULL & SEMPURNA */
-    .sidebar { width:300px; background:var(--sidebar); padding:3.5rem 2.5rem; position:fixed; height:100%; border-right:1px solid var(--border); box-shadow:var(--shadow); z-index:10; display:flex; flex-direction:column; }
-    .logo { font-size:2.8rem; font-weight:800; letter-spacing:-2px; margin-bottom:5rem; color:var(--accent); }
-    .logo span { color:var(--text-light); font-weight:400; }
-    .nav-item { display:flex; align-items:center; padding:20px 28px; border-radius:24px; color:var(--text-light); font-weight:500; margin-bottom:16px; transition:0.4s; cursor:pointer; text-decoration:none; }
-    .nav-item:hover { background:rgba(14,165,233,0.08); color:var(--accent); transform:translateX(10px); }
-    .nav-item.active { background:linear-gradient(135deg,var(--accent),var(--accent-hover)); color:white; font-weight:600; box-shadow:0 12px 30px rgba(14,165,233,0.3); }
-    .nav-item .icon { margin-right:18px; font-size:1.4rem; }
-    .bottom-section { margin-top:auto; padding-top:2.5rem; border-top:1px solid var(--border); }
-    .user-info-sidebar { display:flex; align-items:center; gap:1.5rem; margin-bottom:2rem; }
-    .user-avatar { width:64px; height:64px; background:var(--accent); color:white; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:1.8rem; box-shadow:0 12px 30px rgba(14,165,233,0.35); flex-shrink:0; }
-    .user-details h4 { font-weight:600; font-size:1.15rem; color:var(--primary); margin-bottom:4px; }
-    .user-details p { color:var(--text-light); font-size:0.95rem; }
-    .status-online { display:inline-block; width:12px; height:12px; background:var(--online); border-radius:50%; margin-right:8px; box-shadow:0 0 12px rgba(16,185,129,0.6); animation:pulse 2s infinite; }
-    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)} 70%{box-shadow:0 0 0 10px rgba(16,185,129,0)} 100%{box-shadow:0 0 0 0 rgba(16,185,129,0)} }
-    .logout-btn { display:flex; align-items:center; gap:20px; padding:20px 28px; border-radius:24px; color:var(--danger); font-weight:600; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.15); transition:all 0.4s ease; cursor:pointer; }
-    .logout-btn:hover { background:rgba(239,68,68,0.15); transform:translateX(8px); }
-
-    .main { margin-left:300px; padding:5rem; flex:1; }
-    .header h1 { font-size:3.5rem; font-weight:700; letter-spacing:-2px; margin-bottom:1rem; }
-    .header p { color:var(--text-light); font-size:1.4rem; }
-    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2.5rem; margin:4rem 0; }
-    .stat-card { background:var(--card); padding:3rem; border-radius:28px; box-shadow:var(--shadow); border:1px solid var(--border); transition:0.5s; }
-    .stat-card:hover { transform:translateY(-15px); box-shadow:0 25px 50px rgba(14,165,233,0.2); }
-    .stat-label { color:var(--text-light); font-size:1rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem; }
-    .stat-value { font-size:4.5rem; font-weight:700; color:var(--accent); letter-spacing:-2px; }
-    .charts { display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-top:3rem; }
-    .chart-card { background:var(--card); padding:3rem; border-radius:28px; box-shadow:var(--shadow); border:1px solid var(--border); }
-    .chart-title { font-size:1.6rem; font-weight:600; margin-bottom:2.5rem; color:var(--primary); }
-
-    @media (max-width:1200px) {
-      .sidebar { width:90px; padding:3rem 1.5rem; }
-      .logo,.nav-text,.user-details,.logout-btn span { display:none; }
-      .user-avatar { width:48px; height:48px; font-size:1.4rem; }
-      .main { margin-left:90px; }
-    }
-  </style>
+        /* SPA View Styles */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            width: 100%;
+        }
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Ensure sidebar stays fixed while main content scrolls */
+        main {
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        
+        /* Ensure table can grow infinitely */
+        #view-apar {
+            height: auto;
+            min-height: auto;
+        }
+        
+        /* Hide scrollbar for reminder container */
+        #reminder-container::-webkit-scrollbar {
+            display: none;
+        }
+        #reminder-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body>
+<body class="selection:bg-white selection:text-black noise">
 
-<!-- LOADING TALI NAIK-TURUN — 1 DETIK -->
-<div id="globalLoader">
-  <div class="logo">VC<span>orp</span></div>
-  <div class="wave-loader">
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-  </div>
-</div>
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="fixed top-0 left-0 h-full w-24 md:w-48 z-[100] border-r border-white/5 bg-[#050505] flex flex-col justify-between py-12 px-4 items-center hidden md:flex">
+        <div class="flex flex-col items-center">
+            <a href="#" class="nav-link-trigger text-3xl font-serif tracking-tighter hover:italic transition-all whitespace-nowrap" data-target="home">VICKY.</a>
+        </div>
+        
+        <div class="flex flex-col items-center w-full">
+            <div class="flex flex-col items-center gap-12 text-[16px] uppercase tracking-[0.4em] font-medium text-dim">
+                <a href="#" class="nav-link-trigger nav-link hover:text-white transition-colors duration-500 block" data-target="work">Works</a>
+                
+                <div class="flex flex-col items-center gap-4">
+                    <a href="#" class="nav-link-trigger nav-link hover:text-white transition-colors duration-500 block" data-target="data">Data</a>
+                    <!-- Sidebar Sub-menu -->
+                    <div id="sidebar-data-sub" class="max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out flex flex-col items-center gap-3">
+                        <a href="#" class="data-sub-trigger text-[10px] tracking-[0.3em] text-dim hover:text-white transition-colors" data-sub="apar">— APAR Units</a>
+                    </div>
+                </div>
 
-<div class="sidebar">
-  <div class="logo">VC<span>orp</span></div>
-  <nav>
-    <a href="index.html" class="nav-item active"><span class="icon">⊞</span><span class="nav-text">Dashboard</span></a>
-    <a href="inventory.html" class="nav-item"><span class="icon">📦</span><span class="nav-text">Inventaris</span></a>
-    <a href="stock-in.html" class="nav-item"><span class="icon">↓</span><span class="nav-text">Stock In</span></a>
-    <a href="stock-out.html" class="nav-item"><span class="icon">↑</span><span class="nav-text">Stock Out</span></a>
-    <a href="users.html" class="nav-item" id="menuKelolaUser" style="display:none"><span class="icon">👥</span><span class="nav-text">Kelola User</span></a>
-  </nav>
+                <a href="#" class="nav-link-trigger nav-link hover:text-white transition-colors duration-500 block" data-target="contact">Contact</a>
+            </div>
+        </div>
 
-  <div class="bottom-section">
-    <div class="user-info-sidebar">
-      <div class="user-avatar" id="sidebarAvatar">V</div>
-      <div class="user-details">
-        <h4 id="sidebarNama">User</h4>
-        <p><span class="status-online"></span><span id="sidebarRole">Staff</span> • Online</p>
-      </div>
+        <div class="flex flex-col items-center gap-8 w-full">
+            <div class="text-[15px] uppercase tracking-[0.3em] text-dim/50 clock-target text-center leading-relaxed">
+                INDONESIA<br>--:--:-- WIB
+            </div>
+            <div class="w-8 h-[1px] bg-white/10"></div>
+            <button class="group p-2">
+                <i data-lucide="menu" class="w-5 h-5 text-dim group-hover:text-white transition-colors"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-[101] p-6 flex justify-between items-center md:hidden mix-blend-difference">
+        <a href="#" class="nav-link-trigger text-2xl font-serif tracking-tighter" data-target="home">VICKY.</a>
+        <div class="flex items-center gap-4">
+            <div class="text-[15px] uppercase tracking-[0.2em] text-white clock-target text-right leading-tight">
+                --:--:-- WIB
+            </div>
+            <button class="p-2">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="md:pl-48">
+        
+        <!-- Hero Section -->
+        <section id="home" class="view-section active h-screen flex flex-col justify-center px-10 md:px-20 relative">
+            <div class="max-w-full w-full">
+                <div class="line-reveal mb-8">
+                    <span class="text-[11px] uppercase tracking-[0.4em] text-dim font-bold">Creative Excellence / Since 2018</span>
+                </div>
+                <h1 class="text-6xl md:text-[11vw] leading-[0.85] tracking-tighter mb-16">
+                    DEFINING THE <br>
+                    <span class="italic font-light opacity-80">NEXT</span> ERA.
+                </h1>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+                    <div class="md:col-span-5">
+                        <p class="text-lg md:text-2xl text-dim font-light leading-relaxed">
+                            Independent studio crafting iconic visual identities and digital ecosystems for the brands of tomorrow.
+                        </p>
+                    </div>
+                    <div class="md:col-span-7 flex justify-end">
+                        <button class="nav-link-trigger group relative inline-flex items-center justify-center p-1 px-8 py-6 overflow-hidden font-medium text-white transition duration-300 ease-out border border-white/10 rounded-full shadow-md" data-target="work">
+                            <span class="absolute inset-0 flex items-center justify-center w-full h-full text-black duration-300 -translate-x-full bg-white group-hover:translate-x-0 ease">
+                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </span>
+                            <span class="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease uppercase tracking-[0.2em] text-[10px]">Explore Cases</span>
+                            <p class="relative uppercase tracking-[0.2em] text-[10px]">Explore Cases</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Works Section -->
+        <section id="work" class="view-section py-32 px-10 md:px-20">
+            <div class="max-w-full">
+                <div class="flex justify-between items-end mb-24 border-b border-dim pb-12">
+                    <div class="space-y-6">
+                        <p class="text-[15px] uppercase tracking-[0.3em] text-dim">Curation / 01</p>
+                        <h2 class="text-7xl md:text-[9vw] font-serif leading-[0.9]">Selected Works</h2>
+                    </div>
+                    <div class="hidden md:block text-right">
+                        <p class="text-[15px] uppercase tracking-[0.2em] text-dim mb-4">Archive All Time</p>
+                        <p class="text-[17px] font-light">Filtering: All Productions</p>
+                    </div>
+                </div>
+                
+                <!-- Billboard / Workspace Dashboard -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+                    
+                    <!-- Main Billboard: Activity & Notes -->
+                    <div class="md:col-span-8 space-y-12">
+                        <div class="bg-white/[0.02] border border-white/5 p-16 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-8">
+                                <span class="flex h-3 w-3">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-20"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-white/40"></span>
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center mb-16">
+                                <p class="text-[15px] uppercase tracking-[0.4em] text-dim italic">Active Bulletin / Work Logs</p>
+                                <div id="note-status" class="flex items-center gap-2 opacity-0 transition-opacity">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                    <span class="text-[10px] uppercase tracking-widest text-dim">Synced</span>
+                                </div>
+                            </div>
+                            <div class="space-y-2 mb-20">
+                                <p class="text-[15px] uppercase tracking-[0.4em] text-dim/40">Current Focus:</p>
+                                <input type="text" id="studio-focus" class="w-full bg-transparent text-6xl md:text-[6vw] font-serif leading-tight outline-none border-none p-0 focus:ring-0 placeholder:opacity-20 italic font-light" placeholder="Define your focus...">
+                            </div>
+                            <div class="border-l border-white/10 pl-10">
+                                <textarea id="studio-notes" rows="6" class="w-full bg-transparent text-[23px] font-light text-white/80 leading-relaxed outline-none border-none p-0 focus:ring-0 resize-none placeholder:opacity-10" placeholder="Enter manual studio notes or logs here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Sticky Notes Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div class="border border-white/5 p-12 hover:border-white/20 transition-all">
+                                <i data-lucide="sticky-note" class="w-6 h-6 mb-10 text-dim"></i>
+                                <h4 class="text-[15px] uppercase tracking-[0.3em] text-dim mb-6">Quick Note</h4>
+                                <p class="text-[26px] font-serif italic leading-relaxed">"Precision is the foundation of digital excellence. Review the grid architecture."</p>
+                            </div>
+                            <div class="border border-white/5 p-12 hover:border-white/20 transition-all">
+                                <i data-lucide="alert-circle" class="w-6 h-6 mb-10 text-dim"></i>
+                                <h4 class="text-[15px] uppercase tracking-[0.3em] text-dim mb-6">Important Info</h4>
+                                <p class="text-[26px] font-serif italic leading-relaxed">All repository updates must be synchronized with the Firebase master node before 18:00 WIB.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar: Reminders & Timeline -->
+                    <div class="md:col-span-4 space-y-12">
+                        <div class="border border-white/5 p-12 h-full">
+                            <p class="text-[15px] uppercase tracking-[0.4em] text-dim mb-16">Reminders</p>
+                            <div class="space-y-16">
+                                <div id="reminder-container" class="space-y-12 max-h-[580px] overflow-y-auto scroll-smooth">
+                                    <!-- Dynamic Reminders for Expiring APAR -->
+                                    <p class="text-[14px] text-dim italic">Loading reminders...</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-32 pt-16 border-t border-white/5">
+                                <p class="text-[15px] uppercase tracking-[0.4em] text-dim mb-10">Studio Analytics</p>
+                                <div class="space-y-6">
+                                    <div class="flex justify-between text-[15px] uppercase tracking-tighter">
+                                        <span class="text-dim">Efficiency</span>
+                                        <span>94%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 bg-white/5">
+                                        <div class="w-[94%] h-full bg-white/40"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Section -->
+        <section id="data" class="view-section py-32 px-10 md:px-20">
+            <div class="max-w-full">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-20">
+                    <div class="md:col-span-12 mb-12">
+                        <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-8">Repository / 02</p>
+                        <h2 class="text-7xl md:text-[8vw] font-serif leading-none tracking-tighter">
+                            ASSET <br>
+                            <span class="italic font-light">MANAGEMENT.</span>
+                        </h2>
+                    </div>
+                    
+                    <div class="md:col-span-12">
+                        <!-- Data Sub-Menu -->
+                        <div class="flex gap-12 mb-20 border-b border-white/5 pb-6">
+                            <button class="data-sub-trigger active text-[10px] uppercase tracking-[0.4em] text-white border-b border-white pb-6 -mb-[25px] transition-all" data-sub="apar">APAR Units</button>
+                            <button class="data-sub-trigger text-[10px] uppercase tracking-[0.4em] text-dim hover:text-white pb-6 -mb-[25px] transition-all" data-sub="general">General Assets</button>
+                            <button class="data-sub-trigger text-[10px] uppercase tracking-[0.4em] text-dim hover:text-white pb-6 -mb-[25px] transition-all" data-sub="analytics">Analytics</button>
+                        </div>
+
+                        <!-- APAR Sub-View -->
+                        <div id="view-apar" class="data-content-view pb-24">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
+                                <div>
+                                    <h3 class="text-4xl font-serif mb-2">APAR Monitoring</h3>
+                                    <p class="text-[10px] uppercase tracking-[0.3em] text-dim">Unit Inventory & Safety Compliance</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <button id="open-apar-modal" class="px-6 py-2 bg-white text-black text-[10px] uppercase tracking-widest hover:bg-white/80 transition-all font-bold">+ Add Asset</button>
+                                    <button class="px-6 py-2 border border-white/10 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all">Filter</button>
+                                </div>
+                            </div>
+
+                        <!-- Pagination Controls (Top) -->
+                        <div id="pagination-container" class="flex flex-col md:flex-row justify-between items-center pb-8 border-b border-white/5 gap-8 hidden mb-4">
+                            <div class="flex items-center gap-6">
+                                <p class="text-[10px] uppercase tracking-[0.2em] text-dim">View:</p>
+                                <select id="items-per-page" class="bg-transparent border-b border-white/10 text-[10px] uppercase tracking-[0.2em] outline-none focus:border-white transition-colors cursor-pointer pb-1">
+                                    <option value="5" class="bg-black">5</option>
+                                    <option value="10" class="bg-black">10</option>
+                                    <option value="15" class="bg-black">15</option>
+                                    <option value="20" class="bg-black">20</option>
+                                    <option value="all" class="bg-black">All</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex items-center gap-12">
+                                <button id="prev-page" class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-dim hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none">
+                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                    Prev
+                                </button>
+                                <p id="page-info" class="text-[10px] uppercase tracking-[0.4em] font-light">Page 01 / 01</p>
+                                <button id="next-page" class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-dim hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none">
+                                    Next
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <div class="hidden md:block">
+                                <p id="showing-info" class="text-[10px] uppercase tracking-[0.2em] text-dim italic">Showing 0-0 of 0 Assets</p>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto w-full mb-12">
+                            <table class="w-full text-left border-collapse min-w-[1000px] table-fixed">
+                                <thead>
+                                    <tr class="border-b border-white/10">
+                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Seri</th>
+                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Dymo</th>
+                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Type</th>
+                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Weight</th>
+                                        <th class="w-[34%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Last Position</th>
+                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Expired</th>
+                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Status</th>
+                                        <th class="w-[6%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="apar-table-body" class="text-sm font-light">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+
+                        <!-- General Assets Placeholder -->
+                        <div id="view-general" class="data-content-view hidden opacity-0 transition-opacity duration-500">
+                            <div class="py-20 text-center border border-dashed border-white/10">
+                                <p class="text-dim text-[10px] uppercase tracking-[0.4em]">General Asset Module Coming Soon</p>
+                            </div>
+                        </div>
+
+                        <!-- Analytics Placeholder -->
+                        <div id="view-analytics" class="data-content-view hidden opacity-0 transition-opacity duration-500">
+                            <div class="py-20 text-center border border-dashed border-white/10">
+                                <p class="text-dim text-[10px] uppercase tracking-[0.4em]">Analytics Module Coming Soon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (SPA Page) -->
+        <section id="contact" class="view-section min-h-screen py-32 px-10 md:px-20 flex flex-col justify-between">
+            <div class="max-w-full">
+                <div class="mb-40">
+                    <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-12">Inquiry / 03</p>
+                    <div class="flex flex-col md:flex-row justify-between items-start gap-20">
+                        <h2 class="text-8xl md:text-[15vw] font-serif leading-[0.75] tracking-tighter">
+                            LET'S <br>
+                            <span class="italic text-dim/30">TALK.</span>
+                        </h2>
+                        <div class="space-y-12 md:pt-12">
+                            <p class="text-2xl text-dim font-light max-w-sm leading-relaxed">
+                                Seeking partnerships with brands that value the extraordinary over the expected.
+                            </p>
+                            <button id="open-contact-form" class="group flex items-center gap-6 text-4xl md:text-6xl font-serif border-b border-dim pb-4 hover:border-white transition-all text-left w-full md:w-auto">
+                                Start Project
+                                <i data-lucide="arrow-up-right" class="w-10 h-10 group-hover:rotate-45 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Nav -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-20 border-t border-dim pt-20 pb-10 text-[10px] uppercase tracking-[0.3em] text-dim">
+                    <div class="space-y-6">
+                        <p class="text-white opacity-40">Navigation</p>
+                        <a href="#" class="nav-link-trigger block hover:text-white transition" data-target="work">Works</a>
+                        <a href="#" class="nav-link-trigger block hover:text-white transition" data-target="data">Data Repository</a>
+                        <a href="#" class="nav-link-trigger block hover:text-white transition" data-target="contact">Contact</a>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-white opacity-40">Socials</p>
+                        <a href="#" class="block hover:text-white transition">Instagram</a>
+                        <a href="#" class="block hover:text-white transition">Behance</a>
+                        <a href="#" class="block hover:text-white transition">Vimeo</a>
+                    </div>
+                    <div class="space-y-6">
+                        <p class="text-white opacity-40">Contact</p>
+                        <p>hello@vicky-studio.com</p>
+                        <p>+44 (0) 20 7123 4567</p>
+                    </div>
+                    <div class="space-y-6 md:text-right">
+                        <p class="text-white opacity-40">Based In</p>
+                        <p>Sidoarjo, ID</p>
+                        <p>East Java, Indonesia</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modals -->
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
+        <div class="w-full max-w-2xl bg-[#0a0a0a] border border-white/10 p-10 md:p-16 relative overflow-hidden">
+            <button id="close-contact-modal" class="absolute top-8 right-8 text-dim hover:text-white transition-colors">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <div class="mb-12">
+                <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-4">Start a Conversation</p>
+                <h3 class="text-4xl md:text-5xl font-serif">Tell us about <br><span class="italic font-light opacity-50">your project.</span></h3>
+            </div>
+            <form id="firebase-contact-form" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-[9px] uppercase tracking-widest text-dim">Full Name</label>
+                        <input type="text" id="user_name" required class="w-full bg-transparent border-b border-white/10 py-3 focus:border-white transition-colors outline-none text-sm" placeholder="John Doe">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] uppercase tracking-widest text-dim">Email Address</label>
+                        <input type="email" id="user_email" required class="w-full bg-transparent border-b border-white/10 py-3 focus:border-white transition-colors outline-none text-sm" placeholder="john@example.com">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[9px] uppercase tracking-widest text-dim">Project Details</label>
+                    <textarea id="user_message" required rows="3" class="w-full bg-transparent border-b border-white/10 py-3 focus:border-white transition-colors outline-none text-sm resize-none" placeholder="What are you looking to build?"></textarea>
+                </div>
+                <button type="submit" id="submit-btn" class="group flex items-center gap-4 text-xs uppercase tracking-[0.3em] font-medium pt-8">
+                    Send Inquiry
+                    <span class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </span>
+                </button>
+            </form>
+            <div id="form-success" class="hidden absolute inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center text-center p-10">
+                <i data-lucide="check-circle-2" class="w-16 h-16 text-white mb-6 animate-pulse"></i>
+                <h4 class="text-3xl font-serif mb-4">Message Received.</h4>
+                <p class="text-dim text-sm tracking-wide">We'll be in touch shortly.</p>
+                <button id="reset-form" class="mt-8 text-[9px] uppercase tracking-widest border border-white/10 px-8 py-3 hover:bg-white hover:text-black transition-all">Close</button>
+            </div>
+        </div>
     </div>
-    <div class="logout-btn" id="logout">
-      <span class="icon">⏻</span>
-      <span class="logout-text">Logout</span>
+
+    <!-- APAR Modal -->
+    <div id="apar-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
+        <div class="w-full max-w-xl bg-[#0a0a0a] border border-white/10 p-10 md:p-12 relative">
+            <button id="close-apar-modal" class="absolute top-6 right-6 text-dim hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="mb-10">
+                <p class="text-[9px] uppercase tracking-[0.4em] text-dim mb-3">Asset Registry</p>
+                <h3 id="apar-modal-title" class="text-3xl font-serif">Add New <span class="italic font-light opacity-50">APAR Unit.</span></h3>
+            </div>
+            <form id="apar-form" class="space-y-6">
+                <input type="hidden" id="apar_id">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">No Seri</label>
+                        <input type="text" id="apar_seri" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm font-mono" placeholder="SN-XXXXX">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">No Dymo</label>
+                        <input type="text" id="apar_dymo" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm font-mono" placeholder="DYM-XXX">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Type</label>
+                        <select id="apar_type" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light appearance-none">
+                            <option value="" disabled selected class="bg-[#0a0a0a] text-dim">Select Type</option>
+                            <option value="Powder" class="bg-[#0a0a0a] text-white">Powder</option>
+                            <option value="Foam" class="bg-[#0a0a0a] text-white">Foam</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Weight</label>
+                        <input type="text" id="apar_weight" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. 6 Kg">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[8px] uppercase tracking-widest text-dim">Last Position</label>
+                    <input type="text" id="apar_position" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Main Lobby">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[8px] uppercase tracking-widest text-dim">Expiration Date</label>
+                    <input type="date" id="apar_expired" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light">
+                </div>
+                <div class="pt-6">
+                    <button type="submit" class="w-full bg-white text-black py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white/90 transition-all">Save Asset</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="main">
-  <div class="header">
-    <h1>Inventory Dashboard</h1>
-    <p>Selamat datang kembali, <strong id="headerNama">User</strong>!</p>
-  </div>
+    <!-- Arena AI Portal -->
+    <div id="ai-modal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl">
+        <div class="w-full max-w-2xl bg-[#050505] border border-white/10 relative overflow-hidden flex flex-col shadow-2xl p-12 md:p-20 text-center">
+            <button id="close-ai-modal" class="absolute top-8 right-8 text-dim hover:text-white transition-colors">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <div class="mb-12">
+                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
+                    <i data-lucide="sparkles" class="w-8 h-8 text-white"></i>
+                </div>
+                <p class="text-[10px] uppercase tracking-[0.5em] text-dim mb-4">Secure Portal</p>
+                <h3 class="text-4xl md:text-5xl font-serif mb-6 leading-tight">Arena AI <br><span class="italic font-light opacity-50">Workspace</span></h3>
+                <p class="text-dim text-sm tracking-wide leading-relaxed max-w-sm mx-auto">
+                    Open the AI environment in a dedicated workspace window for full functionality.
+                </p>
+            </div>
+            <button id="launch-arena" class="group relative inline-flex items-center justify-center px-12 py-5 overflow-hidden font-medium transition duration-300 ease-out border border-white/20 rounded-full shadow-md bg-white text-black hover:scale-105 mx-auto">
+                <span class="uppercase tracking-[0.3em] text-[10px] font-bold">Enter Workspace</span>
+            </button>
+        </div>
+    </div>
 
-  <div class="stats">
-    <div class="stat-card"><div class="stat-label">Total Item</div><div class="stat-value" id="totalItems">0</div></div>
-    <div class="stat-card"><div class="stat-label">Total Stok</div><div class="stat-value" id="totalStok">0</div></div>
-    <div class="stat-card"><div class="stat-label">Rusak / Hilang</div><div class="stat-value" id="rusak">0</div></div>
-    <div class="stat-card"><div class="stat-label">Top Kategori</div><div class="stat-value" id="topKat">-</div></div>
-  </div>
+    <!-- AI Floating Button -->
+    <div class="fixed bottom-8 right-8 z-[200]">
+        <button id="open-ai-portal" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all group relative">
+            <i data-lucide="sparkles" class="w-7 h-7"></i>
+            <span class="absolute inset-0 rounded-full bg-white/20 animate-ping"></span>
+        </button>
+    </div>
 
-  <div class="charts">
-    <div class="chart-card"><div class="chart-title">Proporsi Kategori</div><canvas id="chartKat"></canvas></div>
-    <div class="chart-card"><div class="chart-title">Kondisi Aset Saat Ini</div><canvas id="chartKond"></canvas></div>
-  </div>
-</div>
+    <script type="module">
+        // --- FIREBASE ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-<script type="module">
-  import { auth, db } from "./firebase-config.js";
-  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1gbR7XXPOGXGivvZS7EeUkBgmavKK4vA",
+            authDomain: "ayah-kerja.firebaseapp.com",
+            projectId: "ayah-kerja",
+            storageBucket: "ayah-kerja.firebasestorage.app",
+            messagingSenderId: "578797988945",
+            appId: "1:578797988945:web:38d0660c97c3c22fb79c70",
+            databaseURL: "https://ayah-kerja-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
 
-  const loader = document.getElementById('globalLoader');
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-  // LOADING HILANG DALAM 1 DETIK
-  setTimeout(() => loader.style.opacity = '0', 1000);
-  setTimeout(() => loader.remove(), 1600);
+        // --- UI CORE ---
+        lucide.createIcons();
 
-  onAuthStateChanged(auth, user => {
-    if (!user) return location.href = "login.html";
+        // --- CLOCK ---
+        function updateClock() {
+            const timeStr = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Jakarta',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
+            }).format(new Date());
+            
+            document.querySelectorAll('.clock-target').forEach(el => {
+                if(el.innerHTML.includes('INDONESIA')) {
+                    el.innerHTML = `INDONESIA<br><span class="text-white font-mono">${timeStr}</span> <span class="opacity-50">WIB</span>`;
+                } else {
+                    el.innerHTML = `<span class="font-mono">${timeStr}</span> WIB`;
+                }
+            });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-    const nama = user.displayName || user.email.split('@')[0];
-    const initial = nama.charAt(0).toUpperCase();
+        // --- SPA VIEW SWITCHER ---
+        const sections = document.querySelectorAll('.view-section');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-    document.getElementById('headerNama').textContent = nama;
-    document.getElementById('sidebarNama').textContent = nama;
-    document.getElementById('sidebarAvatar').textContent = initial;
+        function switchView(targetId) {
+            if (!targetId) return;
 
-    onValue(ref(db, 'users/' + user.uid + '/role'), snap => {
-      const role = snap.val() || 'Staff';
-      document.getElementById('sidebarRole').textContent = role;
-      if (role === 'Admin') document.getElementById('menuKelolaUser').style.display = 'flex';
-    });
-  });
+            sections.forEach(sec => {
+                sec.classList.remove('active');
+                setTimeout(() => { if(!sec.classList.contains('active')) sec.style.display = 'none'; }, 600);
+            });
 
-  document.getElementById('logout').onclick = () => confirm('Yakin logout?') && signOut(auth);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.style.display = 'block';
+                // Trigger reflow
+                target.offsetHeight;
+                target.classList.add('active');
+                window.scrollTo(0,0);
+            }
 
-  // Realtime Data Inventaris
-  let chartKat, chartKond;
-  onValue(ref(db, 'inventaris'), snap => {
-    const data = snap.val() || {};
-    const items = Object.values(data);
-    let stok = 0, rusak = 0;
-    const kategori = {}, kondisi = {Baik:0,'Perlu Servis':0,Rusak:0};
+            // Update Nav Highlighting
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-target') === targetId);
+            });
 
-    items.forEach(item => {
-      const qty = Number(item.jumlah)||0;
-      stok += qty;
-      if (item.kondisi === 'Rusak') rusak += qty;
-      kategori[item.kategori || 'Lainnya'] = (kategori[item.kategori || 'Lainnya']||0) + qty;
-      kondisi[item.kondisi || 'Baik'] = (kondisi[item.kondisi || 'Baik']||0) + qty;
-    });
+            // Toggle Sidebar Sub-menu Visibility
+            const dataSub = document.getElementById('sidebar-data-sub');
+            if (targetId === 'data') {
+                dataSub.style.maxHeight = '150px';
+                dataSub.style.opacity = '1';
+                dataSub.style.marginTop = '24px';
+                dataSub.style.marginBottom = '8px';
+                dataSub.style.transition = 'all 0.8s cubic-bezier(0.19, 1, 0.22, 1)';
+            } else {
+                dataSub.style.maxHeight = '0';
+                dataSub.style.opacity = '0';
+                dataSub.style.marginTop = '0';
+                dataSub.style.marginBottom = '0';
+                dataSub.style.transition = 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)';
+            }
+            
+            // Re-render Icons
+            lucide.createIcons();
+        }
 
-    document.getElementById('totalItems').textContent = items.length;
-    document.getElementById('totalStok').textContent = stok.toLocaleString('id-ID');
-    document.getElementById('rusak').textContent = rusak.toLocaleString('id-ID');
-    document.getElementById('topKat').textContent = Object.keys(kategori).sort((a,b)=>kategori[b]-kategori[a])[0] || '-';
+        // Global Event Delegation for Nav Triggers
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest('.nav-link-trigger');
+            if (trigger) {
+                e.preventDefault();
+                const target = trigger.getAttribute('data-target');
+                switchView(target);
+            }
+        });
 
-    if (!chartKat) chartKat = new Chart('chartKat', {type:'doughnut', data:{labels:Object.keys(kategori), datasets:[{data:Object.values(kategori), backgroundColor:['#0ea5e9','#06b6d4','#0891b2','#0c4a6e','#0369a1'], borderWidth:0}]}, options:{plugins:{legend:{position:'right'}}, cutout:'70%'}});
-    else { chartKat.data.labels = Object.keys(kategori); chartKat.data.datasets[0].data = Object.values(kategori); chartKat.update('quiet'); }
+        // --- DATA SUB-MENU SWITCHER ---
+        const subTriggers = document.querySelectorAll('.data-sub-trigger');
+        const dataViews = document.querySelectorAll('.data-content-view');
 
-    if (!chartKond) chartKond = new Chart('chartKond', {type:'bar', data:{labels:Object.keys(kondisi), datasets:[{data:Object.values(kondisi), backgroundColor:['#10b981','#f59e0b','#ef4444'], borderRadius:16}]}, options:{plugins:{legend:{display:false}}}});
-    else { chartKond.data.labels = Object.keys(kondisi); chartKond.data.datasets[0].data = Object.values(kondisi); chartKond.update('quiet'); }
-  });
-</script>
+        subTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                const targetSub = trigger.getAttribute('data-sub');
+                
+                // If it's the main Data section view switcher, ensure we're on the Data page
+                if (trigger.classList.contains('data-sub-trigger')) {
+                    const activeView = document.querySelector('.view-section.active');
+                    if (!activeView || activeView.id !== 'data') {
+                        switchView('data');
+                    }
+                }
+
+                // Update All Triggers (Sidebar & Main Content)
+                subTriggers.forEach(t => {
+                    if (t.getAttribute('data-sub') === targetSub) {
+                        t.classList.add('active', 'text-white');
+                        if (!t.classList.contains('text-[10px]')) { // If it's the main content tab
+                            t.classList.add('border-b', 'border-white');
+                        }
+                    } else {
+                        t.classList.remove('active', 'text-white', 'border-b', 'border-white');
+                        t.classList.add('text-dim');
+                    }
+                });
+
+                // Update Views
+                dataViews.forEach(view => {
+                    view.classList.add('hidden', 'opacity-0');
+                });
+                const targetView = document.getElementById(`view-${targetSub}`);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    setTimeout(() => targetView.classList.remove('opacity-0'), 10);
+                }
+            });
+        });
+
+        // --- CONTACT MODAL ---
+        const cModal = document.getElementById('contact-modal');
+        const openCBtn = document.getElementById('open-contact-form');
+        const closeCBtn = document.getElementById('close-contact-modal');
+        const cForm = document.getElementById('firebase-contact-form');
+        const successState = document.getElementById('form-success');
+
+        openCBtn.onclick = () => cModal.classList.remove('hidden');
+        closeCBtn.onclick = () => {
+            cModal.classList.add('hidden');
+            successState.classList.add('hidden');
+            cForm.reset();
+        };
+
+        cForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = 'Sending...';
+            const data = {
+                name: document.getElementById('user_name').value,
+                email: document.getElementById('user_email').value,
+                message: document.getElementById('user_message').value,
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await push(ref(db, 'inquiries'), data);
+                successState.classList.remove('hidden');
+            } catch (err) { alert('Error sending message.'); }
+            btn.innerText = 'Send Inquiry';
+        };
+
+        // --- APAR MANAGEMENT ---
+        const aModal = document.getElementById('apar-modal');
+        const aForm = document.getElementById('apar-form');
+        const aTableBody = document.getElementById('apar-table-body');
+        const openABtn = document.getElementById('open-apar-modal');
+        const closeABtn = document.getElementById('close-apar-modal');
+
+        // Pagination State
+        let aparDataList = [];
+        let itemsPerPage = 5;
+        let currentPage = 1;
+
+        const toggleAModal = (show, isEdit = false) => {
+            aModal.classList.toggle('hidden', !show);
+            if(!show) {
+                aForm.reset();
+                document.getElementById('apar_id').value = '';
+            }
+            document.getElementById('apar-modal-title').innerHTML = isEdit ? 'Edit <span class="italic font-light opacity-50">APAR Unit.</span>' : 'Add New <span class="italic font-light opacity-50">APAR Unit.</span>';
+        };
+
+        openABtn.onclick = () => toggleAModal(true);
+        closeABtn.onclick = () => toggleAModal(false);
+
+        aForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('apar_id').value;
+            const data = {
+                no_seri: document.getElementById('apar_seri').value,
+                no_dymo: document.getElementById('apar_dymo').value,
+                type: document.getElementById('apar_type').value,
+                weight: document.getElementById('apar_weight').value,
+                position: document.getElementById('apar_position').value,
+                expired: document.getElementById('apar_expired').value,
+                updatedAt: new Date().toISOString()
+            };
+            try {
+                if (id) await set(ref(db, `apar_assets/${id}`), data);
+                else await push(ref(db, 'apar_assets'), data);
+                toggleAModal(false);
+            } catch (err) { alert('Save failed.'); }
+        };
+
+        function renderAparTable() {
+            aTableBody.innerHTML = '';
+            if (aparDataList.length === 0) {
+                aTableBody.innerHTML = '<tr><td colspan="8" class="py-20 text-center text-dim italic">No assets registered in repository.</td></tr>';
+                document.getElementById('pagination-container').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('pagination-container').classList.remove('hidden');
+            
+            let displayData = [...aparDataList];
+            let totalItems = displayData.length;
+            let totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(totalItems / itemsPerPage);
+            
+            // Adjust current page if out of bounds
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            // Slice data if not viewing all
+            if (itemsPerPage !== 'all') {
+                const start = (currentPage - 1) * parseInt(itemsPerPage);
+                const end = start + parseInt(itemsPerPage);
+                displayData = displayData.slice(start, end);
+                
+                // Update Pagination Info
+                document.getElementById('page-info').innerText = `Page ${String(currentPage).padStart(2, '0')} / ${String(totalPages).padStart(2, '0')}`;
+                document.getElementById('showing-info').innerText = `Showing ${start + 1}-${Math.min(end, totalItems)} of ${totalItems} Assets`;
+                document.getElementById('prev-page').disabled = currentPage === 1;
+                document.getElementById('next-page').disabled = currentPage === totalPages;
+            } else {
+                document.getElementById('page-info').innerText = `Page 01 / 01`;
+                document.getElementById('showing-info').innerText = `Showing all ${totalItems} Assets`;
+                document.getElementById('prev-page').disabled = true;
+                document.getElementById('next-page').disabled = true;
+            }
+
+            displayData.forEach(itemObj => {
+                const item = itemObj.data;
+                const key = itemObj.id;
+                
+                // Date Formatting Logic
+                const expDate = new Date(item.expired);
+                const isExp = expDate < new Date();
+                const formattedDate = expDate.toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+
+                const row = document.createElement('tr');
+                row.className = 'border-b border-white/5 hover:bg-white/[0.02] transition-colors group';
+                row.innerHTML = `
+                    <td class="py-8 font-mono text-[13px] break-words whitespace-normal px-4 text-center">${item.no_seri}</td>
+                    <td class="py-8 font-mono text-[13px] break-words whitespace-normal px-4 text-center">${item.no_dymo}</td>
+                    <td class="py-8 text-white font-light text-[13px] whitespace-normal px-4 text-center">${item.type || '-'}</td>
+                    <td class="py-8 text-white font-light text-[13px] whitespace-normal px-4 text-center">${item.weight || '-'}</td>
+                    <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] break-words whitespace-normal px-4 text-center">${item.position}</td>
+                    <td class="py-8 text-[13px] whitespace-normal text-center ${isExp ? 'text-red-400 font-bold' : ''}">${formattedDate}</td>
+                    <td class="py-8 text-center">
+                        <span class="inline-block w-2 h-2 rounded-full ${isExp ? 'bg-red-500 animate-pulse shadow-[0_0_10px_red]' : 'bg-green-500 shadow-[0_0_10px_green]'}"></span>
+                    </td>
+                    <td class="py-8 text-center space-x-4">
+                        <button data-id="${key}" class="edit-btn text-dim hover:text-white transition-colors"><i data-lucide="edit-3" class="w-4 h-4 inline"></i></button>
+                        <button data-id="${key}" class="delete-btn text-dim hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline"></i></button>
+                    </td>
+                `;
+                aTableBody.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        // Pagination Events
+        document.getElementById('items-per-page').addEventListener('change', (e) => {
+            itemsPerPage = e.target.value === 'all' ? 'all' : parseInt(e.target.value);
+            currentPage = 1;
+            renderAparTable();
+        });
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderAparTable();
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            let totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(aparDataList.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderAparTable();
+            }
+        });
+
+        onValue(ref(db, 'apar_assets'), (snap) => {
+            const data = snap.val();
+            aparDataList = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    aparDataList.push({ id: key, data: data[key] });
+                });
+            }
+            renderAparTable();
+            updateReminders();
+        });
+
+        function updateReminders() {
+            const container = document.getElementById('reminder-container');
+            if (!container) return;
+            
+            const now = new Date();
+            const twoMonthsFromNow = new Date();
+            twoMonthsFromNow.setMonth(now.getMonth() + 2);
+
+            const expiringSoon = aparDataList.filter(item => {
+                const exp = new Date(item.data.expired);
+                return exp <= twoMonthsFromNow; // Includes both past (expired) and future (2 months out)
+            }).sort((a, b) => new Date(a.data.expired) - new Date(b.data.expired));
+
+            container.innerHTML = '';
+
+            if (expiringSoon.length === 0) {
+                container.innerHTML = '<p class="text-[10px] text-dim/50 italic py-4">No critical APAR expiries in the next 2 months.</p>';
+                return;
+            }
+
+            expiringSoon.forEach(item => {
+                const expDate = new Date(item.data.expired);
+                const isAlreadyExpired = expDate < now;
+                const day = expDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+                const fullDate = expDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                
+                const itemEl = document.createElement('div');
+                itemEl.className = 'group cursor-pointer';
+                itemEl.innerHTML = `
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[14px] uppercase tracking-widest ${isAlreadyExpired ? 'text-red-500 font-black animate-pulse' : 'text-red-400 font-bold'}">
+                            ${isAlreadyExpired ? 'CRITICAL: EXPIRED' : 'Expires Soon'}
+                        </span>
+                        <span class="text-[14px] font-mono text-white/30">(${day}) ${fullDate}</span>
+                    </div>
+                    <h5 class="text-[25px] font-light group-hover:italic transition-all ${isAlreadyExpired ? 'text-red-200' : ''}">APAR ${item.data.no_seri}</h5>
+                    <p class="text-[15px] text-dim mt-3">${item.data.position}</p>
+                    <div class="h-[1px] w-0 group-hover:w-full bg-red-400/20 transition-all duration-700 mt-6"></div>
+                `;
+                itemEl.onclick = () => {
+                    // Switch to Data view
+                    switchView('data');
+                    
+                    // Activate APAR sub-view
+                    const aparTrigger = document.querySelector('.data-sub-trigger[data-sub="apar"]');
+                    if (aparTrigger) aparTrigger.click();
+
+                    // Find the page index for this specific item
+                    const itemIndex = aparDataList.findIndex(a => a.id === item.id);
+                    if (itemIndex !== -1 && itemsPerPage !== 'all') {
+                        const targetPage = Math.floor(itemIndex / parseInt(itemsPerPage)) + 1;
+                        currentPage = targetPage;
+                        renderAparTable();
+                    }
+
+                    // Smooth scroll to the table and highlight the row
+                    setTimeout(() => {
+                        const row = document.querySelector(`button[data-id="${item.id}"]`)?.closest('tr');
+                        if (row) {
+                            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // Apply the "block color" highlight
+                            row.classList.add('bg-white/15', 'border-white/20');
+                            row.style.transition = 'all 0.5s ease-in-out';
+                            
+                            // Remove the highlight after 4 seconds
+                            setTimeout(() => {
+                                row.classList.remove('bg-white/15', 'border-white/20');
+                            }, 4000);
+                        }
+                    }, 800);
+                };
+                container.appendChild(itemEl);
+            });
+        }
+
+        // Table Action Listeners
+        aTableBody.addEventListener('click', (e) => {
+            const editBtn = e.target.closest('.edit-btn');
+            const delBtn = e.target.closest('.delete-btn');
+            if(editBtn) {
+                const id = editBtn.getAttribute('data-id');
+                onValue(ref(db, `apar_assets/${id}`), (s) => {
+                    const i = s.val();
+                    document.getElementById('apar_id').value = id;
+                    document.getElementById('apar_seri').value = i.no_seri;
+                    document.getElementById('apar_dymo').value = i.no_dymo;
+                    document.getElementById('apar_type').value = i.type || '';
+                    document.getElementById('apar_weight').value = i.weight || '';
+                    document.getElementById('apar_position').value = i.position;
+                    document.getElementById('apar_expired').value = i.expired;
+                    toggleAModal(true, true);
+                }, {onlyOnce: true});
+            }
+            if(delBtn) {
+                if(confirm('Delete this asset?')) remove(ref(db, `apar_assets/${delBtn.getAttribute('data-id')}`));
+            }
+        });
+
+        // --- ARENA AI PORTAL ---
+        const aiModal = document.getElementById('ai-modal');
+        const openAIPortal = document.getElementById('open-ai-portal');
+        const closeAIModal = document.getElementById('close-ai-modal');
+        const launchArena = document.getElementById('launch-arena');
+
+        openAIPortal.onclick = () => aiModal.classList.remove('hidden');
+        closeAIModal.onclick = () => aiModal.classList.add('hidden');
+        launchArena.onclick = () => {
+            window.open('https://arena.ai', 'ArenaAI', 'width=1200,height=800,top=100,left=100');
+            aiModal.classList.add('hidden');
+        };
+
+        // --- STUDIO NOTEPAD LOGIC ---
+        const focusInput = document.getElementById('studio-focus');
+        const notesInput = document.getElementById('studio-notes');
+        const statusInd = document.getElementById('note-status');
+
+        // Fetch existing notes
+        onValue(ref(db, 'studio_workspace'), (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (data.focus && document.activeElement !== focusInput) focusInput.value = data.focus;
+                if (data.notes && document.activeElement !== notesInput) notesInput.value = data.notes;
+            }
+        });
+
+        // Auto-save logic
+        const saveWorkspace = () => {
+            statusInd.classList.remove('opacity-0');
+            update(ref(db, 'studio_workspace'), {
+                focus: focusInput.value,
+                notes: notesInput.value,
+                lastUpdated: new Date().toISOString()
+            }).then(() => {
+                setTimeout(() => statusInd.classList.add('opacity-0'), 2000);
+            });
+        };
+
+        let debounceTimer;
+        const debouncedSave = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(saveWorkspace, 1000);
+        };
+
+        focusInput.addEventListener('input', debouncedSave);
+        notesInput.addEventListener('input', debouncedSave);
+
+    </script>
 </body>
 </html>
