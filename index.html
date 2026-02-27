@@ -174,7 +174,7 @@
         <section id="home" class="view-section active h-screen flex flex-col justify-center px-10 md:px-20 relative">
             <div class="max-w-full w-full">
                 <div class="line-reveal mb-8">
-                    <span class="text-[11px] uppercase tracking-[0.4em] text-dim font-bold">Creative Excellence / Since 2018</span>
+                    <span class="text-[11px] uppercase tracking-[0.4em] text-dim font-bold">Creative Excellence / Since 2024</span>
                 </div>
                 <h1 class="text-6xl md:text-[11vw] leading-[0.85] tracking-tighter mb-16">
                     DEFINING THE <br>
@@ -183,7 +183,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
                     <div class="md:col-span-5">
                         <p class="text-lg md:text-2xl text-dim font-light leading-relaxed">
-                            Independent studio crafting iconic visual identities and digital ecosystems for the brands of tomorrow.
+                            Work Hard Play Hard
                         </p>
                     </div>
                     <div class="md:col-span-7 flex justify-end">
@@ -1022,8 +1022,22 @@
             debounceTimer = setTimeout(saveWorkspace, 1000);
         };
 
-        focusInput.addEventListener('input', debouncedSave);
-        notesInput.addEventListener('input', debouncedSave);
+        const autoCapitalize = (el) => {
+            const start = el.selectionStart;
+            const end = el.selectionEnd;
+            // Capitalize first letter of every word
+            el.value = el.value.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+            el.setSelectionRange(start, end);
+        };
+
+        focusInput.addEventListener('input', (e) => {
+            autoCapitalize(e.target);
+            debouncedSave();
+        });
+        notesInput.addEventListener('input', (e) => {
+            autoCapitalize(e.target);
+            debouncedSave();
+        });
 
     </script>
 </body>
