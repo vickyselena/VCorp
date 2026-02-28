@@ -353,14 +353,15 @@
                             <table class="w-full text-left border-collapse min-w-[1000px] table-fixed">
                                 <thead>
                                     <tr class="border-b border-white/10">
-                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Seri</th>
-                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Dymo</th>
-                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Type</th>
-                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Weight</th>
-                                        <th class="w-[34%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Last Position</th>
+                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Seri</th>
+                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Dymo</th>
+                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Type</th>
+                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Weight</th>
+                                        <th class="w-[18%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Last Position</th>
+                                        <th class="w-[18%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Location</th>
                                         <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Expired</th>
                                         <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Status</th>
-                                        <th class="w-[6%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Actions</th>
+                                        <th class="w-[12%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="apar-table-body" class="text-sm font-light">
@@ -518,9 +519,15 @@
                         <input type="text" id="apar_weight" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. 6 Kg">
                     </div>
                 </div>
-                <div class="space-y-2">
-                    <label class="text-[8px] uppercase tracking-widest text-dim">Last Position</label>
-                    <input type="text" id="apar_position" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Main Lobby">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Last Position</label>
+                        <input type="text" id="apar_position" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Main Lobby">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Location</label>
+                        <input type="text" id="apar_location" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Building A">
+                    </div>
                 </div>
                 <div class="space-y-2">
                     <label class="text-[8px] uppercase tracking-widest text-dim">Expiration Date</label>
@@ -764,6 +771,7 @@
                 type: document.getElementById('apar_type').value,
                 weight: document.getElementById('apar_weight').value,
                 position: document.getElementById('apar_position').value,
+                location: document.getElementById('apar_location').value,
                 expired: document.getElementById('apar_expired').value,
                 updatedAt: new Date().toISOString()
             };
@@ -831,6 +839,7 @@
                     <td class="py-8 text-white font-light text-[13px] whitespace-normal px-4 text-center">${item.type || '-'}</td>
                     <td class="py-8 text-white font-light text-[13px] whitespace-normal px-4 text-center">${item.weight || '-'}</td>
                     <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] break-words whitespace-normal px-4 text-center">${item.position}</td>
+                    <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] break-words whitespace-normal px-4 text-center">${item.location || '-'}</td>
                     <td class="py-8 text-[13px] whitespace-normal text-center ${isExp ? 'text-red-400 font-bold' : ''}">${formattedDate}</td>
                     <td class="py-8 text-center">
                         <span class="inline-block w-2 h-2 rounded-full ${isExp ? 'bg-red-500 animate-pulse shadow-[0_0_10px_red]' : 'bg-green-500 shadow-[0_0_10px_green]'}"></span>
@@ -968,6 +977,7 @@
                     document.getElementById('apar_type').value = i.type || '';
                     document.getElementById('apar_weight').value = i.weight || '';
                     document.getElementById('apar_position').value = i.position;
+                    document.getElementById('apar_location').value = i.location || '';
                     document.getElementById('apar_expired').value = i.expired;
                     toggleAModal(true, true);
                 }, {onlyOnce: true});
