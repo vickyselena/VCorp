@@ -1,1054 +1,1301 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICKY STUDIO | Kreativitas Tanpa Batas</title>
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RumahKu - Premium Household Manager</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Google Fonts: Cormorant Garamond & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #050505;
-            --text-light: #ffffff;
-            --text-dim: #888888;
-            --accent: #ffffff;
-        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            letter-spacing: -0.02em;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        h1, h2, h3, .font-serif {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 400;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f3f4f6;
+            text-transform: uppercase;
         }
         input, select, textarea, button {
-            font-family: 'Inter', sans-serif !important;
+            text-transform: uppercase;
         }
-        .nav-link {
+        .active-nav {
+            color: #6366f1;
             position: relative;
-            padding-bottom: 4px;
         }
-        .nav-link::after {
+        .active-nav::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--accent);
-            transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            bottom: -8px;
+            width: 5px;
+            height: 5px;
+            background: #6366f1;
+            border-radius: 50%;
         }
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-        .nav-link.active {
-            color: white !important;
-        }
-        .project-card img {
-            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .project-card:hover img {
-            transform: scale(1.08);
-        }
-        .line-reveal {
-            overflow: hidden;
-        }
-        .line-reveal span {
-            display: block;
-            transform: translateY(110%);
-            animation: reveal 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-        }
-        @keyframes reveal {
-            to { transform: translateY(0); }
-        }
-        .border-dim {
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-        .noise::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.04;
-            z-index: 9999;
-        }
-
-        /* SPA View Styles */
         .view-section {
             display: none;
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
-            width: 100%;
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .view-section.active {
             display: block;
-            opacity: 1;
         }
-        
-        /* Ensure sidebar stays fixed while main content scrolls */
-        main {
-            min-height: 100vh;
-            overflow-y: auto;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* Ensure table can grow infinitely */
-        #view-apar {
-            height: auto;
-            min-height: auto;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
-        
-        /* Hide scrollbar for reminder container */
-        #reminder-container::-webkit-scrollbar {
+        .shadow-premium {
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.05);
+        }
+        .floating-nav {
+            bottom: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            width: calc(100% - 3rem);
+            height: 72px;
+        }
+        .floating-nav.collapsed {
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            right: auto;
+            padding: 0;
+        }
+        .floating-nav.collapsed .nav-item {
             display: none;
         }
-        #reminder-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .floating-nav.collapsed #nav-toggle-btn {
+            width: 100%;
+            height: 100%;
         }
+        input::placeholder { color: #cbd5e1; font-weight: 500; }
+        .custom-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="selection:bg-white selection:text-black noise">
+<body class="text-slate-800 flex justify-center bg-slate-200">
 
-    <!-- Sidebar Navigation (Desktop) -->
-    <nav class="fixed top-0 left-0 h-full w-24 md:w-48 z-[100] border-r border-white/5 bg-[#050505] flex flex-col justify-between py-12 px-4 items-center hidden md:flex">
-        <div class="flex flex-col items-center">
-            <a href="#" class="nav-link-trigger text-3xl font-serif tracking-tighter hover:italic transition-all whitespace-nowrap" data-target="home">VICKY.</a>
-        </div>
+    <!-- Mobile Frame Container -->
+    <div class="w-full max-w-md bg-[#fbfcfe] min-h-screen shadow-[0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden pb-36">
         
-        <div class="flex flex-col items-center w-full">
-            <div class="flex flex-col items-center gap-12 text-[16px] uppercase tracking-[0.4em] font-medium text-dim">
-                <a href="#" class="nav-link-trigger nav-link hover:text-white transition-colors duration-500 block" data-target="work">Works</a>
-                
-                <div class="flex flex-col items-center gap-4">
-                    <a href="#" class="nav-link-trigger nav-link hover:text-white transition-colors duration-500 block" data-target="data">Data</a>
-                    <!-- Sidebar Sub-menu -->
-                    <div id="sidebar-data-sub" class="max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out flex flex-col items-center gap-3">
-                        <a href="#" class="data-sub-trigger text-[10px] tracking-[0.3em] text-dim hover:text-white transition-colors" data-sub="apar">— APAR Units</a>
-                    </div>
-                </div>
-
-                <a href="#" class="nav-link-trigger nav-link hover:text-white transition-colors duration-500 block" data-target="contact">Contact</a>
+        <!-- Mini Header Date/Time -->
+        <header class="px-8 pt-6 pb-2 flex justify-between items-center opacity-70">
+            <div class="flex flex-col">
+                <p id="header-day" class="text-[10px] font-black tracking-[0.2em] text-indigo-600 uppercase">SENIN</p>
+                <p id="header-date" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">01 JANUARI 2024</p>
             </div>
-        </div>
-
-        <div class="flex flex-col items-center gap-8 w-full">
-            <div class="text-[15px] uppercase tracking-[0.3em] text-dim/50 clock-target text-center leading-relaxed">
-                INDONESIA<br>--:--:-- WIB
+            <div class="text-right">
+                <p id="header-time" class="text-sm font-black text-slate-800 tracking-tighter italic">00:00</p>
             </div>
-            <div class="w-8 h-[1px] bg-white/10"></div>
-            <button class="group p-2">
-                <i data-lucide="menu" class="w-5 h-5 text-dim group-hover:text-white transition-colors"></i>
-            </button>
-        </div>
-    </nav>
+        </header>
 
-    <!-- Mobile Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-[101] p-6 flex justify-between items-center md:hidden mix-blend-difference">
-        <a href="#" class="nav-link-trigger text-2xl font-serif tracking-tighter" data-target="home">VICKY.</a>
-        <div class="flex items-center gap-4">
-            <div class="text-[15px] uppercase tracking-[0.2em] text-white clock-target text-right leading-tight">
-                --:--:-- WIB
-            </div>
-            <button class="p-2">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Main Content Wrapper -->
-    <main class="md:pl-48">
+        <main class="px-6 pt-4">
         
-        <!-- Hero Section -->
-        <section id="home" class="view-section active h-screen flex flex-col justify-center px-10 md:px-20 relative">
-            <div class="max-w-full w-full">
-                <div class="line-reveal mb-8">
-                    <span class="text-[11px] uppercase tracking-[0.4em] text-dim font-bold">Creative Excellence / Since 2024</span>
-                </div>
-                <h1 class="text-6xl md:text-[11vw] leading-[0.85] tracking-tighter mb-16">
-                    DEFINING THE <br>
-                    <span class="italic font-light opacity-80">NEXT</span> ERA.
-                </h1>
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
-                    <div class="md:col-span-5">
-                        <p class="text-lg md:text-2xl text-dim font-light leading-relaxed">
-                            Work Hard Play Hard
-                        </p>
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="view-section active">
+            <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-8">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-bold opacity-50 mb-1 uppercase tracking-[0.2em]">Estimasi Total Saldo</p>
+                    <h3 id="dash-balance" class="text-2xl font-black mb-4 tracking-tight italic">RP 0,00</h3>
+                    
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex-1">
+                            <p class="text-[8px] font-bold opacity-40 uppercase tracking-widest">Tunai (Cash)</p>
+                            <p id="dash-cash" class="text-xs font-black text-emerald-400 italic">RP 0,00</p>
+                        </div>
+                        <div class="w-px h-8 bg-white/10"></div>
+                        <div class="flex-1 text-right">
+                            <p class="text-[8px] font-bold opacity-40 uppercase tracking-widest">Bank (Debit)</p>
+                            <p id="dash-debit" class="text-xs font-black text-indigo-300 italic">RP 0,00</p>
+                        </div>
                     </div>
-                    <div class="md:col-span-7 flex justify-end">
-                        <button class="nav-link-trigger group relative inline-flex items-center justify-center p-1 px-8 py-6 overflow-hidden font-medium text-white transition duration-300 ease-out border border-white/10 rounded-full shadow-md" data-target="work">
-                            <span class="absolute inset-0 flex items-center justify-center w-full h-full text-black duration-300 -translate-x-full bg-white group-hover:translate-x-0 ease">
-                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                            </span>
-                            <span class="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease uppercase tracking-[0.2em] text-[10px]">Explore Cases</span>
-                            <p class="relative uppercase tracking-[0.2em] text-[10px]">Explore Cases</p>
-                        </button>
+
+                    <div class="bg-white/10 px-4 py-2 rounded-2xl backdrop-blur-md border border-white/10 inline-block">
+                        <p id="dash-low-stock" class="text-[11px] font-bold text-indigo-200 uppercase tracking-widest">0 STOK MENIPIS</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-5">
+                    <h4 class="font-bold text-slate-900 tracking-tight flex items-center">
+                        <span class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center mr-3 text-sm">📝</span> CATATAN TERAKHIR
+                    </h4>
+                    <button onclick="showView('finance')" class="text-indigo-600 text-[10px] font-black uppercase tracking-widest">SEMUA</button>
+                </div>
+                <div id="recent-finance" class="space-y-3"></div>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-slate-900 tracking-tight mb-5 flex items-center">
+                    <span class="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center mr-3 text-sm">🛒</span> BELI SEGERA
+                </h4>
+                <div id="quick-shopping" class="glass-card rounded-[2rem] border border-white shadow-premium overflow-hidden"></div>
             </div>
         </section>
 
-        <!-- Works Section -->
-        <section id="work" class="view-section py-32 px-10 md:px-20">
-            <div class="max-w-full">
-                <div class="flex justify-between items-end mb-24 border-b border-dim pb-12">
-                    <div class="space-y-6">
-                        <p class="text-[15px] uppercase tracking-[0.3em] text-dim">Curation / 01</p>
-                        <h2 class="text-7xl md:text-[9vw] font-serif leading-[0.9]">Selected Works</h2>
-                    </div>
-                    <div class="hidden md:block text-right">
-                        <p class="text-[15px] uppercase tracking-[0.2em] text-dim mb-4">Archive All Time</p>
-                        <p class="text-[17px] font-light">Filtering: All Productions</p>
-                    </div>
+        <!-- FINANCE -->
+        <section id="finance" class="view-section">
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="changeMonth(-1)" class="w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-indigo-600 font-black text-xl active:scale-90 transition-all">←</button>
+                    <h2 id="finance-month-label" class="text-xl font-extrabold text-slate-900 tracking-tight uppercase">JANUARI 2024</h2>
+                    <button onclick="changeMonth(1)" class="w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm text-indigo-600 font-black text-xl active:scale-90 transition-all">→</button>
                 </div>
                 
-                <!-- Billboard / Workspace Dashboard -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="bg-emerald-500 p-5 rounded-[2rem] text-white shadow-lg shadow-emerald-200/50 relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                        <p class="text-[10px] font-bold opacity-80 uppercase tracking-[0.2em] mb-1">Total Pemasukan</p>
+                        <h3 id="fin-month-in" class="text-2xl font-black tracking-tighter">RP 0,00</h3>
+                    </div>
+                    <div class="bg-rose-500 p-5 rounded-[2rem] text-white shadow-lg shadow-rose-200/50 relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                        <p class="text-[10px] font-bold opacity-80 uppercase tracking-[0.2em] mb-1">Total Pengeluaran</p>
+                        <h3 id="fin-month-out" class="text-2xl font-black tracking-tighter">RP 0,00</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex p-1.5 bg-slate-100 rounded-2xl mb-4 gap-1">
+                <button onclick="setFinTab('all')" id="tab-fin-all" class="flex-1 py-3 text-[9px] font-black uppercase tracking-tight rounded-xl transition-all bg-white shadow-sm text-indigo-600">SEMUA</button>
+                <button onclick="setFinTab('in')" id="tab-fin-in" class="flex-1 py-3 text-[9px] font-black uppercase tracking-tight rounded-xl transition-all text-slate-400">MASUK</button>
+                <button onclick="setFinTab('out')" id="tab-fin-out" class="flex-1 py-3 text-[9px] font-black uppercase tracking-tight rounded-xl transition-all text-slate-400">KELUAR</button>
+                <button onclick="setFinTab('transfer')" id="tab-fin-transfer" class="flex-1 py-3 text-[9px] font-black uppercase tracking-tight rounded-xl transition-all text-slate-400">PINDAH</button>
+            </div>
+
+            <div class="flex gap-2 mb-8">
+                <button onclick="toggleModal('finance-modal', true)" class="flex-[2] py-4 bg-slate-900 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                    <span class="text-lg">+</span> TRANSAKSI
+                </button>
+                <button onclick="toggleModal('category-list-modal', true)" class="flex-1 py-4 bg-indigo-50 text-indigo-600 rounded-[1.5rem] font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all border border-indigo-100">
+                    KATEGORI
+                </button>
+            </div>
+
+            <div id="budget-overview" class="mb-8 hidden">
+                <h4 class="font-bold text-slate-900 tracking-tight mb-4 flex items-center text-sm">
+                    <span class="w-6 h-6 bg-rose-100 rounded-lg flex items-center justify-center mr-2 text-xs">📊</span> PANTAUAN ANGGARAN
+                </h4>
+                <div id="budget-list" class="space-y-3"></div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4 px-1">
+                <h4 class="font-bold text-slate-900 tracking-tight text-sm uppercase">RIWAYAT TRANSAKSI</h4>
+                <div class="flex items-center gap-2">
+                    <span class="text-[9px] font-black text-slate-400 uppercase">TAMPILKAN:</span>
+                    <select onchange="window.state.finLimit = parseInt(this.value); window.state.finOffset = 0; window.renderAll();" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[10px] font-black text-indigo-600 outline-none">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="0" selected>SEMUA</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="finance-list" class="space-y-4"></div>
+            
+            <!-- Pagination Controls -->
+            <div id="finance-pagination" class="mt-6 flex items-center justify-between px-2 hidden">
+                <button id="btn-prev-fin" onclick="changeFinPage(-window.state.finLimit)" class="px-4 py-2 bg-white border border-slate-100 shadow-sm rounded-xl text-[9px] font-black text-indigo-600 uppercase tracking-widest disabled:opacity-30">← SEBELUMNYA</button>
+                <span id="fin-page-info" class="text-[9px] font-black text-slate-400 uppercase">HAL 1</span>
+                <button id="btn-next-fin" onclick="changeFinPage(window.state.finLimit)" class="px-4 py-2 bg-white border border-slate-100 shadow-sm rounded-xl text-[9px] font-black text-indigo-600 uppercase tracking-widest disabled:opacity-30">SELANJUTNYA →</button>
+            </div>
+        </section>
+
+        <!-- SUPPLIES -->
+        <section id="supplies" class="view-section">
+            <div class="flex justify-between items-center mb-6 px-1">
+                <h3 class="font-black text-slate-900 tracking-tight">DATA STOK</h3>
+                <button onclick="toggleModal('supply-modal', true)" class="bg-indigo-600 text-white text-[10px] font-black px-5 py-3 rounded-2xl shadow-lg uppercase tracking-widest">+ BARANG</button>
+            </div>
+            <div id="supply-list"></div>
+        </section>
+
+        <!-- SHOPPING -->
+        <section id="shopping" class="view-section">
+            <div class="glass-card p-2 rounded-3xl shadow-premium mb-6 flex gap-2">
+                <input type="text" id="shop-item" placeholder="Butuh beli apa hari ini?" class="flex-1 px-5 py-3 bg-transparent outline-none font-bold text-slate-700 uppercase">
+                <button onclick="addShopping()" class="bg-slate-900 text-white w-12 h-12 rounded-2xl font-bold flex items-center justify-center shadow-lg active:scale-90 transition-all">+</button>
+            </div>
+            <div class="glass-card rounded-[2.5rem] shadow-premium overflow-hidden mb-4" id="shopping-list"></div>
+            <button onclick="clearCompletedShopping()" class="w-full py-2 text-[9px] font-black text-slate-300 uppercase tracking-widest">HAPUS SELESAI</button>
+        </section>
+
+        <!-- SAVINGS & EMERGENCY FUND -->
+        <section id="savings" class="view-section">
+            <!-- Emergency Fund Header Card -->
+            <div class="bg-gradient-to-br from-amber-400 to-orange-600 p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-8">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black opacity-70 mb-1 uppercase tracking-[0.2em]">DANA DARURAT (EMERGENCY FUND)</p>
+                    <h3 id="ef-current" class="text-2xl font-black mb-1 italic tracking-tight">RP 0,00</h3>
+                    <p id="ef-target-label" class="text-[10px] font-bold opacity-80 mb-6 uppercase">DARI TARGET RP 0,00</p>
                     
-                    <!-- Main Billboard: Activity & Notes -->
-                    <div class="md:col-span-8 space-y-12">
-                        <div class="bg-white/[0.02] border border-white/5 p-16 relative overflow-hidden group">
-                            <div class="absolute top-0 right-0 p-8">
-                                <span class="flex h-3 w-3">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-20"></span>
-                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-white/40"></span>
-                                </span>
-                            </div>
-                            <div class="flex justify-between items-center mb-16">
-                                <p class="text-[15px] uppercase tracking-[0.4em] text-dim italic">Active Bulletin / Work Logs</p>
-                                <div id="note-status" class="flex items-center gap-2 opacity-0 transition-opacity">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                                    <span class="text-[10px] uppercase tracking-widest text-dim">Synced</span>
-                                </div>
-                            </div>
-                            <div class="space-y-2 mb-20">
-                                <p class="text-[15px] uppercase tracking-[0.4em] text-dim/40">Current Focus:</p>
-                                <input type="text" id="studio-focus" class="w-full bg-transparent text-6xl md:text-[6vw] font-serif leading-tight outline-none border-none p-0 focus:ring-0 placeholder:opacity-20 italic font-light" placeholder="Define your focus...">
-                            </div>
-                            <div class="border-l border-white/10 pl-10">
-                                <textarea id="studio-notes" rows="6" class="w-full bg-transparent text-[23px] font-light text-white/80 leading-relaxed outline-none border-none p-0 focus:ring-0 resize-none placeholder:opacity-10" placeholder="Enter manual studio notes or logs here..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Sticky Notes Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                            <div class="border border-white/5 p-12 hover:border-white/20 transition-all">
-                                <i data-lucide="sticky-note" class="w-6 h-6 mb-10 text-dim"></i>
-                                <h4 class="text-[15px] uppercase tracking-[0.3em] text-dim mb-6">Quick Note</h4>
-                                <p class="text-[26px] font-serif italic leading-relaxed">"Precision is the foundation of digital excellence. Review the grid architecture."</p>
-                            </div>
-                            <div class="border border-white/5 p-12 hover:border-white/20 transition-all">
-                                <i data-lucide="alert-circle" class="w-6 h-6 mb-10 text-dim"></i>
-                                <h4 class="text-[15px] uppercase tracking-[0.3em] text-dim mb-6">Important Info</h4>
-                                <p class="text-[26px] font-serif italic leading-relaxed">All repository updates must be synchronized with the Firebase master node before 18:00 WIB.</p>
-                            </div>
-                        </div>
+                    <div class="w-full h-2 bg-black/10 rounded-full overflow-hidden mb-3">
+                        <div id="ef-progress-bar" class="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)] transition-all duration-1000" style="width: 0%"></div>
                     </div>
-
-                    <!-- Sidebar: Reminders & Timeline -->
-                    <div class="md:col-span-4 space-y-12">
-                        <div class="border border-white/5 p-12 h-full">
-                            <p class="text-[15px] uppercase tracking-[0.4em] text-dim mb-16">Reminders</p>
-                            <div class="space-y-16">
-                                <div id="reminder-container" class="space-y-12 max-h-[580px] overflow-y-auto scroll-smooth">
-                                    <!-- Dynamic Reminders for Expiring APAR -->
-                                    <p class="text-[14px] text-dim italic">Loading reminders...</p>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-32 pt-16 border-t border-white/5">
-                                <p class="text-[15px] uppercase tracking-[0.4em] text-dim mb-10">Studio Analytics</p>
-                                <div class="space-y-6">
-                                    <div class="flex justify-between text-[15px] uppercase tracking-tighter">
-                                        <span class="text-dim">Efficiency</span>
-                                        <span>94%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 bg-white/5">
-                                        <div class="w-[94%] h-full bg-white/40"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="ef-percent" class="text-[10px] font-black">0% AMAN</span>
+                        <button onclick="toggleModal('ef-config-modal', true)" class="text-[9px] font-black px-4 py-2 bg-white/20 rounded-xl backdrop-blur-md uppercase tracking-widest">TARGET</button>
                     </div>
+                    <div class="flex gap-2">
+                        <button onclick="adjustEF(true)" class="flex-1 py-2 bg-emerald-500/30 rounded-xl text-[9px] font-black uppercase tracking-widest border border-emerald-400/30">MASUK (+)</button>
+                        <button onclick="adjustEF(false)" class="flex-1 py-2 bg-rose-500/30 rounded-xl text-[9px] font-black uppercase tracking-widest border border-rose-400/30">KELUAR (-)</button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Savings Goals List -->
+            <div class="flex justify-between items-center mb-6 px-1">
+                <h4 class="font-black text-slate-900 tracking-tight uppercase flex items-center">
+                    <span class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center mr-3 text-sm">🎯</span> TARGET TABUNGAN
+                </h4>
+                <button onclick="toggleModal('goal-modal', true)" class="text-indigo-600 text-[10px] font-black uppercase tracking-widest">+ TARGET</button>
+            </div>
+
+            <div id="savings-list" class="space-y-4 mb-10">
+                <!-- Dynamic Goals -->
+            </div>
+
+            <!-- Savings History Section -->
+            <div class="mb-20">
+                <div class="flex justify-between items-center mb-4 px-1">
+                    <h4 class="font-bold text-slate-900 tracking-tight text-sm uppercase flex items-center">
+                        <span class="w-6 h-6 bg-slate-100 rounded-lg flex items-center justify-center mr-2 text-xs">📜</span> RIWAYAT TRANSAKSI
+                    </h4>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-black text-slate-400 uppercase">TAMPIL:</span>
+                        <select onchange="window.state.savLimit = parseInt(this.value); window.state.savOffset = 0; window.renderAll();" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[10px] font-black text-indigo-600 outline-none">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="0" selected>SEMUA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="savings-history-list" class="space-y-3"></div>
+
+                <!-- Pagination Controls for Savings -->
+                <div id="savings-pagination" class="mt-6 flex items-center justify-between px-2 hidden">
+                    <button id="btn-prev-sav" onclick="changeSavPage(-window.state.savLimit)" class="px-4 py-2 bg-white border border-slate-100 shadow-sm rounded-xl text-[9px] font-black text-indigo-600 uppercase tracking-widest disabled:opacity-30">← SEBELUMNYA</button>
+                    <span id="sav-page-info" class="text-[9px] font-black text-slate-400 uppercase">HAL 1</span>
+                    <button id="btn-next-sav" onclick="changeSavPage(window.state.savLimit)" class="px-4 py-2 bg-white border border-slate-100 shadow-sm rounded-xl text-[9px] font-black text-indigo-600 uppercase tracking-widest disabled:opacity-30">SELANJUTNYA →</button>
                 </div>
             </div>
         </section>
 
-        <!-- Data Section -->
-        <section id="data" class="view-section py-32 px-10 md:px-20">
-            <div class="max-w-full">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-20">
-                    <div class="md:col-span-12 mb-12">
-                        <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-8">Repository / 02</p>
-                        <h2 class="text-7xl md:text-[8vw] font-serif leading-none tracking-tighter">
-                            ASSET <br>
-                            <span class="italic font-light">MANAGEMENT.</span>
-                        </h2>
-                    </div>
+        <!-- HB & PERIOD TRACKER -->
+        <section id="hb" class="view-section">
+            <!-- Cycle Status Card -->
+            <div class="bg-gradient-to-br from-rose-400 to-pink-600 p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-8">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black opacity-70 mb-1 uppercase tracking-[0.2em]">STATUS SIKLUS ISTRI</p>
+                    <h3 id="hb-cycle-day" class="text-2xl font-black mb-1 italic tracking-tight uppercase">HARI KE-?</h3>
+                    <p id="hb-next-period" class="text-[10px] font-bold opacity-80 mb-6 uppercase">PREDIKSI HAID BERIKUTNYA: -</p>
                     
-                    <div class="md:col-span-12">
-                        <!-- Data Sub-Menu -->
-                        <div class="flex gap-12 mb-20 border-b border-white/5 pb-6">
-                            <button class="data-sub-trigger active text-[10px] uppercase tracking-[0.4em] text-white border-b border-white pb-6 -mb-[25px] transition-all" data-sub="apar">APAR Units</button>
-                            <button class="data-sub-trigger text-[10px] uppercase tracking-[0.4em] text-dim hover:text-white pb-6 -mb-[25px] transition-all" data-sub="general">General Assets</button>
-                            <button class="data-sub-trigger text-[10px] uppercase tracking-[0.4em] text-dim hover:text-white pb-6 -mb-[25px] transition-all" data-sub="analytics">Analytics</button>
-                        </div>
-
-                        <!-- APAR Sub-View -->
-                        <div id="view-apar" class="data-content-view pb-24">
-                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
-                                <div>
-                                    <h3 class="text-4xl font-serif mb-2">APAR Monitoring</h3>
-                                    <p class="text-[10px] uppercase tracking-[0.3em] text-dim">Unit Inventory & Safety Compliance</p>
-                                </div>
-                                <div class="flex gap-4">
-                                    <button id="open-apar-modal" class="px-6 py-2 bg-white text-black text-[10px] uppercase tracking-widest hover:bg-white/80 transition-all font-bold">+ Add Asset</button>
-                                    <button class="px-6 py-2 border border-white/10 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all">Filter</button>
-                                </div>
-                            </div>
-
-                        <!-- Pagination Controls (Top) -->
-                        <div id="pagination-container" class="flex flex-col md:flex-row justify-between items-center pb-8 border-b border-white/5 gap-8 hidden mb-4">
-                            <div class="flex items-center gap-6">
-                                <p class="text-[10px] uppercase tracking-[0.2em] text-dim">View:</p>
-                                <select id="items-per-page" class="bg-transparent border-b border-white/10 text-[10px] uppercase tracking-[0.2em] outline-none focus:border-white transition-colors cursor-pointer pb-1">
-                                    <option value="5" class="bg-black">5</option>
-                                    <option value="10" class="bg-black">10</option>
-                                    <option value="15" class="bg-black">15</option>
-                                    <option value="20" class="bg-black">20</option>
-                                    <option value="all" class="bg-black">All</option>
-                                </select>
-                            </div>
-                            
-                            <div class="flex items-center gap-12">
-                                <button id="prev-page" class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-dim hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none">
-                                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                                    Prev
-                                </button>
-                                <p id="page-info" class="text-[10px] uppercase tracking-[0.4em] font-light">Page 01 / 01</p>
-                                <button id="next-page" class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-dim hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none">
-                                    Next
-                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-
-                            <div class="hidden md:block">
-                                <p id="showing-info" class="text-[10px] uppercase tracking-[0.2em] text-dim italic">Showing 0-0 of 0 Assets</p>
-                            </div>
-                        </div>
-
-                        <div class="overflow-x-auto w-full mb-12">
-                            <table class="w-full text-left border-collapse min-w-[1000px] table-fixed">
-                                <thead>
-                                    <tr class="border-b border-white/10">
-                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Seri</th>
-                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Dymo</th>
-                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Type</th>
-                                        <th class="w-[8%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Weight</th>
-                                        <th class="w-[18%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Last Position</th>
-                                        <th class="w-[18%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Location</th>
-                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Expired</th>
-                                        <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Status</th>
-                                        <th class="w-[12%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="apar-table-body" class="text-sm font-light">
-                                    <!-- Dynamic content -->
-                                </tbody>
-                            </table>
-                        </div>
-                        </div>
-
-                        <!-- General Assets Placeholder -->
-                        <div id="view-general" class="data-content-view hidden opacity-0 transition-opacity duration-500">
-                            <div class="py-20 text-center border border-dashed border-white/10">
-                                <p class="text-dim text-[10px] uppercase tracking-[0.4em]">General Asset Module Coming Soon</p>
-                            </div>
-                        </div>
-
-                        <!-- Analytics Placeholder -->
-                        <div id="view-analytics" class="data-content-view hidden opacity-0 transition-opacity duration-500">
-                            <div class="py-20 text-center border border-dashed border-white/10">
-                                <p class="text-dim text-[10px] uppercase tracking-[0.4em]">Analytics Module Coming Soon</p>
-                            </div>
-                        </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="toggleModal('hb-log-modal', true, 'hb')" class="py-3 bg-white/20 rounded-xl text-[9px] font-black uppercase tracking-widest border border-white/20 backdrop-blur-md">CATAT HB ❤️</button>
+                        <button onclick="toggleModal('hb-log-modal', true, 'period')" class="py-3 bg-rose-500/40 rounded-xl text-[9px] font-black uppercase tracking-widest border border-rose-300/30 backdrop-blur-md">CATAT HAID 💧</button>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Contact Section (SPA Page) -->
-        <section id="contact" class="view-section min-h-screen py-32 px-10 md:px-20 flex flex-col justify-between">
-            <div class="max-w-full">
-                <div class="mb-40">
-                    <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-12">Inquiry / 03</p>
-                    <div class="flex flex-col md:flex-row justify-between items-start gap-20">
-                        <h2 class="text-8xl md:text-[15vw] font-serif leading-[0.75] tracking-tighter">
-                            LET'S <br>
-                            <span class="italic text-dim/30">TALK.</span>
-                        </h2>
-                        <div class="space-y-12 md:pt-12">
-                            <p class="text-2xl text-dim font-light max-w-sm leading-relaxed">
-                                Seeking partnerships with brands that value the extraordinary over the expected.
-                            </p>
-                            <button id="open-contact-form" class="group flex items-center gap-6 text-4xl md:text-6xl font-serif border-b border-dim pb-4 hover:border-white transition-all text-left w-full md:w-auto">
-                                Start Project
-                                <i data-lucide="arrow-up-right" class="w-10 h-10 group-hover:rotate-45 transition-transform"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex justify-between items-center mb-6 px-1">
+                <h4 class="font-black text-slate-900 tracking-tight uppercase flex items-center">
+                    <span class="w-8 h-8 bg-rose-100 rounded-xl flex items-center justify-center mr-3 text-sm">📅</span> RIWAYAT AKTIVITAS
+                </h4>
+            </div>
 
-                <!-- Footer Nav -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-20 border-t border-dim pt-20 pb-10 text-[10px] uppercase tracking-[0.3em] text-dim">
-                    <div class="space-y-6">
-                        <p class="text-white opacity-40">Navigation</p>
-                        <a href="#" class="nav-link-trigger block hover:text-white transition" data-target="work">Works</a>
-                        <a href="#" class="nav-link-trigger block hover:text-white transition" data-target="data">Data Repository</a>
-                        <a href="#" class="nav-link-trigger block hover:text-white transition" data-target="contact">Contact</a>
-                    </div>
-                    <div class="space-y-6">
-                        <p class="text-white opacity-40">Socials</p>
-                        <a href="#" class="block hover:text-white transition">Instagram</a>
-                        <a href="#" class="block hover:text-white transition">Behance</a>
-                        <a href="#" class="block hover:text-white transition">Vimeo</a>
-                    </div>
-                    <div class="space-y-6">
-                        <p class="text-white opacity-40">Contact</p>
-                        <p>hello@vicky-studio.com</p>
-                        <p>+44 (0) 20 7123 4567</p>
-                    </div>
-                    <div class="space-y-6 md:text-right">
-                        <p class="text-white opacity-40">Based In</p>
-                        <p>Sidoarjo, ID</p>
-                        <p>East Java, Indonesia</p>
-                    </div>
-                </div>
+            <div id="hb-history-list" class="space-y-3 mb-20">
+                <!-- Dynamic Logs -->
             </div>
         </section>
 
     </main>
 
-    <!-- Modals -->
-    <!-- Contact Modal -->
-    <div id="contact-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-        <div class="w-full max-w-2xl bg-[#0a0a0a] border border-white/10 p-10 md:p-16 relative overflow-hidden">
-            <button id="close-contact-modal" class="absolute top-8 right-8 text-dim hover:text-white transition-colors">
-                <i data-lucide="x" class="w-8 h-8"></i>
-            </button>
-            <div class="mb-12">
-                <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-4">Start a Conversation</p>
-                <h3 class="text-4xl md:text-5xl font-serif">Tell us about <br><span class="italic font-light opacity-50">your project.</span></h3>
-            </div>
-            <form id="firebase-contact-form" class="space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="space-y-2">
-                        <label class="text-[9px] uppercase tracking-widest text-dim">Full Name</label>
-                        <input type="text" id="user_name" required class="w-full bg-transparent border-b border-white/10 py-3 focus:border-white transition-colors outline-none text-sm" placeholder="John Doe">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] uppercase tracking-widest text-dim">Email Address</label>
-                        <input type="email" id="user_email" required class="w-full bg-transparent border-b border-white/10 py-3 focus:border-white transition-colors outline-none text-sm" placeholder="john@example.com">
-                    </div>
+    <!-- Modal Supply -->
+    <div id="supply-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('supply-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 class="font-black text-2xl mb-8 text-center">TAMBAH BARANG</h3>
+            <div class="space-y-5">
+                <input type="text" id="sup-name" placeholder="NAMA BARANG" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="sup-qty" placeholder="JUMLAH" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                    <input type="text" id="sup-unit" placeholder="SATUAN" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
                 </div>
-                <div class="space-y-2">
-                    <label class="text-[9px] uppercase tracking-widest text-dim">Project Details</label>
-                    <textarea id="user_message" required rows="3" class="w-full bg-transparent border-b border-white/10 py-3 focus:border-white transition-colors outline-none text-sm resize-none" placeholder="What are you looking to build?"></textarea>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="toggleModal('supply-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button onclick="addSupply()" class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
                 </div>
-                <button type="submit" id="submit-btn" class="group flex items-center gap-4 text-xs uppercase tracking-[0.3em] font-medium pt-8">
-                    Send Inquiry
-                    <span class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </span>
-                </button>
-            </form>
-            <div id="form-success" class="hidden absolute inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center text-center p-10">
-                <i data-lucide="check-circle-2" class="w-16 h-16 text-white mb-6 animate-pulse"></i>
-                <h4 class="text-3xl font-serif mb-4">Message Received.</h4>
-                <p class="text-dim text-sm tracking-wide">We'll be in touch shortly.</p>
-                <button id="reset-form" class="mt-8 text-[9px] uppercase tracking-widest border border-white/10 px-8 py-3 hover:bg-white hover:text-black transition-all">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- APAR Modal -->
-    <div id="apar-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
-        <div class="w-full max-w-xl bg-[#0a0a0a] border border-white/10 p-10 md:p-12 relative">
-            <button id="close-apar-modal" class="absolute top-6 right-6 text-dim hover:text-white transition-colors">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <div class="mb-10">
-                <p class="text-[9px] uppercase tracking-[0.4em] text-dim mb-3">Asset Registry</p>
-                <h3 id="apar-modal-title" class="text-3xl font-serif">Add New <span class="italic font-light opacity-50">APAR Unit.</span></h3>
+    <!-- Modal Finance -->
+    <div id="finance-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('finance-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 class="font-black text-2xl mb-8 text-center" id="fin-modal-title">CATAT KEUANGAN</h3>
+            <div class="space-y-5">
+                <input type="text" id="fin-desc" placeholder="KETERANGAN (MISAL: BELI SAYUR)" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" id="fin-amount" oninput="formatCurrencyInput(this)" placeholder="JUMLAH (RP)" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-indigo-600 uppercase">
+                    <select id="fin-type" onchange="updateCategorySelect()" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-slate-600 uppercase">
+                        <option value="out">KELUAR</option>
+                        <option value="in">MASUK</option>
+                        <option value="transfer">TRANSFER</option>
+                    </select>
+                </div>
+                <div id="fin-category-wrapper">
+                    <select id="fin-category" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-slate-600 uppercase">
+                        <!-- Dynamic -->
+                    </select>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase ml-1" id="fin-method-label">METODE PEMBAYARAN</p>
+                    <select id="fin-method" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-slate-600 uppercase">
+                        <option value="cash">TUNAI (CASH)</option>
+                        <option value="debit">BANK (DEBIT)</option>
+                    </select>
+                </div>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="toggleModal('finance-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button onclick="addFinance()" id="btn-save-finance" class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
+                </div>
             </div>
-            <form id="apar-form" class="space-y-6">
-                <input type="hidden" id="apar_id">
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">No Seri</label>
-                        <input type="text" id="apar_seri" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm font-mono" placeholder="SN-XXXXX">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">No Dymo</label>
-                        <input type="text" id="apar_dymo" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm font-mono" placeholder="DYM-XXX">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">Type</label>
-                        <select id="apar_type" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light appearance-none">
-                            <option value="" disabled selected class="bg-[#0a0a0a] text-dim">Select Type</option>
-                            <option value="Powder" class="bg-[#0a0a0a] text-white">Powder</option>
-                            <option value="Foam" class="bg-[#0a0a0a] text-white">Foam</option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">Weight</label>
-                        <input type="text" id="apar_weight" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. 6 Kg">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">Last Position</label>
-                        <input type="text" id="apar_position" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Main Lobby">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">Location</label>
-                        <input type="text" id="apar_location" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Building A">
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[8px] uppercase tracking-widest text-dim">Expiration Date</label>
-                    <input type="date" id="apar_expired" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light">
-                </div>
-                <div class="pt-6">
-                    <button type="submit" class="w-full bg-white text-black py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white/90 transition-all">Save Asset</button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <!-- Arena AI Portal -->
-    <div id="ai-modal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl">
-        <div class="w-full max-w-2xl bg-[#050505] border border-white/10 relative overflow-hidden flex flex-col shadow-2xl p-12 md:p-20 text-center">
-            <button id="close-ai-modal" class="absolute top-8 right-8 text-dim hover:text-white transition-colors">
-                <i data-lucide="x" class="w-8 h-8"></i>
-            </button>
-            <div class="mb-12">
-                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
-                    <i data-lucide="sparkles" class="w-8 h-8 text-white"></i>
-                </div>
-                <p class="text-[10px] uppercase tracking-[0.5em] text-dim mb-4">Secure Portal</p>
-                <h3 class="text-4xl md:text-5xl font-serif mb-6 leading-tight">Arena AI <br><span class="italic font-light opacity-50">Workspace</span></h3>
-                <p class="text-dim text-sm tracking-wide leading-relaxed max-w-sm mx-auto">
-                    Open the AI environment in a dedicated workspace window for full functionality.
-                </p>
+    <!-- Modal Category List -->
+    <div id="category-list-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('category-list-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10 max-h-[80vh] flex flex-col">
+            <h3 class="font-black text-2xl mb-6 text-center">KELOLA KATEGORI</h3>
+            <div id="category-items" class="flex-1 overflow-y-auto custom-scrollbar space-y-3 mb-6">
+                <!-- Dynamic -->
             </div>
-            <button id="launch-arena" class="group relative inline-flex items-center justify-center px-12 py-5 overflow-hidden font-medium transition duration-300 ease-out border border-white/20 rounded-full shadow-md bg-white text-black hover:scale-105 mx-auto">
-                <span class="uppercase tracking-[0.3em] text-[10px] font-bold">Enter Workspace</span>
-            </button>
+            <button onclick="toggleModal('add-category-modal', true)" class="w-full py-4 bg-indigo-600 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px] uppercase tracking-widest">+ KATEGORI BARU</button>
         </div>
     </div>
 
-    <!-- AI Floating Button -->
-    <div class="fixed bottom-8 right-8 z-[200]">
-        <button id="open-ai-portal" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all group relative">
-            <i data-lucide="sparkles" class="w-7 h-7"></i>
-            <span class="absolute inset-0 rounded-full bg-white/20 animate-ping"></span>
+    <!-- Modal Emergency Fund Config -->
+    <div id="ef-config-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('ef-config-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 class="font-black text-2xl mb-8 text-center">DANA DARURAT</h3>
+            <div class="space-y-5">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">SALDO SAAT INI (SUDAH ADA)</p>
+                    <input type="text" id="ef-input-current" oninput="formatCurrencyInput(this)" placeholder="RP 0,00" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-emerald-600 uppercase">
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">NOMINAL TARGET UTAMA (TARGET RP)</p>
+                    <input type="text" id="ef-input-target-manual" oninput="formatCurrencyInput(this)" placeholder="CONTOH: 50.000.000" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-indigo-600 uppercase">
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">REFERENSI PENGELUARAN/BULAN</p>
+                    <input type="text" id="ef-input-monthly" oninput="formatCurrencyInput(this)" placeholder="RP 0,00" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-rose-500 uppercase">
+                </div>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="toggleModal('ef-config-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button onclick="saveEFConfig()" class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add Savings Goal -->
+    <div id="goal-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('goal-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 class="font-black text-2xl mb-8 text-center" id="goal-modal-title">TARGET TABUNGAN</h3>
+            <div class="space-y-5">
+                <input type="text" id="goal-name" placeholder="NAMA TARGET (MISAL: BELI LAPTOP)" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">NOMINAL TARGET (RP)</p>
+                        <input type="text" id="goal-target" oninput="formatCurrencyInput(this)" placeholder="RP 0,00" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-indigo-600 uppercase">
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">SALDO SAAT INI (RP)</p>
+                        <input type="text" id="goal-current" oninput="formatCurrencyInput(this)" placeholder="RP 0,00" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-emerald-600 uppercase">
+                    </div>
+                </div>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="toggleModal('goal-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button id="btn-save-goal" onclick="addSavingsGoal()" class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add Category -->
+    <div id="add-category-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('add-category-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 class="font-black text-xl mb-6 text-center">TAMBAH KATEGORI</h3>
+            <div class="space-y-4">
+                <input type="text" id="cat-name" placeholder="NAMA KATEGORI" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                <select id="cat-type" onchange="toggleBudgetInput()" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                    <option value="out">PENGELUARAN</option>
+                    <option value="in">PEMASUKAN</option>
+                </select>
+                <div id="budget-input-wrapper">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">ANGGARAN BULANAN (OPSIONAL)</p>
+                    <input type="text" id="cat-budget" oninput="formatCurrencyInput(this)" placeholder="CONTOH: 1.000.000" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-rose-500 uppercase">
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button onclick="toggleModal('add-category-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button id="btn-save-category" onclick="addCategory()" class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Savings Transaction (Model Catat Keuangan) -->
+    <div id="savings-trans-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('savings-trans-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 id="savings-trans-title" class="font-black text-2xl mb-8 text-center uppercase">MUTASI SALDO</h3>
+            <div class="space-y-5">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">KETERANGAN</p>
+                    <input type="text" id="savings-trans-desc" placeholder="MISAL: TABUNGAN BULAN INI" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">NOMINAL (RP)</p>
+                    <input type="text" id="savings-trans-amount" oninput="formatCurrencyInput(this)" placeholder="RP 0,00" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-black text-indigo-600 text-xl uppercase">
+                </div>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="toggleModal('savings-trans-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button onclick="processSavingsTransaction()" class="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal HB Log -->
+    <div id="hb-log-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="absolute inset-0" onclick="toggleModal('hb-log-modal', false)"></div>
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-10 shadow-2xl relative z-10">
+            <h3 id="hb-modal-title" class="font-black text-2xl mb-8 text-center uppercase">CATAT AKTIVITAS</h3>
+            <div class="space-y-5">
+                <div id="hb-type-selector" class="hidden">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">JENIS HAID</p>
+                    <select id="hb-period-type" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold text-slate-600 uppercase">
+                        <option value="period_start">MULAI HAID (HARI PERTAMA)</option>
+                        <option value="period_end">SELESAI HAID (HARI TERAKHIR)</option>
+                    </select>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">TANGGAL</p>
+                    <input type="date" id="hb-date" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase text-slate-600">
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">KETERANGAN (OPSIONAL)</p>
+                    <input type="text" id="hb-note" placeholder="MISAL: SIKLUS NORMAL" class="w-full p-4 bg-slate-50 rounded-2xl border border-slate-100 font-bold uppercase">
+                </div>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="toggleModal('hb-log-modal', false)" class="flex-1 py-4 font-black text-slate-300 uppercase tracking-widest text-[10px]">BATAL</button>
+                    <button onclick="addHBLog()" class="flex-1 py-4 bg-rose-500 text-white font-black rounded-2xl shadow-xl active:scale-95 transition-all text-[10px]">SIMPAN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav Container (to keep fixed nav inside mobile view) -->
+    <div class="fixed bottom-0 w-full max-w-md z-40 px-6 pb-6 pointer-events-none">
+        <nav id="main-nav" class="floating-nav bg-white/90 backdrop-blur-xl px-5 flex justify-between items-center border border-white/50 relative pointer-events-auto">
+        <button id="nav-toggle-btn" onclick="toggleNav()" class="flex flex-col items-center justify-center gap-1 w-10 h-full text-indigo-600">
+            <svg id="toggle-icon" class="w-6 h-6 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
+        
+        <button onclick="showView('dashboard')" class="nav-item flex flex-col items-center gap-1 flex-1 active-nav" id="nav-dashboard">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">HOME</span>
+        </button>
+        <button onclick="showView('finance')" class="nav-item flex flex-col items-center gap-1 flex-1 text-slate-400" id="nav-finance">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">UANG</span>
+        </button>
+        <button onclick="showView('savings')" class="nav-item flex flex-col items-center gap-1 flex-1 text-slate-400" id="nav-savings">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 100-6 3 3 0 000 6z M12 9V7 M12 17v-2 M15 12h2 M7 12h2 M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">TABUNGAN</span>
+        </button>
+        <button onclick="showView('hb')" class="nav-item flex flex-col items-center gap-1 flex-1 text-slate-400" id="nav-hb">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">HB</span>
+        </button>
+        <button onclick="showView('supplies')" class="nav-item flex flex-col items-center gap-1 flex-1 text-slate-400" id="nav-supplies">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">STOK</span>
+        </button>
+        <button onclick="showView('shopping')" class="nav-item flex flex-col items-center gap-1 flex-1 text-slate-400" id="nav-shopping">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            <span class="text-[8px] font-black uppercase tracking-widest">BELI</span>
+        </button>
+        </nav>
     </div>
+</div> <!-- End of Mobile Frame Container -->
 
     <script type="module">
-        // --- FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyD1gbR7XXPOGXGivvZS7EeUkBgmavKK4vA",
-            authDomain: "ayah-kerja.firebaseapp.com",
-            projectId: "ayah-kerja",
-            storageBucket: "ayah-kerja.firebasestorage.app",
-            messagingSenderId: "578797988945",
-            appId: "1:578797988945:web:38d0660c97c3c22fb79c70",
-            databaseURL: "https://ayah-kerja-default-rtdb.asia-southeast1.firebasedatabase.app/"
+            apiKey: "AIzaSyCXk2rKN2XtLQpDO8aGWj-tfgFwGXYq2Ao",
+            authDomain: "project1-ed0d1.firebaseapp.com",
+            databaseURL: "https://project1-ed0d1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "project1-ed0d1",
+            storageBucket: "project1-ed0d1.firebasestorage.app",
+            messagingSenderId: "371384628609",
+            appId: "1:371384628609:web:11cdf5a78e4f47c81ea480"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        let state = { 
+            finance: [], 
+            supplies: [], 
+            shopping: [],
+            categories: [],
+            savings: [],
+            savingsHistory: [],
+            hbLogs: [],
+            efConfig: { current: 0, monthly: 0, months: 6 },
+            viewMonth: new Date().getMonth(),
+            viewYear: new Date().getFullYear(),
+            finTab: 'all',
+            finLimit: 0,
+            finOffset: 0,
+            savLimit: 0,
+            savOffset: 0,
+            editingCategoryId: null,
+            editingFinanceId: null,
+            editingGoalId: null,
+            savingsTransContext: null, // { type: 'ef'|'goal', id: string|null, isPlus: boolean }
+            hbContext: 'hb' // 'hb' or 'period'
+        };
+        window.state = state;
 
-        // --- UI CORE ---
-        lucide.createIcons();
+        const getMonthlyBudget = (cat) => {
+            if (!cat || !cat.monthlyBudgets) return 0;
+            const yearData = cat.monthlyBudgets[state.viewYear];
+            if (!yearData) return 0;
+            return yearData[state.viewMonth] || 0;
+        };
 
-        // --- CLOCK ---
-        function updateClock() {
-            const timeStr = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Asia/Jakarta',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                hour12: false
-            }).format(new Date());
-            
-            document.querySelectorAll('.clock-target').forEach(el => {
-                if(el.innerHTML.includes('INDONESIA')) {
-                    el.innerHTML = `INDONESIA<br><span class="text-white font-mono">${timeStr}</span> <span class="opacity-50">WIB</span>`;
+        const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+
+        onValue(ref(db, 'finance'), (s) => {
+            const d = s.val(); state.finance = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })).reverse() : []; renderAll();
+        });
+        onValue(ref(db, 'supplies'), (s) => {
+            const d = s.val(); state.supplies = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })) : []; renderAll();
+        });
+        onValue(ref(db, 'shopping'), (s) => {
+            const d = s.val(); state.shopping = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })) : []; renderAll();
+        });
+        onValue(ref(db, 'savings'), (s) => {
+            const d = s.val(); state.savings = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })) : []; renderAll();
+        });
+        onValue(ref(db, 'savings_history'), (s) => {
+            const d = s.val(); state.savingsHistory = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })).reverse() : []; renderAll();
+        });
+        onValue(ref(db, 'hb_logs'), (s) => {
+            const d = s.val(); state.hbLogs = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })).reverse() : []; renderAll();
+        });
+        onValue(ref(db, 'ef_config'), (s) => {
+            const d = s.val(); if (d) state.efConfig = d; renderAll();
+        });
+        onValue(ref(db, 'categories'), (s) => {
+            const d = s.val(); 
+            state.categories = d ? Object.entries(d).map(([id, v]) => ({ id, ...v })) : [];
+            if (!d) {
+                const defaults = [
+                    { name: 'GAJI', type: 'in' },
+                    { name: 'BONUS', type: 'in' },
+                    { name: 'MAKAN', type: 'out', monthlyBudgets: { [state.viewYear]: { [state.viewMonth]: 2000000 } } },
+                    { name: 'TRANSPORTASI', type: 'out', monthlyBudgets: { [state.viewYear]: { [state.viewMonth]: 500000 } } },
+                    { name: 'TAGIHAN', type: 'out', monthlyBudgets: { [state.viewYear]: { [state.viewMonth]: 1000000 } } }
+                ];
+                defaults.forEach(c => push(ref(db, 'categories'), c));
+            }
+            renderAll();
+        });
+
+        window.showView = (v) => {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(v).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav', 'text-slate-400'));
+            document.querySelectorAll('.nav-item').forEach(n => n.id === 'nav-' + v ? n.classList.add('active-nav') : n.classList.add('text-slate-400'));
+        };
+
+        window.toggleModal = (id, s, context = 'hb') => {
+            document.getElementById(id).classList.toggle('hidden', !s);
+            if (id === 'hb-log-modal') {
+                if (s) {
+                    state.hbContext = context;
+                    document.getElementById('hb-modal-title').innerText = context === 'hb' ? 'CATAT HB ❤️' : 'CATAT SIKLUS HAID 💧';
+                    document.getElementById('hb-type-selector').classList.toggle('hidden', context === 'hb');
+                    document.getElementById('hb-note').value = '';
+                    // Set default date to today
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('hb-date').value = today;
+                }
+            }
+            if (id === 'goal-modal') {
+                if (!s) {
+                    state.editingGoalId = null;
+                    document.getElementById('goal-name').value = '';
+                    document.getElementById('goal-target').value = '';
+                    document.getElementById('goal-current').value = '';
+                    document.getElementById('btn-save-goal').innerText = 'SIMPAN';
+                }
+            }
+            if (id === 'ef-config-modal' && s) {
+                document.getElementById('ef-input-current').value = state.efConfig.current ? state.efConfig.current.toLocaleString('id-ID') : '';
+                document.getElementById('ef-input-monthly').value = state.efConfig.monthly ? state.efConfig.monthly.toLocaleString('id-ID') : '';
+                document.getElementById('ef-input-target-manual').value = state.efConfig.manualTarget ? state.efConfig.manualTarget.toLocaleString('id-ID') : '';
+            }
+            if (id === 'finance-modal') {
+                const btn = document.getElementById('btn-save-finance');
+                if (!s) {
+                    state.editingFinanceId = null;
+                    document.getElementById('fin-desc').value = '';
+                    document.getElementById('fin-amount').value = '';
+                    document.getElementById('fin-method').value = 'cash';
+                    document.getElementById('fin-type').value = 'out';
+                    if (btn) btn.innerText = 'SIMPAN';
                 } else {
-                    el.innerHTML = `<span class="font-mono">${timeStr}</span> WIB`;
-                }
-            });
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // --- SPA VIEW SWITCHER ---
-        const sections = document.querySelectorAll('.view-section');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        function switchView(targetId) {
-            if (!targetId) return;
-
-            sections.forEach(sec => {
-                sec.classList.remove('active');
-                setTimeout(() => { if(!sec.classList.contains('active')) sec.style.display = 'none'; }, 600);
-            });
-
-            const target = document.getElementById(targetId);
-            if (target) {
-                target.style.display = 'block';
-                // Trigger reflow
-                target.offsetHeight;
-                target.classList.add('active');
-                window.scrollTo(0,0);
-            }
-
-            // Update Nav Highlighting
-            navLinks.forEach(link => {
-                link.classList.toggle('active', link.getAttribute('data-target') === targetId);
-            });
-
-            // Toggle Sidebar Sub-menu Visibility
-            const dataSub = document.getElementById('sidebar-data-sub');
-            if (targetId === 'data') {
-                dataSub.style.maxHeight = '150px';
-                dataSub.style.opacity = '1';
-                dataSub.style.marginTop = '24px';
-                dataSub.style.marginBottom = '8px';
-                dataSub.style.transition = 'all 0.8s cubic-bezier(0.19, 1, 0.22, 1)';
-            } else {
-                dataSub.style.maxHeight = '0';
-                dataSub.style.opacity = '0';
-                dataSub.style.marginTop = '0';
-                dataSub.style.marginBottom = '0';
-                dataSub.style.transition = 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)';
-            }
-            
-            // Re-render Icons
-            lucide.createIcons();
-        }
-
-        // Global Event Delegation for Nav Triggers
-        document.addEventListener('click', (e) => {
-            const trigger = e.target.closest('.nav-link-trigger');
-            if (trigger) {
-                e.preventDefault();
-                const target = trigger.getAttribute('data-target');
-                switchView(target);
-            }
-        });
-
-        // --- DATA SUB-MENU SWITCHER ---
-        const subTriggers = document.querySelectorAll('.data-sub-trigger');
-        const dataViews = document.querySelectorAll('.data-content-view');
-
-        subTriggers.forEach(trigger => {
-            trigger.addEventListener('click', (e) => {
-                const targetSub = trigger.getAttribute('data-sub');
-                
-                // If it's the main Data section view switcher, ensure we're on the Data page
-                if (trigger.classList.contains('data-sub-trigger')) {
-                    const activeView = document.querySelector('.view-section.active');
-                    if (!activeView || activeView.id !== 'data') {
-                        switchView('data');
+                    if (!state.editingFinanceId) {
+                        if (state.finTab !== 'all') document.getElementById('fin-type').value = state.finTab;
+                        updateCategorySelect();
                     }
                 }
-
-                // Update All Triggers (Sidebar & Main Content)
-                subTriggers.forEach(t => {
-                    if (t.getAttribute('data-sub') === targetSub) {
-                        t.classList.add('active', 'text-white');
-                        if (!t.classList.contains('text-[10px]')) { // If it's the main content tab
-                            t.classList.add('border-b', 'border-white');
-                        }
-                    } else {
-                        t.classList.remove('active', 'text-white', 'border-b', 'border-white');
-                        t.classList.add('text-dim');
+            }
+            if (id === 'add-category-modal') {
+                const btn = document.getElementById('btn-save-category');
+                if (!s) {
+                    state.editingCategoryId = null;
+                    document.getElementById('cat-name').value = '';
+                    document.getElementById('cat-budget').value = '';
+                    if (btn) btn.innerText = 'SIMPAN';
+                } else {
+                    if (btn) btn.innerText = state.editingCategoryId ? 'UPDATE' : 'SIMPAN';
+                    if (!state.editingCategoryId && state.finTab !== 'all') {
+                        document.getElementById('cat-type').value = state.finTab;
+                        toggleBudgetInput();
                     }
-                });
-
-                // Update Views
-                dataViews.forEach(view => {
-                    view.classList.add('hidden', 'opacity-0');
-                });
-                const targetView = document.getElementById(`view-${targetSub}`);
-                if (targetView) {
-                    targetView.classList.remove('hidden');
-                    setTimeout(() => targetView.classList.remove('opacity-0'), 10);
                 }
-            });
-        });
-
-        // --- CONTACT MODAL ---
-        const cModal = document.getElementById('contact-modal');
-        const openCBtn = document.getElementById('open-contact-form');
-        const closeCBtn = document.getElementById('close-contact-modal');
-        const cForm = document.getElementById('firebase-contact-form');
-        const successState = document.getElementById('form-success');
-
-        openCBtn.onclick = () => cModal.classList.remove('hidden');
-        closeCBtn.onclick = () => {
-            cModal.classList.add('hidden');
-            successState.classList.add('hidden');
-            cForm.reset();
-        };
-
-        cForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            btn.innerText = 'Sending...';
-            const data = {
-                name: document.getElementById('user_name').value,
-                email: document.getElementById('user_email').value,
-                message: document.getElementById('user_message').value,
-                timestamp: new Date().toISOString()
-            };
-            try {
-                await push(ref(db, 'inquiries'), data);
-                successState.classList.remove('hidden');
-            } catch (err) { alert('Error sending message.'); }
-            btn.innerText = 'Send Inquiry';
-        };
-
-        // --- APAR MANAGEMENT ---
-        const aModal = document.getElementById('apar-modal');
-        const aForm = document.getElementById('apar-form');
-        const aTableBody = document.getElementById('apar-table-body');
-        const openABtn = document.getElementById('open-apar-modal');
-        const closeABtn = document.getElementById('close-apar-modal');
-
-        // Pagination State
-        let aparDataList = [];
-        let itemsPerPage = 5;
-        let currentPage = 1;
-
-        const toggleAModal = (show, isEdit = false) => {
-            aModal.classList.toggle('hidden', !show);
-            if(!show) {
-                aForm.reset();
-                document.getElementById('apar_id').value = '';
             }
-            document.getElementById('apar-modal-title').innerHTML = isEdit ? 'Edit <span class="italic font-light opacity-50">APAR Unit.</span>' : 'Add New <span class="italic font-light opacity-50">APAR Unit.</span>';
-        };
-
-        openABtn.onclick = () => toggleAModal(true);
-        closeABtn.onclick = () => toggleAModal(false);
-
-        aForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('apar_id').value;
-            const data = {
-                no_seri: document.getElementById('apar_seri').value,
-                no_dymo: document.getElementById('apar_dymo').value,
-                type: document.getElementById('apar_type').value,
-                weight: document.getElementById('apar_weight').value,
-                position: document.getElementById('apar_position').value,
-                location: document.getElementById('apar_location').value,
-                expired: document.getElementById('apar_expired').value,
-                updatedAt: new Date().toISOString()
-            };
-            try {
-                if (id) await set(ref(db, `apar_assets/${id}`), data);
-                else await push(ref(db, 'apar_assets'), data);
-                toggleAModal(false);
-            } catch (err) { alert('Save failed.'); }
-        };
-
-        function renderAparTable() {
-            aTableBody.innerHTML = '';
-            if (aparDataList.length === 0) {
-                aTableBody.innerHTML = '<tr><td colspan="8" class="py-20 text-center text-dim italic">No assets registered in repository.</td></tr>';
-                document.getElementById('pagination-container').classList.add('hidden');
-                return;
+            if (id === 'savings-trans-modal') {
+                if (!s) {
+                    document.getElementById('savings-trans-amount').value = '';
+                    document.getElementById('savings-trans-desc').value = '';
+                    state.savingsTransContext = null;
+                }
             }
+        };
 
-            document.getElementById('pagination-container').classList.remove('hidden');
-            
-            let displayData = [...aparDataList];
-            let totalItems = displayData.length;
-            let totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(totalItems / itemsPerPage);
-            
-            // Adjust current page if out of bounds
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
-            // Slice data if not viewing all
-            if (itemsPerPage !== 'all') {
-                const start = (currentPage - 1) * parseInt(itemsPerPage);
-                const end = start + parseInt(itemsPerPage);
-                displayData = displayData.slice(start, end);
-                
-                // Update Pagination Info
-                document.getElementById('page-info').innerText = `Page ${String(currentPage).padStart(2, '0')} / ${String(totalPages).padStart(2, '0')}`;
-                document.getElementById('showing-info').innerText = `Showing ${start + 1}-${Math.min(end, totalItems)} of ${totalItems} Assets`;
-                document.getElementById('prev-page').disabled = currentPage === 1;
-                document.getElementById('next-page').disabled = currentPage === totalPages;
+        window.toggleNav = () => {
+            const nav = document.getElementById('main-nav');
+            const icon = document.getElementById('toggle-icon');
+            nav.classList.toggle('collapsed');
+            if(nav.classList.contains('collapsed')) {
+                icon.style.transform = 'scale(1.2)';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path>';
             } else {
-                document.getElementById('page-info').innerText = `Page 01 / 01`;
-                document.getElementById('showing-info').innerText = `Showing all ${totalItems} Assets`;
-                document.getElementById('prev-page').disabled = true;
-                document.getElementById('next-page').disabled = true;
+                icon.style.transform = 'scale(1)';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>';
             }
+        };
 
-            displayData.forEach(itemObj => {
-                const item = itemObj.data;
-                const key = itemObj.id;
-                
-                // Date Formatting Logic
-                const expDate = new Date(item.expired);
-                const isExp = expDate < new Date();
-                const formattedDate = expDate.toLocaleDateString('id-ID', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric'
-                });
+        window.formatCurrencyInput = (el) => {
+            let val = el.value.replace(/[^0-9,]/g, "");
+            let parts = val.split(",");
+            let integerPart = parts[0].replace(/\D/g, "");
+            let decimalPart = parts.length > 1 ? "," + parts[1].substring(0, 2) : "";
+            if (integerPart === "" && parts.length > 1) integerPart = "0";
+            if (integerPart === "") { el.value = ""; return; }
+            el.value = parseInt(integerPart).toLocaleString('id-ID') + decimalPart;
+        };
 
-                const row = document.createElement('tr');
-                row.className = 'border-b border-white/5 hover:bg-white/[0.02] transition-colors group';
-                row.innerHTML = `
-                    <td class="py-8 font-mono text-[13px] break-words whitespace-normal px-4 text-center">${item.no_seri}</td>
-                    <td class="py-8 font-mono text-[13px] break-words whitespace-normal px-4 text-center">${item.no_dymo}</td>
-                    <td class="py-8 text-white font-light text-[13px] whitespace-normal px-4 text-center">${item.type || '-'}</td>
-                    <td class="py-8 text-white font-light text-[13px] whitespace-normal px-4 text-center">${item.weight || '-'}</td>
-                    <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] break-words whitespace-normal px-4 text-center">${item.position}</td>
-                    <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] break-words whitespace-normal px-4 text-center">${item.location || '-'}</td>
-                    <td class="py-8 text-[13px] whitespace-normal text-center ${isExp ? 'text-red-400 font-bold' : ''}">${formattedDate}</td>
-                    <td class="py-8 text-center">
-                        <span class="inline-block w-2 h-2 rounded-full ${isExp ? 'bg-red-500 animate-pulse shadow-[0_0_10px_red]' : 'bg-green-500 shadow-[0_0_10px_green]'}"></span>
-                    </td>
-                    <td class="py-8 text-center space-x-4">
-                        <button data-id="${key}" class="edit-btn text-dim hover:text-white transition-colors"><i data-lucide="edit-3" class="w-4 h-4 inline"></i></button>
-                        <button data-id="${key}" class="delete-btn text-dim hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline"></i></button>
-                    </td>
+        const parseCurrencyValue = (str) => {
+            if (!str) return 0;
+            let clean = str.toString().replace(/\./g, "").replace(",", ".");
+            return parseFloat(clean) || 0;
+        };
+
+        window.changeMonth = (delta) => {
+            state.viewMonth += delta;
+            if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
+            if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
+            state.finOffset = 0; // Reset pagination
+            renderAll();
+        };
+
+        window.setFinTab = (tab) => {
+            state.finTab = tab;
+            state.finOffset = 0; // Reset pagination
+            renderAll();
+        };
+
+        window.changeFinPage = (delta) => {
+            state.finOffset += delta;
+            renderAll();
+        };
+
+        window.changeSavPage = (delta) => {
+            state.savOffset += delta;
+            renderAll();
+        };
+
+        window.updateCategorySelect = () => {
+            const type = document.getElementById('fin-type').value;
+            const select = document.getElementById('fin-category');
+            const wrapper = document.getElementById('fin-category-wrapper');
+            const methodLabel = document.getElementById('fin-method-label');
+            const methodSelect = document.getElementById('fin-method');
+            const descInput = document.getElementById('fin-desc');
+
+            if (type === 'transfer') {
+                wrapper.classList.add('hidden');
+                methodLabel.innerText = "ARAH TRANSFER";
+                methodSelect.innerHTML = `
+                    <option value="cash_to_debit">TUNAI (CASH) → BANK (DEBIT)</option>
+                    <option value="debit_to_cash">BANK (DEBIT) → TUNAI (CASH)</option>
                 `;
-                aTableBody.appendChild(row);
-            });
-            lucide.createIcons();
-        }
-
-        // Pagination Events
-        document.getElementById('items-per-page').addEventListener('change', (e) => {
-            itemsPerPage = e.target.value === 'all' ? 'all' : parseInt(e.target.value);
-            currentPage = 1;
-            renderAparTable();
-        });
-
-        document.getElementById('prev-page').addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderAparTable();
+                if (!descInput.value) descInput.value = "TRANSFER SALDO";
+            } else {
+                wrapper.classList.remove('hidden');
+                methodLabel.innerText = "METODE PEMBAYARAN";
+                methodSelect.innerHTML = `
+                    <option value="cash">TUNAI (CASH)</option>
+                    <option value="debit">BANK (DEBIT)</option>
+                `;
+                const cats = state.categories.filter(c => c.type === type);
+                select.innerHTML = cats.map(c => `<option value="${c.name}">${c.name}</option>`).join('') || '<option value="">PILIH KATEGORI</option>';
             }
-        });
+        };
 
-        document.getElementById('next-page').addEventListener('click', () => {
-            let totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(aparDataList.length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderAparTable();
+        window.toggleBudgetInput = () => {
+            const type = document.getElementById('cat-type').value;
+            document.getElementById('budget-input-wrapper').classList.toggle('hidden', type === 'in');
+        };
+
+        window.editCategory = (id) => {
+            const cat = state.categories.find(c => c.id === id);
+            if (!cat) return;
+            state.editingCategoryId = id;
+            document.getElementById('cat-name').value = cat.name;
+            document.getElementById('cat-type').value = cat.type;
+            const currentBudget = getMonthlyBudget(cat);
+            document.getElementById('cat-budget').value = currentBudget > 0 ? currentBudget.toLocaleString('id-ID') : '';
+            toggleBudgetInput();
+            toggleModal('add-category-modal', true);
+        };
+
+        window.addCategory = () => {
+            const name = document.getElementById('cat-name').value.toUpperCase();
+            const type = document.getElementById('cat-type').value;
+            const budget = parseCurrencyValue(document.getElementById('cat-budget').value);
+            if (!name) return alert('NAMA WAJIB DIISI');
+            if (state.editingCategoryId) {
+                const updates = { name, type };
+                if (type === 'out') updates[`monthlyBudgets/${state.viewYear}/${state.viewMonth}`] = budget;
+                update(ref(db, `categories/${state.editingCategoryId}`), updates);
+            } else {
+                const newCat = { name, type };
+                if (type === 'out') {
+                    newCat.monthlyBudgets = { [state.viewYear]: { [state.viewMonth]: budget } };
+                }
+                push(ref(db, 'categories'), newCat);
             }
-        });
+            toggleModal('add-category-modal', false);
+        };
 
-        onValue(ref(db, 'apar_assets'), (snap) => {
-            const data = snap.val();
-            aparDataList = [];
-            if (data) {
-                Object.keys(data).forEach(key => {
-                    aparDataList.push({ id: key, data: data[key] });
-                });
+        window.deleteCategory = (id) => confirm('HAPUS KATEGORI?') && remove(ref(db, `categories/${id}`));
+
+        window.editFinance = (id) => {
+            const f = state.finance.find(x => x.id === id);
+            if (!f) return;
+            state.editingFinanceId = id;
+            document.getElementById('fin-desc').value = f.desc;
+            document.getElementById('fin-amount').value = f.amount.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(',00', '');
+            document.getElementById('fin-type').value = f.type;
+            updateCategorySelect();
+            document.getElementById('fin-method').value = f.method || 'cash';
+            if (f.type !== 'transfer') document.getElementById('fin-category').value = f.category;
+            const btn = document.getElementById('btn-save-finance');
+            if (btn) btn.innerText = 'UPDATE';
+            toggleModal('finance-modal', true);
+        };
+
+        window.addFinance = () => {
+            const desc = document.getElementById('fin-desc').value.toUpperCase();
+            const amount = parseCurrencyValue(document.getElementById('fin-amount').value);
+            const type = document.getElementById('fin-type').value;
+            const method = document.getElementById('fin-method').value;
+            let category = "TRANSFER";
+            if (type !== 'transfer') {
+                category = document.getElementById('fin-category').value.toUpperCase();
+                if (!category) return alert('PILIH KATEGORI');
             }
-            renderAparTable();
-            updateReminders();
-        });
+            if (!desc || !amount) return alert('LENGKAPI DATA');
 
-        function updateReminders() {
-            const container = document.getElementById('reminder-container');
-            if (!container) return;
-            
             const now = new Date();
-            const twoMonthsFromNow = new Date();
-            twoMonthsFromNow.setMonth(now.getMonth() + 2);
+            const data = { 
+                desc, amount, type, category, method,
+                date: now.toLocaleDateString('id-ID'),
+                timestamp: now.getTime(),
+                month: state.viewMonth,
+                year: state.viewYear
+            };
 
-            const expiringSoon = aparDataList.filter(item => {
-                const exp = new Date(item.data.expired);
-                return exp <= twoMonthsFromNow; // Includes both past (expired) and future (2 months out)
-            }).sort((a, b) => new Date(a.data.expired) - new Date(b.data.expired));
+            if (state.editingFinanceId) {
+                update(ref(db, `finance/${state.editingFinanceId}`), data);
+            } else {
+                push(ref(db, 'finance'), data);
+            }
+            toggleModal('finance-modal', false);
+        };
 
-            container.innerHTML = '';
+        window.deleteFinance = (id) => confirm('HAPUS?') && remove(ref(db, `finance/${id}`));
 
-            if (expiringSoon.length === 0) {
-                container.innerHTML = '<p class="text-[10px] text-dim/50 italic py-4">No critical APAR expiries in the next 2 months.</p>';
-                return;
+        window.saveEFConfig = () => {
+            const current = parseCurrencyValue(document.getElementById('ef-input-current').value);
+            const monthly = parseCurrencyValue(document.getElementById('ef-input-monthly').value);
+            const manualTarget = parseCurrencyValue(document.getElementById('ef-input-target-manual').value);
+            update(ref(db, 'ef_config'), { current, monthly, manualTarget });
+            toggleModal('ef-config-modal', false);
+        };
+
+        window.addSavingsGoal = () => {
+            const name = document.getElementById('goal-name').value.toUpperCase();
+            const target = parseCurrencyValue(document.getElementById('goal-target').value);
+            const current = parseCurrencyValue(document.getElementById('goal-current').value);
+            if (!name || !target) return alert('LENGKAPI DATA');
+
+            if (state.editingGoalId) {
+                update(ref(db, `savings/${state.editingGoalId}`), { name, target, current });
+            } else {
+                push(ref(db, 'savings'), { name, target, current });
+            }
+            toggleModal('goal-modal', false);
+        };
+
+        window.editGoal = (id) => {
+            const g = state.savings.find(x => x.id === id);
+            if (!g) return;
+            state.editingGoalId = id;
+            document.getElementById('goal-name').value = g.name;
+            document.getElementById('goal-target').value = g.target.toLocaleString('id-ID');
+            document.getElementById('goal-current').value = g.current.toLocaleString('id-ID');
+            document.getElementById('btn-save-goal').innerText = 'UPDATE';
+            toggleModal('goal-modal', true);
+        };
+
+        window.deleteGoal = (id) => confirm('HAPUS TARGET INI?') && remove(ref(db, `savings/${id}`));
+
+        window.adjustEF = (isPlus) => {
+            state.savingsTransContext = { type: 'ef', id: null, isPlus };
+            document.getElementById('savings-trans-title').innerText = isPlus ? 'DANA DARURAT MASUK' : 'DANA DARURAT KELUAR';
+            toggleModal('savings-trans-modal', true);
+        };
+
+        window.adjustGoal = (id, isPlus) => {
+            const g = state.savings.find(x => x.id === id);
+            if (!g) return;
+            state.savingsTransContext = { type: 'goal', id, isPlus };
+            document.getElementById('savings-trans-title').innerText = isPlus ? `${g.name} MASUK` : `${g.name} KELUAR`;
+            toggleModal('savings-trans-modal', true);
+        };
+
+        window.processSavingsTransaction = () => {
+            const amount = parseCurrencyValue(document.getElementById('savings-trans-amount').value);
+            const desc = document.getElementById('savings-trans-desc').value.toUpperCase() || 'MUTASI TABUNGAN';
+            const ctx = state.savingsTransContext;
+            if (!ctx || amount <= 0) return alert('MASUKKAN NOMINAL YANG VALID');
+
+            let targetName = "";
+            if (ctx.type === 'ef') {
+                targetName = "DANA DARURAT";
+                const newCurrent = ctx.isPlus ? (state.efConfig.current || 0) + amount : Math.max(0, (state.efConfig.current || 0) - amount);
+                update(ref(db, 'ef_config'), { current: newCurrent });
+            } else if (ctx.type === 'goal') {
+                const g = state.savings.find(x => x.id === ctx.id);
+                if (g) {
+                    targetName = g.name;
+                    const newCurrent = ctx.isPlus ? g.current + amount : Math.max(0, g.current - amount);
+                    update(ref(db, `savings/${ctx.id}`), { current: newCurrent });
+                }
             }
 
-            expiringSoon.forEach(item => {
-                const expDate = new Date(item.data.expired);
-                const isAlreadyExpired = expDate < now;
-                const day = expDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-                const fullDate = expDate.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                
-                const itemEl = document.createElement('div');
-                itemEl.className = 'group cursor-pointer';
-                itemEl.innerHTML = `
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-[14px] uppercase tracking-widest ${isAlreadyExpired ? 'text-red-500 font-black animate-pulse' : 'text-red-400 font-bold'}">
-                            ${isAlreadyExpired ? 'CRITICAL: EXPIRED' : 'Expires Soon'}
-                        </span>
-                        <span class="text-[14px] font-mono text-white/30">(${day}) ${fullDate}</span>
-                    </div>
-                    <h5 class="text-[25px] font-light group-hover:italic transition-all ${isAlreadyExpired ? 'text-red-200' : ''}">APAR ${item.data.no_seri}</h5>
-                    <p class="text-[15px] text-dim mt-3">${item.data.position}</p>
-                    <div class="h-[1px] w-0 group-hover:w-full bg-red-400/20 transition-all duration-700 mt-6"></div>
-                `;
-                itemEl.onclick = () => {
-                    // Switch to Data view
-                    switchView('data');
-                    
-                    // Activate APAR sub-view
-                    const aparTrigger = document.querySelector('.data-sub-trigger[data-sub="apar"]');
-                    if (aparTrigger) aparTrigger.click();
-
-                    // Find the page index for this specific item
-                    const itemIndex = aparDataList.findIndex(a => a.id === item.id);
-                    if (itemIndex !== -1 && itemsPerPage !== 'all') {
-                        const targetPage = Math.floor(itemIndex / parseInt(itemsPerPage)) + 1;
-                        currentPage = targetPage;
-                        renderAparTable();
-                    }
-
-                    // Smooth scroll to the table and highlight the row
-                    setTimeout(() => {
-                        const row = document.querySelector(`button[data-id="${item.id}"]`)?.closest('tr');
-                        if (row) {
-                            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            // Apply the "block color" highlight
-                            row.classList.add('bg-white/15', 'border-white/20');
-                            row.style.transition = 'all 0.5s ease-in-out';
-                            
-                            // Remove the highlight after 4 seconds
-                            setTimeout(() => {
-                                row.classList.remove('bg-white/15', 'border-white/20');
-                            }, 4000);
-                        }
-                    }, 800);
-                };
-                container.appendChild(itemEl);
+            // Simpan ke Riwayat Tabungan
+            const now = new Date();
+            push(ref(db, 'savings_history'), {
+                targetName,
+                desc,
+                amount,
+                type: ctx.isPlus ? 'in' : 'out',
+                date: now.toLocaleDateString('id-ID'),
+                timestamp: now.getTime()
             });
+
+            toggleModal('savings-trans-modal', false);
+        };
+
+        window.addSupply = () => {
+            const name = document.getElementById('sup-name').value.toUpperCase(); 
+            const qty = parseInt(document.getElementById('sup-qty').value);
+            const unit = document.getElementById('sup-unit').value.toUpperCase() || 'PCS';
+            if (!name || isNaN(qty)) return alert('LENGKAPI DATA');
+            push(ref(db, 'supplies'), { name, qty, unit });
+            toggleModal('supply-modal', false);
+        };
+
+        window.updateSupplyQty = (id, delta) => {
+            const item = state.supplies.find(s => s.id === id);
+            if (item) update(ref(db, `supplies/${id}`), { qty: Math.max(0, item.qty + delta) });
+        };
+
+        window.deleteSupply = (id) => confirm('HAPUS?') && remove(ref(db, `supplies/${id}`));
+
+        window.addShopping = () => {
+            const text = document.getElementById('shop-item').value.toUpperCase(); if (!text) return;
+            push(ref(db, 'shopping'), { text, done: false }); document.getElementById('shop-item').value = '';
+        };
+
+        window.toggleShopping = (id) => {
+            const item = state.shopping.find(s => s.id === id); if (item) update(ref(db, `shopping/${id}`), { done: !item.done });
+        };
+
+        window.clearCompletedShopping = () => state.shopping.forEach(i => i.done && remove(ref(db, `shopping/${i.id}`)));
+        window.addToShoppingFromSupply = (n) => { push(ref(db, 'shopping'), { text: n, done: false }); showView('shopping'); };
+
+        window.addHBLog = () => {
+            const type = state.hbContext === 'hb' ? 'hb' : document.getElementById('hb-period-type').value;
+            const note = document.getElementById('hb-note').value.toUpperCase() || (type === 'hb' ? 'AKTIVITAS INTIM' : 'CATATAN SIKLUS');
+            const selectedDate = document.getElementById('hb-date').value;
+            
+            if (!selectedDate) return alert('PILIH TANGGAL TERLEBIH DAHULU');
+            
+            const dateObj = new Date(selectedDate);
+            push(ref(db, 'hb_logs'), {
+                type,
+                note,
+                date: dateObj.toLocaleDateString('id-ID'),
+                timestamp: dateObj.getTime()
+            });
+            toggleModal('hb-log-modal', false);
+        };
+
+        window.deleteHBLog = (id) => confirm('HAPUS CATATAN INI?') && remove(ref(db, `hb_logs/${id}`));
+
+        function updateLiveTime() {
+            const now = new Date();
+            const days = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
+            document.getElementById('header-day').innerText = days[now.getDay()];
+            document.getElementById('header-date').innerText = `${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+            document.getElementById('header-time').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false }).replace('.', ':');
         }
+        setInterval(updateLiveTime, 1000);
+        updateLiveTime();
 
-        // Table Action Listeners
-        aTableBody.addEventListener('click', (e) => {
-            const editBtn = e.target.closest('.edit-btn');
-            const delBtn = e.target.closest('.delete-btn');
-            if(editBtn) {
-                const id = editBtn.getAttribute('data-id');
-                onValue(ref(db, `apar_assets/${id}`), (s) => {
-                    const i = s.val();
-                    document.getElementById('apar_id').value = id;
-                    document.getElementById('apar_seri').value = i.no_seri;
-                    document.getElementById('apar_dymo').value = i.no_dymo;
-                    document.getElementById('apar_type').value = i.type || '';
-                    document.getElementById('apar_weight').value = i.weight || '';
-                    document.getElementById('apar_position').value = i.position;
-                    document.getElementById('apar_location').value = i.location || '';
-                    document.getElementById('apar_expired').value = i.expired;
-                    toggleAModal(true, true);
-                }, {onlyOnce: true});
-            }
-            if(delBtn) {
-                if(confirm('Delete this asset?')) remove(ref(db, `apar_assets/${delBtn.getAttribute('data-id')}`));
-            }
-        });
-
-        // --- ARENA AI PORTAL ---
-        const aiModal = document.getElementById('ai-modal');
-        const openAIPortal = document.getElementById('open-ai-portal');
-        const closeAIModal = document.getElementById('close-ai-modal');
-        const launchArena = document.getElementById('launch-arena');
-
-        openAIPortal.onclick = () => aiModal.classList.remove('hidden');
-        closeAIModal.onclick = () => aiModal.classList.add('hidden');
-        launchArena.onclick = () => {
-            window.open('https://arena.ai', 'ArenaAI', 'width=1200,height=800,top=100,left=100');
-            aiModal.classList.add('hidden');
-        };
-
-        // --- STUDIO NOTEPAD LOGIC ---
-        const focusInput = document.getElementById('studio-focus');
-        const notesInput = document.getElementById('studio-notes');
-        const statusInd = document.getElementById('note-status');
-
-        // Fetch existing notes
-        onValue(ref(db, 'studio_workspace'), (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                if (data.focus && document.activeElement !== focusInput) focusInput.value = data.focus;
-                if (data.notes && document.activeElement !== notesInput) notesInput.value = data.notes;
-            }
-        });
-
-        // Auto-save logic
-        const saveWorkspace = () => {
-            statusInd.classList.remove('opacity-0');
-            update(ref(db, 'studio_workspace'), {
-                focus: focusInput.value,
-                notes: notesInput.value,
-                lastUpdated: new Date().toISOString()
-            }).then(() => {
-                setTimeout(() => statusInd.classList.add('opacity-0'), 2000);
+        function renderAll() {
+            // Calculate Average Expenses for EF Recommendation
+            const lastMonths = 3;
+            const now = new Date();
+            let totalExpensesLastPeriod = 0;
+            const expenseTrans = state.finance.filter(f => f.type === 'out');
+            expenseTrans.forEach(f => {
+                totalExpensesLastPeriod += f.amount;
             });
-        };
+            // Simplified avg: total expenses / unique months in data or 1
+            const uniqueMonths = new Set(expenseTrans.map(f => `${f.month}-${f.year}`)).size || 1;
+            const avgMonthlyExpenses = totalExpensesLastPeriod / uniqueMonths;
 
-        let debounceTimer;
-        const debouncedSave = () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(saveWorkspace, 1000);
-        };
+            // Render EF Card
+            const efMonthly = state.efConfig.monthly || avgMonthlyExpenses;
+            const efTarget = state.efConfig.manualTarget || (efMonthly * (state.efConfig.months || 6));
+            const efCurrent = state.efConfig.current || 0;
+            const efPercent = efTarget > 0 ? Math.min(100, Math.round((efCurrent / efTarget) * 100)) : 0;
 
-        const autoCapitalize = (el) => {
-            const start = el.selectionStart;
-            const end = el.selectionEnd;
-            // Capitalize first letter of every word
-            el.value = el.value.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
-            el.setSelectionRange(start, end);
-        };
+            document.getElementById('ef-current').innerText = 'RP ' + efCurrent.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+            document.getElementById('ef-target-label').innerText = `DARI TARGET RP ${efTarget.toLocaleString('id-ID', { minimumFractionDigits: 2 })}`;
+            document.getElementById('ef-progress-bar').style.width = efPercent + '%';
+            document.getElementById('ef-percent').innerText = `${efPercent}% AMAN`;
 
-        focusInput.addEventListener('input', (e) => {
-            autoCapitalize(e.target);
-            debouncedSave();
-        });
-        notesInput.addEventListener('input', (e) => {
-            autoCapitalize(e.target);
-            debouncedSave();
-        });
+            // Pre-fill EF Modal
+            document.getElementById('ef-input-current').placeholder = efCurrent.toLocaleString('id-ID');
+            document.getElementById('ef-input-monthly').placeholder = efMonthly.toLocaleString('id-ID');
+            document.getElementById('ef-input-target-manual').placeholder = efTarget.toLocaleString('id-ID');
 
+            // Render Savings Goals
+            document.getElementById('savings-list').innerHTML = state.savings.length ? state.savings.map(g => {
+                const per = Math.min(100, Math.round((g.current / g.target) * 100));
+                return `
+                    <div class="glass-card p-6 rounded-[2rem] shadow-premium">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="font-black text-slate-800 text-sm tracking-tight mb-1">${g.name}</h4>
+                                <p class="text-[10px] font-black text-indigo-500 uppercase">RP ${g.current.toLocaleString('id-ID', {minimumFractionDigits:2})} / ${g.target.toLocaleString('id-ID', {minimumFractionDigits:2})}</p>
+                            </div>
+                            <div class="flex gap-1">
+                                <button onclick="editGoal('${g.id}')" class="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-xs">✎</button>
+                                <button onclick="deleteGoal('${g.id}')" class="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-xs text-rose-400">✕</button>
+                            </div>
+                        </div>
+                        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mb-3">
+                            <div class="h-full bg-indigo-500" style="width: ${per}%"></div>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[9px] font-black text-slate-400">${per}% TERCAPAI</span>
+                            <span class="text-[9px] font-black text-slate-400">SISA RP ${(g.target - g.current).toLocaleString('id-ID', {minimumFractionDigits:2})}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="adjustGoal('${g.id}', true)" class="flex-1 py-2 bg-emerald-50 text-emerald-600 rounded-xl text-[8px] font-black uppercase tracking-widest border border-emerald-100">MASUK (+)</button>
+                            <button onclick="adjustGoal('${g.id}', false)" class="flex-1 py-2 bg-rose-50 text-rose-600 rounded-xl text-[8px] font-black uppercase tracking-widest border border-rose-100">KELUAR (-)</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p class="p-16 text-center text-[10px] font-black text-slate-300">BELUM ADA TARGET TABUNGAN</p>';
+
+            // Render Savings History
+            const totalSavItems = state.savingsHistory.length;
+            const savPaginationEl = document.getElementById('savings-pagination');
+            let finalSavDisplay = state.savingsHistory;
+
+            if (state.savLimit > 0 && totalSavItems > state.savLimit) {
+                savPaginationEl.classList.remove('hidden');
+                finalSavDisplay = state.savingsHistory.slice(state.savOffset, state.savOffset + state.savLimit);
+                const currentSavPage = Math.floor(state.savOffset / state.savLimit) + 1;
+                const totalSavPages = Math.ceil(totalSavItems / state.savLimit);
+                document.getElementById('sav-page-info').innerText = `HAL ${currentSavPage} DARI ${totalSavPages}`;
+                document.getElementById('btn-prev-sav').disabled = state.savOffset <= 0;
+                document.getElementById('btn-next-sav').disabled = state.savOffset + state.savLimit >= totalSavItems;
+            } else {
+                savPaginationEl.classList.add('hidden');
+                if (state.savLimit > 0) finalSavDisplay = state.savingsHistory.slice(0, state.savLimit);
+            }
+
+            document.getElementById('savings-history-list').innerHTML = finalSavDisplay.length ? finalSavDisplay.map(h => {
+                let icon = h.type === 'in' ? '↓' : '↑';
+                let colorClass = h.type === 'in' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600';
+                let amountColor = h.type === 'in' ? 'text-emerald-600' : 'text-rose-600';
+                let sign = h.type === 'in' ? '+' : '-';
+                return `
+                    <div class="glass-card p-4 rounded-2xl flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold ${colorClass}">${icon}</div>
+                            <div>
+                                <p class="font-black text-slate-800 text-[11px] leading-tight">${h.desc}</p>
+                                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">${h.targetName} • ${h.date}</p>
+                            </div>
+                        </div>
+                        <p class="font-black ${amountColor} text-[11px] tracking-tighter">${sign} RP ${h.amount.toLocaleString('id-ID', { minimumFractionDigits: 2 })}</p>
+                    </div>
+                `;
+            }).join('') : '<p class="text-center p-12 text-[9px] font-black text-slate-300 uppercase">BELUM ADA RIWAYAT TABUNGAN</p>';
+
+            let totalBal = 0, cashBal = 0, debitBal = 0;
+            state.finance.forEach(f => {
+                const amt = f.amount || 0;
+                if (f.type === 'in') {
+                    totalBal += amt;
+                    if (f.method === 'cash') cashBal += amt; else debitBal += amt;
+                } else if (f.type === 'out') {
+                    totalBal -= amt;
+                    if (f.method === 'cash') cashBal -= amt; else debitBal -= amt;
+                } else if (f.type === 'transfer') {
+                    if (f.method === 'cash_to_debit') { cashBal -= amt; debitBal += amt; }
+                    else if (f.method === 'debit_to_cash') { cashBal += amt; debitBal -= amt; }
+                }
+            });
+
+            document.getElementById('dash-balance').innerText = 'RP ' + totalBal.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+            document.getElementById('dash-cash').innerText = 'RP ' + cashBal.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+            document.getElementById('dash-debit').innerText = 'RP ' + debitBal.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+            document.getElementById('dash-low-stock').innerText = state.supplies.filter(s => s.qty <= 2).length + ' STOK MENIPIS';
+
+            document.getElementById('finance-month-label').innerText = `${monthNames[state.viewMonth]} ${state.viewYear}`;
+            const currentMonthFinance = state.finance.filter(f => f.month === state.viewMonth && f.year === state.viewYear);
+            const mIn = currentMonthFinance.filter(f => f.type === 'in').reduce((a, c) => a + c.amount, 0);
+            const mOut = currentMonthFinance.filter(f => f.type === 'out').reduce((a, c) => a + c.amount, 0);
+            document.getElementById('fin-month-in').innerText = 'RP ' + mIn.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+            document.getElementById('fin-month-out').innerText = 'RP ' + mOut.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+
+            let filteredCats = state.categories;
+            if (state.finTab !== 'all') filteredCats = state.categories.filter(c => c.type === state.finTab);
+            document.getElementById('category-items').innerHTML = filteredCats.length ? filteredCats.map(c => `
+                <div class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="flex-1">
+                        <p class="font-black text-sm">${c.name}</p>
+                        <p class="text-[9px] font-bold uppercase ${c.type === 'in' ? 'text-emerald-500' : 'text-rose-500'}">
+                            ${c.type === 'in' ? 'PEMASUKAN' : 'PENGELUARAN'} • BUDGET: ${getMonthlyBudget(c).toLocaleString('id-ID')}
+                        </p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editCategory('${c.id}')" class="text-indigo-400 p-2">✎</button>
+                        <button onclick="deleteCategory('${c.id}')" class="text-rose-400 p-2">✕</button>
+                    </div>
+                </div>`).join('') : '<p class="text-center p-4 text-[10px] font-bold text-slate-300">KOSONG</p>';
+
+            const budgetList = document.getElementById('budget-list');
+            const outCatsWithBudget = state.categories.filter(c => c.type === 'out' && getMonthlyBudget(c) > 0);
+            if (state.finTab === 'out' && outCatsWithBudget.length > 0) {
+                document.getElementById('budget-overview').classList.remove('hidden');
+                budgetList.innerHTML = outCatsWithBudget.map(c => {
+                    const mBudget = getMonthlyBudget(c);
+                    const spent = currentMonthFinance.filter(f => f.category === c.name).reduce((a, curr) => a + curr.amount, 0);
+                    const per = Math.min(100, (spent / mBudget) * 100);
+                    return `
+                        <div class="glass-card p-4 rounded-2xl">
+                            <div class="flex justify-between items-end mb-2">
+                                <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">${c.name}</p>
+                                <p class="font-black text-xs ${spent > mBudget ? 'text-rose-600' : 'text-slate-800'}">RP ${spent.toLocaleString('id-ID')} / ${mBudget.toLocaleString('id-ID')}</p></div>
+                                <p class="text-[10px] font-black ${spent > mBudget ? 'text-rose-500' : 'text-indigo-500'}">${Math.round(per)}%</p>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full ${spent > mBudget ? 'bg-rose-500' : per > 80 ? 'bg-amber-500' : 'bg-indigo-500'}" style="width: ${per}%"></div></div>
+                        </div>`;
+                }).join('');
+            } else document.getElementById('budget-overview').classList.add('hidden');
+
+            ['all', 'in', 'out', 'transfer'].forEach(t => {
+                const btn = document.getElementById('tab-fin-' + t);
+                if (btn) {
+                    btn.className = state.finTab === t 
+                        ? "flex-1 py-3 text-[9px] font-black uppercase tracking-tight rounded-xl transition-all bg-white shadow-sm text-indigo-600"
+                        : "flex-1 py-3 text-[9px] font-black uppercase tracking-tight rounded-xl transition-all text-slate-400";
+                }
+            });
+
+            let displayFinance = currentMonthFinance;
+            if (state.finTab !== 'all') displayFinance = displayFinance.filter(f => f.type === state.finTab);
+            
+            // Pagination Logic
+            const totalItems = displayFinance.length;
+            const paginationEl = document.getElementById('finance-pagination');
+            let finalDisplay = displayFinance;
+
+            if (state.finLimit > 0 && totalItems > state.finLimit) {
+                paginationEl.classList.remove('hidden');
+                finalDisplay = displayFinance.slice(state.finOffset, state.finOffset + state.finLimit);
+                
+                const currentPage = Math.floor(state.finOffset / state.finLimit) + 1;
+                const totalPages = Math.ceil(totalItems / state.finLimit);
+                
+                document.getElementById('fin-page-info').innerText = `HAL ${currentPage} DARI ${totalPages}`;
+                document.getElementById('btn-prev-fin').disabled = state.finOffset <= 0;
+                document.getElementById('btn-next-fin').disabled = state.finOffset + state.finLimit >= totalItems;
+            } else {
+                paginationEl.classList.add('hidden');
+                if (state.finLimit > 0) {
+                    finalDisplay = displayFinance.slice(0, state.finLimit);
+                }
+            }
+
+            document.getElementById('finance-list').innerHTML = finalDisplay.length ? finalDisplay.map(f => {
+                let icon = f.type === 'in' ? '↓' : f.type === 'out' ? '↑' : '⇆';
+                let colorClass = f.type === 'in' ? 'bg-emerald-50 text-emerald-600' : f.type === 'out' ? 'bg-rose-50 text-rose-600' : 'bg-indigo-50 text-indigo-600';
+                let amountColor = f.type === 'in' ? 'text-emerald-600' : f.type === 'out' ? 'text-rose-600' : 'text-indigo-600';
+                let sign = f.type === 'in' ? '+' : f.type === 'out' ? '-' : '•';
+                let methodLabel = f.method === 'cash_to_debit' ? 'CASH → BANK' : f.method === 'debit_to_cash' ? 'BANK → CASH' : f.method.toUpperCase();
+                
+                return `<div class="glass-card p-5 rounded-[2rem] flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <button onclick="editFinance('${f.id}')" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold active:scale-90 transition-all ${colorClass}">${icon}</button>
+                        <div><p class="font-black text-slate-800 text-sm tracking-tight">${f.desc}</p>
+                        <div class="flex items-center gap-2"><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${f.category} • ${f.date}</p>
+                        <span class="px-1.5 py-0.5 rounded-md bg-slate-100 text-[7px] font-black text-slate-400 uppercase">${methodLabel}</span></div></div>
+                    </div>
+                    <div class="text-right"><p class="font-black ${amountColor} text-sm tracking-tighter">${sign} RP ${f.amount.toLocaleString('id-ID', { minimumFractionDigits: 2 })}</p>
+                    <button onclick="deleteFinance('${f.id}')" class="text-[8px] font-black text-slate-300 uppercase">HAPUS</button></div>
+                </div>`;
+            }).join('') : '<p class="text-center p-16 text-[10px] font-black text-slate-300">TIDAK ADA DATA</p>';
+
+            document.getElementById('recent-finance').innerHTML = state.finance.slice(0, 3).map(f => {
+                let icon = f.type === 'in' ? '↓' : f.type === 'out' ? '↑' : '⇆';
+                let colorClass = f.type === 'in' ? 'bg-emerald-50 text-emerald-600' : f.type === 'out' ? 'bg-rose-50 text-rose-600' : 'bg-indigo-50 text-indigo-600';
+                let amountColor = f.type === 'in' ? 'text-emerald-600' : f.type === 'out' ? 'text-rose-600' : 'text-indigo-600';
+                return `<div class="glass-card p-4 rounded-2xl flex justify-between items-center mb-3">
+                    <div class="flex items-center gap-3"><button onclick="editFinance('${f.id}')" class="w-9 h-9 rounded-xl flex items-center justify-center font-bold active:scale-90 transition-all ${colorClass}">${icon}</button>
+                    <div><p class="font-bold text-slate-800 text-xs">${f.desc}</p><p class="text-[8px] font-bold text-slate-300 uppercase">${f.category}</p></div></div>
+                    <p class="text-xs font-black ${amountColor}">${f.type === 'in' ? '+' : f.type === 'out' ? '-' : ''} ${f.amount.toLocaleString('id-ID')}</p>
+                </div>`;
+            }).join('') || '<p class="text-center p-8 text-[10px] font-bold text-slate-300">KOSONG</p>';
+
+            document.getElementById('quick-shopping').innerHTML = state.shopping.slice(0, 3).map(s => `
+                <div class="px-5 py-3 border-b border-slate-50 flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full ${s.done ? 'bg-slate-200' : 'bg-indigo-500'}"></div>
+                <span class="text-xs font-bold ${s.done ? 'line-through text-slate-300' : 'text-slate-700'}">${s.text}</span></div>`).join('') || '<p class="p-5 text-center text-[10px] font-bold text-slate-300">KOSONG</p>';
+
+            document.getElementById('supply-list').innerHTML = state.supplies.map(s => {
+                const low = s.qty <= 2;
+                return `<div class="glass-card p-6 rounded-[2rem] mb-4">
+                    <div class="flex justify-between items-start mb-4">
+                        <div><h4 class="font-black text-slate-800 text-lg leading-none mb-1">${s.name}</h4><p class="text-[10px] font-black ${low ? 'text-rose-500' : 'text-indigo-400'} uppercase">${s.qty} ${s.unit} TERSISA</p></div>
+                        <div class="flex gap-2"><button onclick="updateSupplyQty('${s.id}', -1)" class="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center font-black">-</button>
+                        <button onclick="updateSupplyQty('${s.id}', 1)" class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">+</button></div>
+                    </div>
+                    <div class="w-full h-1 bg-slate-50 rounded-full overflow-hidden mb-5"><div class="h-full ${low ? 'bg-rose-500' : 'bg-indigo-500'}" style="width: ${Math.min(100, (s.qty/10)*100)}%"></div></div>
+                    <div class="flex justify-between items-center"><button onclick="deleteSupply('${s.id}')" class="text-[9px] font-bold text-slate-300 uppercase">HAPUS</button>
+                    <button onclick="addToShoppingFromSupply('${s.name}')" class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-[10px] font-black uppercase">🛒 BELI LAGI</button></div>
+                </div>`;
+            }).join('') || '<p class="p-16 text-center text-[10px] font-black text-slate-300">BELUM ADA DATA</p>';
+
+            document.getElementById('shopping-list').innerHTML = state.shopping.map(s => `
+                <div class="px-6 py-5 border-b border-slate-50/50 flex items-center gap-5 cursor-pointer" onclick="toggleShopping('${s.id}')">
+                    <div class="w-7 h-7 rounded-xl border-2 flex items-center justify-center ${s.done ? 'bg-indigo-600 border-indigo-600' : 'border-slate-200'}">
+                        ${s.done ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="4"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>' : ''}
+                    </div>
+                    <span class="flex-1 text-[15px] font-extrabold tracking-tight ${s.done ? 'line-through text-slate-300' : 'text-slate-800'}">${s.text}</span>
+                </div>`).join('') || '<p class="p-16 text-center text-[10px] font-black text-slate-300">KOSONG ✨</p>';
+
+            // Render HB Section
+            const lastPeriodStart = state.hbLogs.find(l => l.type === 'period_start');
+            let cycleDay = "?";
+            let nextPeriodText = "-";
+            if (lastPeriodStart) {
+                const diff = Math.floor((new Date().getTime() - lastPeriodStart.timestamp) / (1000 * 60 * 60 * 24));
+                cycleDay = diff + 1;
+                const nextPeriodDate = new Date(lastPeriodStart.timestamp + (28 * 24 * 60 * 60 * 1000));
+                nextPeriodText = nextPeriodDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'LONG', year: 'numeric' }).toUpperCase();
+            }
+            document.getElementById('hb-cycle-day').innerText = `HARI KE-${cycleDay}`;
+            document.getElementById('hb-next-period').innerText = `PREDIKSI HAID BERIKUTNYA: ${nextPeriodText}`;
+
+            document.getElementById('hb-history-list').innerHTML = state.hbLogs.length ? state.hbLogs.map(l => {
+                const isHB = l.type === 'hb';
+                const isStart = l.type === 'period_start';
+                const icon = isHB ? '❤️' : isStart ? '🩸' : '✨';
+                const colorClass = isHB ? 'bg-rose-50 text-rose-600' : 'bg-pink-50 text-pink-600';
+                const label = isHB ? 'AKTIVITAS HB' : isStart ? 'MULAI HAID' : 'SELESAI HAID';
+                return `
+                    <div class="glass-card p-4 rounded-2xl flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg ${colorClass}">${icon}</div>
+                            <div>
+                                <p class="font-black text-slate-800 text-[11px] leading-tight">${l.note}</p>
+                                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">${label} • ${l.date}</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteHBLog('${l.id}')" class="text-[8px] font-black text-slate-300 uppercase">HAPUS</button>
+                    </div>
+                `;
+            }).join('') : '<p class="text-center p-12 text-[9px] font-black text-slate-300 uppercase">BELUM ADA DATA AKTIVITAS</p>';
+        }
+        window.renderAll = renderAll;
     </script>
 </body>
 </html>
