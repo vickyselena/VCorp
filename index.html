@@ -136,6 +136,7 @@
                     <!-- Sidebar Sub-menu -->
                     <div id="sidebar-data-sub" class="max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out flex flex-col items-center gap-3">
                         <a href="#" class="data-sub-trigger text-[10px] tracking-[0.3em] text-dim hover:text-white transition-colors" data-sub="apar">— APAR Units</a>
+                        <a href="#" class="data-sub-trigger text-[10px] tracking-[0.3em] text-dim hover:text-white transition-colors" data-sub="tera">— Tera Timbangan</a>
                     </div>
                 </div>
 
@@ -292,17 +293,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-20">
                     <div class="md:col-span-12 mb-12">
                         <p class="text-[10px] uppercase tracking-[0.4em] text-dim mb-8">Repository / 02</p>
-                        <h2 class="text-7xl md:text-[8vw] font-serif leading-none tracking-tighter">
+                        <h2 id="data-main-title" class="text-7xl md:text-[8vw] font-serif leading-none tracking-tighter">
                             APAR <br>
                             <span class="italic font-light">MANAGEMENT.</span>
                         </h2>
                     </div>
                     
                     <div class="md:col-span-12">
-                        <!-- Data Sub-Menu -->
-                        <div class="flex gap-12 mb-20 border-b border-white/5 pb-6">
-                            <button class="data-sub-trigger active text-[10px] uppercase tracking-[0.4em] text-white border-b border-white pb-6 -mb-[25px] transition-all" data-sub="apar">APAR Units</button>
-                            <button class="data-sub-trigger text-[10px] uppercase tracking-[0.4em] text-dim hover:text-white pb-6 -mb-[25px] transition-all" data-sub="analytics">Analytics</button>
+                        <!-- Data Sub-Menu Tabs (Dynamic) -->
+                        <div id="data-tabs-container" class="flex gap-12 mb-20 border-b border-white/5 pb-6">
+                            <!-- Tabs injected by JS -->
                         </div>
 
                         <!-- APAR Sub-View -->
@@ -370,6 +370,68 @@
                                 </tbody>
                             </table>
                         </div>
+                        </div>
+
+                        <!-- Tera Sub-View -->
+                        <div id="view-tera" class="data-content-view hidden opacity-0 transition-opacity duration-500 pb-24">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
+                                <div>
+                                    <h3 class="text-4xl font-serif mb-2">Tera Timbangan</h3>
+                                    <p class="text-[10px] uppercase tracking-[0.3em] text-dim">Scale Calibration & Certification Registry</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <button id="open-tera-modal" class="px-6 py-2 bg-white text-black text-[10px] uppercase tracking-widest hover:bg-white/80 transition-all font-bold">+ Add Tera Asset</button>
+                                    <select id="tera-location-filter" class="bg-transparent border border-white/10 px-6 py-2 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all outline-none cursor-pointer">
+                                        <option value="all" class="bg-black text-white">All Locations</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Tera Pagination Controls -->
+                            <div id="tera-pagination-container" class="flex flex-col md:flex-row justify-between items-center pb-8 border-b border-white/5 gap-8 hidden mb-4">
+                                <div class="flex items-center gap-6">
+                                    <p class="text-[10px] uppercase tracking-[0.2em] text-dim">View:</p>
+                                    <select id="tera-items-per-page" class="bg-transparent border-b border-white/10 text-[10px] uppercase tracking-[0.2em] outline-none focus:border-white transition-colors cursor-pointer pb-1">
+                                        <option value="5" class="bg-black">5</option>
+                                        <option value="10" class="bg-black">10</option>
+                                        <option value="15" class="bg-black">15</option>
+                                        <option value="20" class="bg-black">20</option>
+                                        <option value="all" class="bg-black">All</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center gap-12">
+                                    <button id="tera-prev-page" class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-dim hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none">
+                                        <i data-lucide="chevron-left" class="w-4 h-4"></i> Prev
+                                    </button>
+                                    <p id="tera-page-info" class="text-[10px] uppercase tracking-[0.4em] font-light">Page 01 / 01</p>
+                                    <button id="tera-next-page" class="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-dim hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none">
+                                        Next <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                <div class="hidden md:block">
+                                    <p id="tera-showing-info" class="text-[10px] uppercase tracking-[0.2em] text-dim italic">Showing 0-0 of 0 Assets</p>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto w-full mb-12">
+                                <table class="w-full text-left border-collapse min-w-[1000px] table-fixed">
+                                    <thead>
+                                        <tr class="border-b border-white/10">
+                                            <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Seri</th>
+                                            <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Merk</th>
+                                            <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Kapasitas</th>
+                                            <th class="w-[24%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Lokasi</th>
+                                            <th class="w-[15%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Last Tera</th>
+                                            <th class="w-[15%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Next Tera</th>
+                                            <th class="w-[6%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Status</th>
+                                            <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tera-table-body" class="text-sm font-light">
+                                        <!-- Dynamic Tera content -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <!-- Analytics Module -->
@@ -567,6 +629,55 @@
         </div>
     </div>
 
+    <!-- Tera Modal -->
+    <div id="tera-modal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
+        <div class="w-full max-w-xl bg-[#0a0a0a] border border-white/10 p-10 md:p-12 relative">
+            <button id="close-tera-modal" class="absolute top-6 right-6 text-dim hover:text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="mb-10">
+                <p class="text-[9px] uppercase tracking-[0.4em] text-dim mb-3">Calibration Registry</p>
+                <h3 id="tera-modal-title" class="text-3xl font-serif">Add New <span class="italic font-light opacity-50">Tera Record.</span></h3>
+            </div>
+            <form id="tera-form" class="space-y-6">
+                <input type="hidden" id="tera_id">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">No Seri</label>
+                        <input type="text" id="tera_seri" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm font-mono" placeholder="SN-XXXXX">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Merk</label>
+                        <input type="text" id="tera_merk" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Avery">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Kapasitas</label>
+                        <input type="text" id="tera_kapasitas" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. 500 Kg">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Lokasi</label>
+                        <input type="text" id="tera_lokasi" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Area Produksi">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Last Tera</label>
+                        <input type="date" id="tera_last" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Next Tera</label>
+                        <input type="date" id="tera_next" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light">
+                    </div>
+                </div>
+                <div class="pt-6">
+                    <button type="submit" class="w-full bg-white text-black py-4 uppercase tracking-[0.3em] text-[10px] font-bold hover:bg-white/90 transition-all">Save Tera Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Arena AI Portal -->
     <div id="ai-modal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl">
         <div class="w-full max-w-2xl bg-[#050505] border border-white/10 relative overflow-hidden flex flex-col shadow-2xl p-12 md:p-20 text-center">
@@ -641,7 +752,7 @@
         const sections = document.querySelectorAll('.view-section');
         const navLinks = document.querySelectorAll('.nav-link');
 
-        function switchView(targetId) {
+        function switchView(targetId, category = null) {
             if (!targetId) return;
 
             sections.forEach(sec => {
@@ -652,7 +763,6 @@
             const target = document.getElementById(targetId);
             if (target) {
                 target.style.display = 'block';
-                // Trigger reflow
                 target.offsetHeight;
                 target.classList.add('active');
                 window.scrollTo(0,0);
@@ -671,6 +781,29 @@
                 dataSub.style.marginTop = '24px';
                 dataSub.style.marginBottom = '8px';
                 dataSub.style.transition = 'all 0.8s cubic-bezier(0.19, 1, 0.22, 1)';
+                
+                if (category) {
+                    currentCategory = category;
+                } else {
+                    // Check if a sub-trigger is already active
+                    const activeSub = Array.from(document.querySelectorAll('.data-sub-trigger')).find(t => t.classList.contains('active'));
+                    if (!activeSub) {
+                        currentCategory = 'apar';
+                    } else {
+                        currentCategory = activeSub.getAttribute('data-sub');
+                    }
+                }
+
+                // Update sub-menu triggers visual state
+                document.querySelectorAll('.data-sub-trigger').forEach(t => {
+                    const isActive = t.getAttribute('data-sub') === currentCategory;
+                    t.classList.toggle('text-white', isActive);
+                    t.classList.toggle('text-dim', !isActive);
+                    t.classList.toggle('active', isActive);
+                });
+
+                renderDataTabs();
+                switchDataSubView(currentSubTab);
             } else {
                 dataSub.style.maxHeight = '0';
                 dataSub.style.opacity = '0';
@@ -690,41 +823,86 @@
                 e.preventDefault();
                 const target = trigger.getAttribute('data-target');
                 switchView(target);
+                if (target === 'data') {
+                    renderDataTabs();
+                    switchDataSubView(currentSubTab);
+                }
             }
         });
 
-        // --- DATA SUB-MENU SWITCHER ---
-        const subTriggers = document.querySelectorAll('.data-sub-trigger');
-        const dataViews = document.querySelectorAll('.data-content-view');
+        // --- DATA MODULE LOGIC (APAR VS TERA) ---
+        let currentCategory = 'apar'; // 'apar' or 'tera'
+        let currentSubTab = 'data'; // 'data' or 'analytics'
 
-        subTriggers.forEach(trigger => {
-            trigger.addEventListener('click', (e) => {
-                const targetSub = trigger.getAttribute('data-sub');
-                
-                // Update All Triggers (Sidebar & Main Content)
-                subTriggers.forEach(t => {
-                    if (t.getAttribute('data-sub') === targetSub) {
-                        t.classList.add('active', 'text-white');
-                        if (t.classList.contains('border-b') || !t.closest('nav')) { 
-                            t.classList.add('border-b', 'border-white');
-                        }
-                    } else {
-                        t.classList.remove('active', 'text-white', 'border-b', 'border-white');
-                        t.classList.add('text-dim');
-                    }
-                });
+        function renderDataTabs() {
+            const container = document.getElementById('data-tabs-container');
+            if (!container) return;
 
-                // Update Views
-                dataViews.forEach(view => {
-                    view.classList.add('hidden', 'opacity-0');
-                });
-                const targetView = document.getElementById(`view-${targetSub}`);
+            const isApar = currentCategory === 'apar';
+            const label1 = isApar ? 'APAR UNITS' : 'TERA TIMBANGAN';
+            const target1 = 'data';
+            const target2 = 'analytics';
+
+            container.innerHTML = `
+                <button onclick="switchDataSubView('${target1}')" id="btn-tab-data" class="text-[11px] tracking-[0.4em] uppercase transition-all pb-4 border-b-2 ${currentSubTab === 'data' ? 'text-white border-white' : 'text-dim border-transparent hover:text-white'} font-bold">${label1}</button>
+                <button onclick="switchDataSubView('${target2}')" id="btn-tab-analytics" class="text-[11px] tracking-[0.4em] uppercase transition-all pb-4 border-b-2 ${currentSubTab === 'analytics' ? 'text-white border-white' : 'text-dim border-transparent hover:text-white'} font-bold">ANALYTICS</button>
+            `;
+        }
+
+        window.switchDataSubView = function(tab) {
+            currentSubTab = tab;
+            renderDataTabs();
+
+            // Hide all sub-views
+            document.querySelectorAll('.data-content-view').forEach(v => {
+                v.classList.add('hidden', 'opacity-0');
+            });
+
+            if (tab === 'data') {
+                const targetViewId = currentCategory === 'apar' ? 'view-apar' : 'view-tera';
+                const targetView = document.getElementById(targetViewId);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    setTimeout(() => targetView.classList.remove('opacity-0'), 10);
+                }
+            } else if (tab === 'analytics') {
+                const targetView = document.getElementById('view-analytics');
                 if (targetView) {
                     targetView.classList.remove('hidden');
                     setTimeout(() => {
                         targetView.classList.remove('opacity-0');
-                        if (targetSub === 'analytics') renderAnalytics();
+                        renderAnalytics();
                     }, 10);
+                }
+            }
+
+            // Update Main Section Title and Metadata
+            const dataTitle = document.querySelector('#data h2');
+            const dataMeta = document.querySelector('#data p.text-dim'); // Subtitle/Meta
+            if (dataTitle) {
+                if (currentCategory === 'apar') {
+                    dataTitle.innerHTML = tab === 'data' ? 'APAR <br><span class="italic font-light">MANAGEMENT.</span>' : 'APAR <br><span class="italic font-light">ANALYTICS.</span>';
+                } else {
+                    dataTitle.innerHTML = tab === 'data' ? 'TERA <br><span class="italic font-light">MANAGEMENT.</span>' : 'TERA <br><span class="italic font-light">ANALYTICS.</span>';
+                }
+            }
+        };
+
+        // Update sidebar sub-menu triggers
+        document.querySelectorAll('.data-sub-trigger').forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const cat = trigger.getAttribute('data-sub');
+                currentSubTab = 'data'; // Default to data tab when switching category
+                switchView('data', cat);
+                
+                // Explicitly refresh tables
+                if (cat === 'apar') {
+                    currentPage = 1;
+                    renderAparTable();
+                } else {
+                    teraCurrentPage = 1;
+                    renderTeraTable();
                 }
             });
         });
@@ -734,90 +912,93 @@
             const expiryChart = document.getElementById('expiry-chart');
             const locationChart = document.getElementById('location-chart');
             const yearSelect = document.getElementById('analytics-year-select');
+            const roadmapTitle = document.querySelector('#view-analytics h3'); // Roadmap title
             if (!expiryChart || !locationChart) return;
             
-            // Sync current year from the actual clock timezone
-            const nowInJkt = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Asia/Jakarta',
-                year: 'numeric'
-            }).format(new Date());
+            // Sync current year from Jakarta timezone
+            const nowInJkt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jakarta', year: 'numeric' }).format(new Date());
             const currentYearFromClock = parseInt(nowInJkt);
             
-            // Identify all years present in the data to populate the selector
+            // Determine active dataset
+            const isApar = currentCategory === 'apar';
+            const dataset = isApar ? aparDataList : teraDataList;
+            const dateField = isApar ? 'expired' : 'next_tera';
+            const locationField = isApar ? 'location' : 'lokasi';
+
+            // Update title for Analytics section
+            if (roadmapTitle) roadmapTitle.innerHTML = (isApar ? 'Expiry Roadmap ' : 'Calibration Roadmap ') + '<span id="analytics-year-target">----</span>';
+
+            // Identify all years present in the selected dataset
             const availableYears = new Set();
             availableYears.add(currentYearFromClock);
-            aparDataList.forEach(item => {
-                if (item.data.expired) {
-                    const y = parseInt(item.data.expired.split('-')[0]);
+            dataset.forEach(item => {
+                if (item.data[dateField]) {
+                    const y = parseInt(item.data[dateField].split('-')[0]);
                     if (!isNaN(y)) availableYears.add(y);
                 }
             });
 
-            // Populate/Update Year Selector
+            // Populate Year Selector
             if (yearSelect) {
                 const currentVal = yearSelect.value;
                 yearSelect.innerHTML = '';
                 Array.from(availableYears).sort().forEach(y => {
                     const opt = document.createElement('option');
-                    opt.value = y;
-                    opt.textContent = y;
-                    opt.className = 'bg-black text-white';
-                    if (currentVal) {
-                        if (y.toString() === currentVal) opt.selected = true;
-                    } else {
-                        if (y === currentYearFromClock) opt.selected = true;
-                    }
+                    opt.value = y; opt.textContent = y; opt.className = 'bg-black text-white';
+                    if (currentVal && y.toString() === currentVal) opt.selected = true;
+                    else if (!currentVal && y === currentYearFromClock) opt.selected = true;
                     yearSelect.appendChild(opt);
                 });
                 yearSelect.onchange = () => renderAnalytics();
             }
 
             const targetYear = (yearSelect && yearSelect.value) ? parseInt(yearSelect.value) : currentYearFromClock;
-            
-            // Update UI year title
             const yearTarget = document.getElementById('analytics-year-target');
             if (yearTarget) yearTarget.innerText = targetYear;
             
-            // Monthly Expiry Data
+            // Process Data
             const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             const monthlyCounts = new Array(12).fill(0);
             const locationMap = {};
 
-            aparDataList.forEach(item => {
-                const dateParts = item.data.expired ? item.data.expired.split('-') : [];
+            dataset.forEach(item => {
+                const dateParts = item.data[dateField] ? item.data[dateField].split('-') : [];
                 if (dateParts.length >= 1) {
                     const year = parseInt(dateParts[0]);
                     const month = parseInt(dateParts[1]) - 1;
-                    
-                    if (year === targetYear && month >= 0 && month < 12) {
-                        monthlyCounts[month]++;
-                    }
+                    if (year === targetYear && month >= 0 && month < 12) monthlyCounts[month]++;
                 }
-                
-                const loc = item.data.location || 'Unassigned';
+                const loc = item.data[locationField] || 'Unassigned';
                 locationMap[loc] = (locationMap[loc] || 0) + 1;
             });
 
-            // Render Expiry Bar Chart
+            // Update Titles to be fully specific
+            const roadmapTitleEl = document.querySelector('#view-analytics h4');
+            if (roadmapTitleEl) {
+                roadmapTitleEl.innerHTML = (isApar ? 'EXPIRY ROADMAP ' : 'CALIBRATION ROADMAP ') + `<span id="analytics-year-target">${targetYear}</span>`;
+            }
+            const densityTitleEl = document.querySelector('#view-analytics .md\\:grid-cols-2 div:last-child h4');
+            if (densityTitleEl) {
+                densityTitleEl.innerHTML = (isApar ? 'APAR DENSITY' : 'TERA DENSITY');
+            }
+
+            // Render Charts
             const maxCount = Math.max(...monthlyCounts, 1);
             expiryChart.innerHTML = monthlyCounts.map((count, i) => {
-                const heightPercent = count > 0 ? Math.max((count / maxCount) * 100, 5) : 0;
+                const h = count > 0 ? Math.max((count/maxCount)*100, 5) : 0;
                 return `
                 <div class="flex flex-col items-center flex-1 h-full gap-4 group">
                     <div class="relative w-full bg-white/[0.02] rounded-t-sm flex-1 flex items-end justify-center">
-                        <div class="w-full max-w-[16px] bg-white/20 group-hover:bg-white transition-all duration-700 ease-out relative" style="height: ${heightPercent}%">
+                        <div class="w-full max-w-[16px] bg-white/20 group-hover:bg-white transition-all duration-700 ease-out relative" style="height: ${h}%">
                             ${count > 0 ? `<span class="absolute -top-7 left-1/2 -translate-x-1/2 text-[11px] font-bold text-white font-mono">${count}</span>` : ''}
                         </div>
                     </div>
                     <span class="text-[9px] uppercase tracking-[0.2em] ${count > 0 ? 'text-white' : 'text-dim/40'}">${months[i]}</span>
-                </div>
-                `;
+                </div>`;
             }).join('');
 
-            // Render Location Density
             const locEntries = Object.entries(locationMap).sort((a,b) => b[1] - a[1]);
             const maxLoc = Math.max(...Object.values(locationMap), 1);
-            
             locationChart.innerHTML = locEntries.map(([name, count]) => `
                 <div class="space-y-3">
                     <div class="flex justify-between text-[10px] uppercase tracking-widest">
@@ -827,8 +1008,7 @@
                     <div class="w-full h-[1px] bg-white/5 relative">
                         <div class="absolute top-0 left-0 h-full bg-white/40 transition-all duration-1000" style="width: ${(count/maxLoc)*100}%"></div>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         // --- CONTACT MODAL ---
@@ -1088,12 +1268,8 @@
                     <div class="h-[1px] w-0 group-hover:w-full bg-red-400/20 transition-all duration-700 mt-6"></div>
                 `;
                 itemEl.onclick = () => {
-                    // Switch to Data view
-                    switchView('data');
-                    
-                    // Activate APAR sub-view
-                    const aparTrigger = document.querySelector('.data-sub-trigger[data-sub="apar"]');
-                    if (aparTrigger) aparTrigger.click();
+                    // Switch to Data view specifically for APAR category
+                    switchView('data', 'apar');
 
                     // Find the page index for this specific item
                     const itemIndex = aparDataList.findIndex(a => a.id === item.id);
@@ -1145,6 +1321,171 @@
             if(delBtn) {
                 if(confirm('Delete this asset?')) remove(ref(db, `apar_assets/${delBtn.getAttribute('data-id')}`));
             }
+        });
+
+        // --- TERA MANAGEMENT ---
+        const tModal = document.getElementById('tera-modal');
+        const tForm = document.getElementById('tera-form');
+        const tTableBody = document.getElementById('tera-table-body');
+        const openTBtn = document.getElementById('open-tera-modal');
+        const closeTBtn = document.getElementById('close-tera-modal');
+
+        let teraDataList = [];
+        let teraItemsPerPage = 5;
+        let teraCurrentPage = 1;
+        let selectedTeraLocation = 'all';
+
+        const toggleTModal = (show, isEdit = false) => {
+            tModal.classList.toggle('hidden', !show);
+            if(!show) {
+                tForm.reset();
+                document.getElementById('tera_id').value = '';
+            }
+            document.getElementById('tera-modal-title').innerHTML = isEdit ? 'Edit <span class="italic font-light opacity-50">Tera Record.</span>' : 'Add New <span class="italic font-light opacity-50">Tera Record.</span>';
+        };
+
+        openTBtn.onclick = () => toggleTModal(true);
+        closeTBtn.onclick = () => toggleTModal(false);
+
+        tForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('tera_id').value;
+            const data = {
+                no_seri: document.getElementById('tera_seri').value,
+                merk: document.getElementById('tera_merk').value,
+                kapasitas: document.getElementById('tera_kapasitas').value,
+                lokasi: document.getElementById('tera_lokasi').value,
+                last_tera: document.getElementById('tera_last').value,
+                next_tera: document.getElementById('tera_next').value,
+                updatedAt: new Date().toISOString()
+            };
+            try {
+                if (id) await set(ref(db, `tera_assets/${id}`), data);
+                else await push(ref(db, 'tera_assets'), data);
+                toggleTModal(false);
+            } catch (err) { alert('Save failed.'); }
+        };
+
+        function renderTeraTable() {
+            tTableBody.innerHTML = '';
+            let displayData = (selectedTeraLocation === 'all') ? [...teraDataList] : teraDataList.filter(item => item.data.lokasi === selectedTeraLocation);
+
+            if (displayData.length === 0) {
+                tTableBody.innerHTML = '<tr><td colspan="8" class="py-20 text-center text-dim italic">No records found.</td></tr>';
+                document.getElementById('tera-pagination-container').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('tera-pagination-container').classList.remove('hidden');
+            let totalItems = displayData.length;
+            let totalPages = teraItemsPerPage === 'all' ? 1 : Math.ceil(totalItems / teraItemsPerPage);
+            
+            if (teraCurrentPage > totalPages) teraCurrentPage = totalPages;
+            if (teraCurrentPage < 1) teraCurrentPage = 1;
+
+            if (teraItemsPerPage !== 'all') {
+                const start = (teraCurrentPage - 1) * parseInt(teraItemsPerPage);
+                const end = start + parseInt(teraItemsPerPage);
+                displayData = displayData.slice(start, end);
+                document.getElementById('tera-page-info').innerText = `Page ${String(teraCurrentPage).padStart(2, '0')} / ${String(totalPages).padStart(2, '0')}`;
+                document.getElementById('tera-showing-info').innerText = `Showing ${start + 1}-${Math.min(end, totalItems)} of ${totalItems} Records`;
+                document.getElementById('tera-prev-page').disabled = teraCurrentPage === 1;
+                document.getElementById('tera-next-page').disabled = teraCurrentPage === totalPages;
+            } else {
+                document.getElementById('tera-page-info').innerText = `Page 01 / 01`;
+                document.getElementById('tera-showing-info').innerText = `Showing all ${totalItems} Records`;
+                document.getElementById('tera-prev-page').disabled = true;
+                document.getElementById('tera-next-page').disabled = true;
+            }
+
+            displayData.forEach(itemObj => {
+                const item = itemObj.data;
+                const key = itemObj.id;
+                const nextDate = new Date(item.next_tera);
+                const isOverdue = nextDate < new Date();
+                const formatDate = (d) => new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+
+                const row = document.createElement('tr');
+                row.className = 'border-b border-white/5 hover:bg-white/[0.02] transition-colors group';
+                row.innerHTML = `
+                    <td class="py-8 font-mono text-[13px] px-4 text-center">${item.no_seri}</td>
+                    <td class="py-8 text-white font-light text-[13px] px-4 text-center">${item.merk}</td>
+                    <td class="py-8 text-white font-light text-[13px] px-4 text-center">${item.kapasitas}</td>
+                    <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] px-4 text-center break-words">${item.lokasi}</td>
+                    <td class="py-8 text-dim text-[13px] px-4 text-center">${formatDate(item.last_tera)}</td>
+                    <td class="py-8 text-[13px] px-4 text-center ${isOverdue ? 'text-red-400 font-bold' : ''}">${formatDate(item.next_tera)}</td>
+                    <td class="py-8 text-center">
+                        <span class="inline-block w-2 h-2 rounded-full ${isOverdue ? 'bg-red-500 animate-pulse shadow-[0_0_10px_red]' : 'bg-green-500 shadow-[0_0_10px_green]'}"></span>
+                    </td>
+                    <td class="py-8 text-center space-x-4">
+                        <button data-id="${key}" class="tera-edit-btn text-dim hover:text-white transition-colors"><i data-lucide="edit-3" class="w-4 h-4 inline"></i></button>
+                        <button data-id="${key}" class="tera-delete-btn text-dim hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline"></i></button>
+                    </td>
+                `;
+                tTableBody.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        onValue(ref(db, 'tera_assets'), (snap) => {
+            const data = snap.val();
+            teraDataList = [];
+            if (data) Object.keys(data).forEach(k => teraDataList.push({ id: k, data: data[k] }));
+            updateTeraLocationFilterOptions();
+            renderTeraTable();
+        });
+
+        function updateTeraLocationFilterOptions() {
+            const f = document.getElementById('tera-location-filter');
+            const cur = f.value;
+            const locs = [...new Set(teraDataList.map(i => i.data.lokasi))].sort();
+            f.innerHTML = '<option value="all" class="bg-black text-white">All Locations</option>';
+            locs.forEach(l => {
+                if(l) {
+                    const o = document.createElement('option');
+                    o.value = l; o.textContent = l; o.className = 'bg-black text-white';
+                    if(l === cur) o.selected = true;
+                    f.appendChild(o);
+                }
+            });
+        }
+
+        document.getElementById('tera-location-filter').addEventListener('change', (e) => {
+            selectedTeraLocation = e.target.value;
+            teraCurrentPage = 1;
+            renderTeraTable();
+        });
+
+        document.getElementById('tera-items-per-page').addEventListener('change', (e) => {
+            teraItemsPerPage = e.target.value === 'all' ? 'all' : parseInt(e.target.value);
+            teraCurrentPage = 1;
+            renderTeraTable();
+        });
+
+        document.getElementById('tera-prev-page').onclick = () => { if(teraCurrentPage > 1) { teraCurrentPage--; renderTeraTable(); } };
+        document.getElementById('tera-next-page').onclick = () => {
+            let tp = teraItemsPerPage === 'all' ? 1 : Math.ceil(teraDataList.length / teraItemsPerPage);
+            if(teraCurrentPage < tp) { teraCurrentPage++; renderTeraTable(); }
+        };
+
+        tTableBody.addEventListener('click', (e) => {
+            const eb = e.target.closest('.tera-edit-btn');
+            const db_btn = e.target.closest('.tera-delete-btn');
+            if(eb) {
+                const id = eb.getAttribute('data-id');
+                onValue(ref(db, `tera_assets/${id}`), (s) => {
+                    const i = s.val();
+                    document.getElementById('tera_id').value = id;
+                    document.getElementById('tera_seri').value = i.no_seri;
+                    document.getElementById('tera_merk').value = i.merk;
+                    document.getElementById('tera_kapasitas').value = i.kapasitas;
+                    document.getElementById('tera_lokasi').value = i.lokasi;
+                    document.getElementById('tera_last').value = i.last_tera;
+                    document.getElementById('tera_next').value = i.next_tera;
+                    toggleTModal(true, true);
+                }, {onlyOnce: true});
+            }
+            if(db_btn) { if(confirm('Delete this record?')) remove(ref(db, `tera_assets/${db_btn.getAttribute('data-id')}`)); }
         });
 
         // --- ARENA AI PORTAL ---
@@ -1208,6 +1549,10 @@
             autoCapitalize(e.target);
             debouncedSave();
         });
+
+        // Initialize default view
+        switchView('home');
+        renderDataTabs();
 
     </script>
 </body>
