@@ -419,8 +419,9 @@
                                         <tr class="border-b border-white/10">
                                             <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">No Seri</th>
                                             <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Merk</th>
+                                            <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Jenis</th>
                                             <th class="w-[10%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Kapasitas</th>
-                                            <th class="w-[24%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Lokasi</th>
+                                            <th class="w-[14%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Lokasi</th>
                                             <th class="w-[15%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Last Tera</th>
                                             <th class="w-[15%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Next Tera</th>
                                             <th class="w-[6%] py-6 text-[11px] uppercase tracking-[0.3em] text-dim font-medium text-center">Status</th>
@@ -653,13 +654,17 @@
                 </div>
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-2">
+                        <label class="text-[8px] uppercase tracking-widest text-dim">Jenis</label>
+                        <input type="text" id="tera_jenis" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Digital">
+                    </div>
+                    <div class="space-y-2">
                         <label class="text-[8px] uppercase tracking-widest text-dim">Kapasitas</label>
                         <input type="text" id="tera_kapasitas" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. 500 Kg">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[8px] uppercase tracking-widest text-dim">Lokasi</label>
-                        <input type="text" id="tera_lokasi" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Area Produksi">
-                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[8px] uppercase tracking-widest text-dim">Lokasi</label>
+                    <input type="text" id="tera_lokasi" required class="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none text-sm text-white font-light" placeholder="e.g. Area Produksi">
                 </div>
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-2">
@@ -1353,6 +1358,7 @@
             const data = {
                 no_seri: document.getElementById('tera_seri').value,
                 merk: document.getElementById('tera_merk').value,
+                jenis: document.getElementById('tera_jenis').value,
                 kapasitas: document.getElementById('tera_kapasitas').value,
                 lokasi: document.getElementById('tera_lokasi').value,
                 last_tera: document.getElementById('tera_last').value,
@@ -1410,6 +1416,7 @@
                 row.innerHTML = `
                     <td class="py-8 font-mono text-[13px] px-4 text-center">${item.no_seri}</td>
                     <td class="py-8 text-white font-light text-[13px] px-4 text-center">${item.merk}</td>
+                    <td class="py-8 text-white font-light text-[13px] px-4 text-center">${item.jenis || '-'}</td>
                     <td class="py-8 text-white font-light text-[13px] px-4 text-center">${item.kapasitas}</td>
                     <td class="py-8 text-dim group-hover:text-white transition-colors text-[13px] px-4 text-center break-words">${item.lokasi}</td>
                     <td class="py-8 text-dim text-[13px] px-4 text-center">${formatDate(item.last_tera)}</td>
@@ -1478,6 +1485,7 @@
                     document.getElementById('tera_id').value = id;
                     document.getElementById('tera_seri').value = i.no_seri;
                     document.getElementById('tera_merk').value = i.merk;
+                    document.getElementById('tera_jenis').value = i.jenis || '';
                     document.getElementById('tera_kapasitas').value = i.kapasitas;
                     document.getElementById('tera_lokasi').value = i.lokasi;
                     document.getElementById('tera_last').value = i.last_tera;
